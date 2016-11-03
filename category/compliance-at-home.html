@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - security</title>
+        <title>Writing to think 2: Write harder - Compliance at home</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -15,7 +15,7 @@
                 <h1><a href="/">Writing to think 2: Write harder </a></h1>
                 <nav><ul>
                     <li><a href="/category/commentary.html">Commentary</a></li>
-                    <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+                    <li class="active"><a href="/category/compliance-at-home.html">Compliance at home</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
                     <li><a href="/category/projects.html">Projects</a></li>
                     <li><a href="/category/security.html">Security</a></li>
@@ -25,84 +25,7 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/netconf-and-the-curse-of-consensus.html">NETCONF and the curse of consensus</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2016-05-01T02:07:00-04:00">
-                Published: Sun 01 May 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/commentary.html">Commentary</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info --><p>So my router runs OpenWRT, and its configuration is complicated enough
-that I can't easily capture it all in one place, nor set up a new blank
-router to do its job if need be. There are packages to install, UCI
-settings to set, configuration files to put in place, and maybe a change
-or two to an /etc/init.d script. And the firewall config when written in
-UCI gets repetitive really fast.</p>
-<p>I wanted Puppet, but that's too big by far, especially now that Puppet
-has copies of all its own dependencies (i.e., its own Ruby interpreter
-and set of gems) inside the official packages. And someone's done it
-before and it's petered out.</p>
-<p>I always sort of thought Puppet was too big: cfengine 2 did 50% of what
-Puppet did, while being much smaller. I'd never trade back now, because
-cfengine 2 wasn't extensible to new resource types, its syntax was not
-good, and cfengine 3 syntax is downright bad.</p>
-<p>I've wanted for a long time to be able to link compliance with config
-policy (see back through the &quot;Compliance at home&quot; category), and the
-cool kids (Salt, Ansible) are using YAML these days, so why not use RDF,
-encoded in something light like Turtle? It's the ultimate in
-linkability. And RDF HDT for wire transfers, or something. But I thought
-through what I would need to write a decent system configuration, and
-something like Puppet's classes and facts would be necessary. Well - one
-of the biggest things OWL does is to classify resources based on
-information, i.e. to figure out what classes things have based on facts
-about the class and the thing. But no one seems to have tried to make a
-small-footprint OWL inference engine. And I found that the Rete
-algorithm, which makes inference fast enough to be possible, does so by
-trading memory use for CPU work. That may not scale on a router. (On
-second thought, I haven't figured out what the scale might need to be.)
-So RDF might be too heavy for a router to deal with.</p>
-<p>OpenWRT has Lua, though: perhaps I could just write a set of functions
-in Lua, calls to which constitute the desired state of the system; the
-functions would check the state and change if necessary. This is the way
-of Lua: munge code in with data. Power in a small size, at the possible
-expense of easy security. Make a package with the desired-state function
-definitions; rsync the description of the desired state up; no packaging
-RDF libraries, no C work (Rust would be nicer but I can't quite get it
-to cross-compile yet, there's some little mips h file missing): quicker,
-smaller, nicer. So I'm reading through the Lua reference manual again.</p>
-<p>Meanwhile I find out about NETCONF, which is XML-based network device
-configuration getting-and-setting, with flexible transports underneath,
-but most likely presented as an SSHv2 subsystem. It probably will only
-do UCI settings, not also put arbitrary config files in place (e.g.
-ntpd.conf, gpsd.conf, sshd_config), but it's already standardized and a
-server is already packaged for OpenWRT.</p>
-<p>So now to my main complaint: worse is better. NETCONF is made of XML not
-ASN.1 BER, woohoo I guess. But it's still grotty, and I think it's
-because no one could agree on anything cooler.</p>
-<p>I'd like for the way of configuration to be either made of RDF, or
-exposed via a 9P filesystem, or both (that's funny because the Plan 9
-folks swear by short strings and local filesystems, and the RDF folks
-reckon the URI as the supreme abstraction: long but global). But I don't
-think I've got time to both flout the consensuses and do cool things in
-the next layer up.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/cmits-is-public.html" rel="bookmark"
-                           title="Permalink to CMITS is public!">CMITS is public!</a></h1>
-                </header>
-
-                <div class="entry-content">
+                    <h1 class="entry-title"><a href="/cmits-is-public.html">CMITS is public!</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2015-03-24T02:45:00-04:00">
                 Published: Tue 24 March 2015
@@ -113,14 +36,42 @@ the next layer up.</p>
         </address>
 <p>In <a href="/category/compliance-at-home.html">Compliance at home</a>.</p>
 <p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>Configuration Management for Information Technology Systems (CMITS) is a
+</footer><!-- /.post-info --><p>Configuration Management for Information Technology Systems (CMITS) is a
 melding of Puppet, LaTeX and my own scripts that makes compliance with
 hundreds of security requirements maintainable for me at work. And I've
 obtained permission to release it. The initial release is made at
-<a class="reference external" href="https://github.com/afseo/cmits">https://github.com/afseo/cmits</a>, in ...</p>
-                <a class="readmore" href="/cmits-is-public.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
+<a class="reference external" href="https://github.com/afseo/cmits">https://github.com/afseo/cmits</a>, in the &quot;public domain&quot; as defined by
+copyright law; forthwith I have made my own forks of each of its pieces,
+and placed them under various open-source licenses. In these forks I've
+applied some effort to make the unified policy document build properly
+at home and make more sense in a public context.</p>
+<p>There's a Python piece, and two LaTeX pieces, and a big ball of Puppet
+code that according to modern Puppet practices should be at least fifty
+pieces. Each of these languages has a canonical repository: PyPI, CTAN,
+and the Puppet Forge, respectively. As of this writing, none of the code
+has made its way to those places. So if you want to try it out, the
+first thing to do is get the <a class="reference external" href="https://github.com/jaredjennings/cmits/raw/master/build-products/cmits-example.pdf">pre-built unified policy document for the
+example
+policy</a>,
+read, and marvel. Then if you want to build your own (see also
+prerequisites in the various READMEs):</p>
+<ol class="arabic simple">
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/latex-cyber">https://github.com/jaredjennings/latex-cyber</a></li>
+<li>(cd latex-cyber; make &amp;&amp; make install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/latex-cybercic">https://github.com/jaredjennings/latex-cybercic</a></li>
+<li>(cd latex-cybercic; make &amp;&amp; make install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/shaney">https://github.com/jaredjennings/shaney</a></li>
+<li>(cd shaney; python setup.py install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/cmits">https://github.com/jaredjennings/cmits</a></li>
+<li>cd cmits/cmits-example/unified-policy-document</li>
+<li>make</li>
+</ol>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
 
             <li><article class="hentry">
                 <header>
@@ -151,32 +102,6 @@ interfaces</a>.</p>
 these documents, I could go through them, manually configuring the
 router as I ...</p>
                 <a class="readmore" href="/openwrt-stigs-automated-testing.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/sagemincer.html" rel="bookmark"
-                           title="Permalink to sagemincer">sagemincer</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-08-08T02:44:00-04:00">
-                Published: Fri 08 August 2014
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>If you've been reading my Compliance at Home series, you'll know that
-the DoD releases security guidance in the form of STIGs. They're
-downloadable as ZIP files, which contain ZIP files, which contain
-checklists written in XCCDF, and stylesheets that can turn the XCCDF
-document into HTML ...</p>
-                <a class="readmore" href="/sagemincer.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 

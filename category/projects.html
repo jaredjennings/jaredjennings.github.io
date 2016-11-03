@@ -14,23 +14,53 @@
         <header id="banner" class="body">
                 <h1><a href="/">Writing to think 2: Write harder </a></h1>
                 <nav><ul>
-                    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-                    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/commentary.html">Commentary</a></li>
+                    <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
                     <li class="active"><a href="/category/projects.html">Projects</a></li>
-                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
-                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/for-and-against-par1.html">for and against PAR1</a></h1>
+                    <h1 class="entry-title"><a href="/for-par1.html">for PAR1</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-02-07T05:42:00-05:00">
+                Published: Sun 07 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info --><p>I looked in the source of parchive (which is only like 3500 lines of
+code to par2cmdline's 13500 or so) and didn't find any evidence of the
+flawed math that was in the original RS tutorial. I don't think parchive
+is flawed at this point.</p>
+<p>And it's five and a half times faster than par2cmdline!! As packaged by
+Debian, which means probably no whiz-bang optimizations! Bump turbo
+codes, bump making my own file format, it works here and now, GPU or no.
+Case closed, for now at least.</p>
+<p>See also <a class="reference external" href="https://github.com/jaredjennings/darbrrb/issues/2">darbrrb issue
+2</a>, which is where
+I should have written all this mess. Oh, well.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/for-and-against-par1.html" rel="bookmark"
+                           title="Permalink to for and against PAR1">for and against PAR1</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2016-02-07T01:56:00-05:00">
                 Published: Sun 07 February 2016
@@ -41,33 +71,40 @@
         </address>
 <p>In <a href="/category/projects.html">Projects</a>.</p>
 
-</footer><!-- /.post-info --><p>PAR2 is better than PAR1. Why? Because it can deal with different-sized
+</footer><!-- /.post-info -->                <p>PAR2 is better than PAR1. Why? Because it can deal with different-sized
 input files, it can store different numbers of parity blocks in parity
 files, and it can read parts of corrupt parity files.</p>
 <p>But how does darbrrb use PAR2? Upon dar slice files that are all one
-size. darbrrb directs PAR2 to store an identical number of parity blocks
-in each parity file, so they will be of predictable and identical size.
-And darbrrb requests a quite conservative amount of parity, and uses
-small slices and parity files, on the theory that if an optical disc
-fails to produce some bytes in the middle of a file, it will fail to
-produce the rest of the file as well, but might (untested) successfully
-produce the next file. In other words, there's a reason PAR2 is
-overcomplicated for darbrrb's uses: darbrrb only needs PAR1.</p>
-<p>And Gibraltar calculates 8-bit Reed-Solomon codes really fast, and
-par2cmdline still recovers from PAR1 files. So there's fast encoding,
-and a strong fallback.</p>
-<p>But PAR1 depends on a technical specification of Reed-Solomon
-calculation that's broken. So Gibraltar will likely not produce the same
-bits as the PAR1 spec says, the bits par2cmdline could decode.</p>
-<p>So I think a new format is still needed. But PAR1 might make a better
-base for it than PAR2, and the PAR1 spec is public-domain. That's easier
-than the GNU FDL.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+size. darbrrb ...</p>
+                <a class="readmore" href="/for-and-against-par1.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/against-turbo-codes.html" rel="bookmark"
+                           title="Permalink to against turbo codes">against turbo codes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-06T15:12:00-05:00">
+                Published: Sat 06 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Upon reading a few more papers, I find that the reason people only
+simulate turbo codes in software is because decoding them is so
+computationally difficult that for the applications they are used in
+(phones and TVs) people make custom silicon or write programs for DSPs
+in order to decode ...</p>
+                <a class="readmore" href="/against-turbo-codes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -92,6 +129,58 @@ like to be true of it.</p>
 work even if parts of it are corrupted, and which parts are needed. It
 makes a lot ...</p>
                 <a class="readmore" href="/redundancy-file-format.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/redundancy-files.html" rel="bookmark"
+                           title="Permalink to redundancy files">redundancy files</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-06T01:32:00-05:00">
+                Published: Sat 06 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've done some reading about various kinds of codes (thanks again,
+Wikipedia). I've found that while Reed-Solomon is a good code, it takes
+a lot of computation to encode as compared to some others. Most
+interestingly, turbocodes seem faster and the patent on them just
+expired in 2013 ...</p>
+                <a class="readmore" href="/redundancy-files.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/darbrrb-three-years-later.html" rel="bookmark"
+                           title="Permalink to darbrrb, three years later">darbrrb, three years later</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-02T04:32:00-05:00">
+                Published: Tue 02 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>In 2013, I wrote <a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a>
+to make redundant backups onto optical media using dar and par2. After
+some testing I found par2 was so slow that backing up my files (a couple
+of hundred gigabytes) would take more than a week, not counting the time
+it takes to burn each ...</p>
+                <a class="readmore" href="/darbrrb-three-years-later.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
@@ -144,6 +233,88 @@ files onto redundant arrays of optical discs.
 <p>It looks like I can't both use the PAR2 file format and use Gibraltar,
 which is a library that uses the GPU to calculate redundancy data really ...</p>
                 <a class="readmore" href="/backup.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/push-generators-and-monads.html" rel="bookmark"
+                           title="Permalink to Push generators and monads">Push generators and monads</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-06-01T03:19:00-04:00">
+                Published: Mon 01 June 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I wrote <a class="reference external" href="https://github.com/jaredjennings/shaney/">Shaney</a>
+(<a class="reference external" href="https://github.com/jaredjennings/shaney/blob/master/requirements.txt">history</a>)
+to parse important elements out of hundreds of text files (Puppet source
+code and LaTeX), and produce interesting content out of them, writing it
+into dozens of other text files (LaTeX). Now I'm trying to do much the
+same thing for
+<a class="reference external" href="https://gitlab.com/sagemincer/snailcrusader">snailcrusader</a>, but not
+reading ...</p>
+                <a class="readmore" href="/push-generators-and-monads.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/sagemincer-updates.html" rel="bookmark"
+                           title="Permalink to sagemincer updates">sagemincer updates</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-09-27T21:43:00-04:00">
+                Published: Sat 27 September 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>When first released,
+<a class="reference external" href="https://gitlab.com/sagemincer/sagemincer">sagemincer</a> was slow.
+Like, thirty seconds to load a page slow. After a bunch of changes, now
+it's fast enough to be far prouder of. Also I got a new domain for it,
+<a class="reference external" href="http://securityrules.info/">securityrules.info</a>.</p>
+<p>The way it got faster was this: I stopped trying to ...</p>
+                <a class="readmore" href="/sagemincer-updates.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/sagemincer.html" rel="bookmark"
+                           title="Permalink to sagemincer">sagemincer</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-08-08T02:44:00-04:00">
+                Published: Fri 08 August 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+<p>tags: <a href="/tag/security.html">security</a> </p>
+</footer><!-- /.post-info -->                <p>If you've been reading my Compliance at Home series, you'll know that
+the DoD releases security guidance in the form of STIGs. They're
+downloadable as ZIP files, which contain ZIP files, which contain
+checklists written in XCCDF, and stylesheets that can turn the XCCDF
+document into HTML ...</p>
+                <a class="readmore" href="/sagemincer.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
