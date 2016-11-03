@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder</title>
+        <title>Writing to think 2: Write harder - puppet</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -27,19 +27,44 @@
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<ul>
-    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-    <li><a href="/category/misc.html">misc</a></li>
-    <li><a href="/category/projects.html">Projects</a></li>
-    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
-    <li><a href="/category/security.html">Security</a></li>
-    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-</ul>
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/compliance-at-home-what-should-be-done.html">Compliance at home: What should be done</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-03-09T02:56:00-05:00">
+                Published: Sun 09 March 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a>.</p>
+<p>tags: <a href="/tag/chef.html">chef</a> <a href="/tag/disa.html">disa</a> <a href="/tag/nist.html">nist</a> <a href="/tag/puppet.html">puppet</a> <a href="/tag/security.html">security</a> <a href="/tag/standards.html">standards</a> </p>
+</footer><!-- /.post-info --><p>Last time I shared my doubts about the applicability of the way security
+configuration is being done to home administrators. So what do I think
+we should all be doing instead of what NIST and DISA think we should be
+doing?</p>
+<p>These things: Describe security-related system configuration changes
+using languages and tools that already exist for describing general
+system configuration changes. Submit patches to code others have already
+written in these languages, to make generic code fulfill specific
+security requirements. Use some novel method to document which security
+requirements are fulfilled, so that interested people can collect these
+assertions.</p>
+<p>For example, someone has written some code in Chef that configures an
+Apache web server, blissfully unaware of the security needs of various
+large organizations. Instead of coding up a bunch of unrelated XML to be
+consumed by a separate tool that will fight with Chef, submit patches to
+the Chef Apache recipe maintainer that make the recipe capable of
+configuring Apache to be secure in the prescribed ways.</p>
+<p>There are two main differences between this and what I understand of
+SCAP: one, it involves more people and more code from outside
+security-specific circles; and, because of this, two, assertions that
+the code brings a system into compliance with a security requirement are
+to be tested and not taken on trust.</p>
+                </article>
+            </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

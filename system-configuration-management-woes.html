@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Jared Jennings</title>
+        <title>System configuration management woes</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -24,32 +24,63 @@
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
                     <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                    <li class="active"><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/system-configuration-management-woes.html" rel="bookmark"
+           title="Permalink to System configuration management woes">System configuration management woes</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/frist-psot.html">Frist Psot!</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2016-11-02T22:30:20-04:00">
-                Published: Wed 02 November 2016
+        <abbr class="published" title="2015-09-19T02:34:00-04:00">
+                Published: Sat 19 September 2015
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/author/jared-jennings.html">Jared Jennings</a>
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
         </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
 
-</footer><!-- /.post-info --><p>I've imported the content from the original &quot;Writing to think,&quot; a
-WordPress blog previously here at <a class="reference external" href="http://j.agrue.info">http://j.agrue.info</a>, so that I
-can read it again at this new Pelican site. There are some rough
-edges―for example, I think WordPress supported multiple categories and
-Pelican doesn't do so in the same way. But things will improve, and
-besides, if you're reading this, you're probably me, so <a class="reference external" href="http://www.elyrics.net/read/m/mc-frontalot-lyrics/the-omg-skit-lyrics.html">you know all
-this anyway</a>.</p>
-                </article>
-            </aside><!-- /#featured -->
+</footer><!-- /.post-info -->      <p>First, there aren't enough prebuilt packages for system configuration
+management software (e.g. Puppet, Chef, Ansible, Salt) for ARM.</p>
+<p>Then about Puppet's modules. They are supposed to be a great help: I
+want to configure a subsystem, I go to the Puppet Forge and find a
+module, I use the module. But it seems all the most popular modules
+merely manage to squish all the configuration of the subsystem into
+class parameters, turning my Hiera config files into just everything
+config files. There are relatively less successful modules that are more
+opinionated, but there's no way to tell whether their opinions about how
+the subsystem should be configured will be helpful to me: no one steps
+back from their work and compares it to the work of others, and I've
+seen no historical information of the form, &quot;I started with x module by
+author y. It didn't z and I needed it to, so I made some changes.&quot;</p>
+<p>I thought I was going to inject security compliance into the mix. But
+that was itself short-sighted: where I was, we couldn't have something
+if we couldn't secure it, so I reckoned module authors would welcome
+changes that would improve security, and possibly worry about comment
+bloat as I added in a bunch of metadata. But in the outside world,
+security is one of the things that makes stuff not work. I always knew
+you couldn't just flip a switch - CMITS has many interdependencies that
+have been challenging to tease out - but I never reckoned that even if
+such a switch existed, there are people who don't even want to walk
+close to it.</p>
+<p>Finally, everything decent is too big, and everything small enough is
+substandard. This means: Puppet (pre-4; they didn't build 4 for ARM)
+requires 23 packages. Salt may have been smaller (they didn't build for
+ARM) but come on: executable YAML? (This is a Puppet talking point, but
+that doesn't make it false.) I want something written in Rust that
+consumes Lua or Scheme or something small like that. Then maybe I could
+run it on my routers too.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

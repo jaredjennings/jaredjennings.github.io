@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Jared Jennings</title>
+        <title>CMITS is public!</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -15,7 +15,7 @@
                 <h1><a href="/">Writing to think 2: Write harder </a></h1>
                 <nav><ul>
                     <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li class="active"><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
                     <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
                     <li><a href="/category/projects.html">Projects</a></li>
@@ -27,29 +27,60 @@
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/cmits-is-public.html" rel="bookmark"
+           title="Permalink to CMITS is public!">CMITS is public!</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/frist-psot.html">Frist Psot!</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2016-11-02T22:30:20-04:00">
-                Published: Wed 02 November 2016
+        <abbr class="published" title="2015-03-24T02:45:00-04:00">
+                Published: Tue 24 March 2015
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/author/jared-jennings.html">Jared Jennings</a>
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
         </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
+<p>In <a href="/category/compliance-at-home-security.html">Compliance at home, Security</a>.</p>
 
-</footer><!-- /.post-info --><p>I've imported the content from the original &quot;Writing to think,&quot; a
-WordPress blog previously here at <a class="reference external" href="http://j.agrue.info">http://j.agrue.info</a>, so that I
-can read it again at this new Pelican site. There are some rough
-edges―for example, I think WordPress supported multiple categories and
-Pelican doesn't do so in the same way. But things will improve, and
-besides, if you're reading this, you're probably me, so <a class="reference external" href="http://www.elyrics.net/read/m/mc-frontalot-lyrics/the-omg-skit-lyrics.html">you know all
-this anyway</a>.</p>
-                </article>
-            </aside><!-- /#featured -->
+</footer><!-- /.post-info -->      <p>Configuration Management for Information Technology Systems (CMITS) is a
+melding of Puppet, LaTeX and my own scripts that makes compliance with
+hundreds of security requirements maintainable for me at work. And I've
+obtained permission to release it. The initial release is made at
+<a class="reference external" href="https://github.com/afseo/cmits">https://github.com/afseo/cmits</a>, in the &quot;public domain&quot; as defined by
+copyright law; forthwith I have made my own forks of each of its pieces,
+and placed them under various open-source licenses. In these forks I've
+applied some effort to make the unified policy document build properly
+at home and make more sense in a public context.</p>
+<p>There's a Python piece, and two LaTeX pieces, and a big ball of Puppet
+code that according to modern Puppet practices should be at least fifty
+pieces. Each of these languages has a canonical repository: PyPI, CTAN,
+and the Puppet Forge, respectively. As of this writing, none of the code
+has made its way to those places. So if you want to try it out, the
+first thing to do is get the <a class="reference external" href="https://github.com/jaredjennings/cmits/raw/master/build-products/cmits-example.pdf">pre-built unified policy document for the
+example
+policy</a>,
+read, and marvel. Then if you want to build your own (see also
+prerequisites in the various READMEs):</p>
+<ol class="arabic simple">
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/latex-cyber">https://github.com/jaredjennings/latex-cyber</a></li>
+<li>(cd latex-cyber; make &amp;&amp; make install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/latex-cybercic">https://github.com/jaredjennings/latex-cybercic</a></li>
+<li>(cd latex-cybercic; make &amp;&amp; make install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/shaney">https://github.com/jaredjennings/shaney</a></li>
+<li>(cd shaney; python setup.py install)</li>
+<li>git clone <a class="reference external" href="https://github.com/jaredjennings/cmits">https://github.com/jaredjennings/cmits</a></li>
+<li>cd cmits/cmits-example/unified-policy-document</li>
+<li>make</li>
+</ol>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

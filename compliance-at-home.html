@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Compliance at home</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
+                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/compliance-at-home.html" rel="bookmark"
+           title="Permalink to Compliance at home">Compliance at home</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-22T05:41:00-05:00">
+                Published: Wed 22 January 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a>.</p>
+<p>tags: <a href="/tag/disa.html">disa</a> <a href="/tag/nist.html">nist</a> <a href="/tag/security.html">security</a> <a href="/tag/srg.html">srg</a> <a href="/tag/standards.html">standards</a> <a href="/tag/stig.html">stig</a> </p>
+</footer><!-- /.post-info -->      <p>I'm much more cognizant of the need for secure configuration of
+operating system software everywhere than I've ever been in my life—and
+at no time in my life have I had less time to worry about securing my
+home computers.</p>
+<p>The U.S. DoD and NIST have done some solid work in setting out, at
+multiple levels of abstraction, how software should be configured for
+security. It looks like the top levels of this are set out by the <a class="reference external" href="http://nist.gov/cyberframework/index.cfm">NIST
+Cybersecurity Framework</a>
+these days; the highest-level standard I'm used to is <a class="reference external" href="https://nvd.nist.gov/static/feeds/xml/sp80053/rev4/800-53-controls.xml">SP
+800-53</a>,
+written nicely in some form of XML in this link. The
+<a class="reference external" href="http://disa.mil/">DISA</a> produces
+<a class="reference external" href="http://iase.disa.mil/srgs/">SRGs</a> which speak on how the SP 800-53
+requirements apply to categories of products, and
+<a class="reference external" href="http://iase.disa.mil/stigs/">STIGs</a> which say how to apply the
+requirements in SRGs to specific products.</p>
+<p>As examples of the levels we're talking about, SP 800-53 might have a
+requirement that when I, a user of a system, delete some data in the
+system, you, another user of that system, should not be able to find and
+read that deleted data. Then the UNIX Operating System SRG may say that
+an operating system should have a secure, robust multi-user filesystem.
+And suppose ElfinSlipper Professional Linux™ provides the capability to
+install on a FAT or ext4 filesystem, where FAT can't separate access by
+different users and lets anyone access data outside known files, and
+ext4 supports multiple users and prevents users from reading anything
+they don't own, including the raw disk. Then the STIG for ElfinSlipper
+would say that you have to choose the ext4 filesystem when you are
+installing ElfinSlipper.</p>
+<p>Now, NIST and DISA were promulgating these standards for years before I
+took any notice. And if I weren't being paid to read and understand
+them, I wouldn't have bothered. I don't have any time to implement them
+at home, but I feel insecure not having done so.</p>
+<p>More later about what's being done to put security in easy reach of
+beleaguered sysadmins, and what should be done instead.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

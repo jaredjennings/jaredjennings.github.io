@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Frist Psot!</title>
+        <title>Somebodyoughta: GitLab + Trello</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -17,13 +17,13 @@
                     <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
                     <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
                     <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-                    <li class="active"><a href="/category/misc.html">misc</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
                     <li><a href="/category/projects.html">Projects</a></li>
                     <li><a href="/category/projects-security.html">Projects, Security</a></li>
                     <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li class="active"><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
@@ -31,28 +31,55 @@
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="/frist-psot.html" rel="bookmark"
-           title="Permalink to Frist Psot!">Frist Psot!</a></h1>
+        <a href="/somebodyoughta-gitorious-trello.html" rel="bookmark"
+           title="Permalink to Somebodyoughta: GitLab + Trello">Somebodyoughta: GitLab + Trello</a></h1>
     </header>
 
     <div class="entry-content">
 <footer class="post-info">
-        <abbr class="published" title="2016-11-02T22:30:20-04:00">
-                Published: Wed 02 November 2016
+        <abbr class="published" title="2015-01-30T04:44:00-05:00">
+                Published: Fri 30 January 2015
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/author/jared-jennings.html">Jared Jennings</a>
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
         </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
+<p>In <a href="/category/somebody-oughta.html">Somebody Oughta</a>.</p>
 
-</footer><!-- /.post-info -->      <p>I've imported the content from the original &quot;Writing to think,&quot; a
-WordPress blog previously here at <a class="reference external" href="http://j.agrue.info">http://j.agrue.info</a>, so that I
-can read it again at this new Pelican site. There are some rough
-edges―for example, I think WordPress supported multiple categories and
-Pelican doesn't do so in the same way. But things will improve, and
-besides, if you're reading this, you're probably me, so <a class="reference external" href="http://www.elyrics.net/read/m/mc-frontalot-lyrics/the-omg-skit-lyrics.html">you know all
-this anyway</a>.</p>
+</footer><!-- /.post-info -->      <p>This is way less pie-in-the-sky than any of the other somebodyoughtas.
+Take a weekend and bang it out.</p>
+<p>(UPDATED: <a class="reference external" href="https://about.gitlab.com/2015/03/03/gitlab-acquires-gitorious/">GitLab acquires Gitorious; gitorious.org to shut
+down</a>.
+But GitLab doesn't have a Trello integration either. So the
+somebodyoughta materially stands.)</p>
+<p>You've probably heard of <a class="reference external" href="https://github.com/">GitHub</a>. It's a site
+that hosts Git repositories. The software that runs their site is
+fabulous, and proprietary. <a class="reference external" href="https://gitorious.org/">Gitorious</a> is a
+similar Git code hosting site, but the site software is available under
+the <a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a>. Trello is a
+site that hosts virtual kanban boards, where (if, for example, you are
+running a software project) you can make a virtual card for each change
+you want to make to your software, add little color swatches to it to
+indicate that it's really important or it has to do with subcomponent X,
+and move it from list to list (e.g., &quot;Somebodyoughta&quot; to &quot;Working on
+it&quot;) within the board. So like a bug tracker but with much more wisdom
+in its user interface.</p>
+<p>So when you make changes to your code, you may want to move a card in
+direct response, perhaps from a &quot;Coding&quot; list to a &quot;Ready to test&quot; list
+or something. GitHub has <a class="reference external" href="https://developer.github.com/webhooks/">web
+hooks</a>, whereby when you push
+changes to the repository, GitHub sends an HTTP POST request to a URL of
+your choosing, whose body contains data about the changes pushed. Trello
+has a well-developed
+<a class="reference external" href="https://gitorious.org/gitorious/pages/WebHooks">API</a> whereby you can
+programmatically tell it to, say, move a card from a list to another.
+These two aren't exactly the same, so it takes a little code to adapt
+between them. Someone has
+<a class="reference external" href="https://github.com/zanker/github-trello">written</a> this code.</p>
+<p>Gitorious also has <a class="reference external" href="https://gitorious.org/gitorious/pages/WebHooks">web
+hooks</a>. They are
+similar but not quite the same, I think. No one has written a
+Gitorious-Trello adapter. Somebodyoughta.</p>
 
     </div><!-- /.entry-content -->
 

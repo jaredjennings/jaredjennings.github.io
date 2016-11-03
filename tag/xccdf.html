@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Jared Jennings</title>
+        <title>Writing to think 2: Write harder - xccdf</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -30,24 +30,52 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/frist-psot.html">Frist Psot!</a></h1>
+                    <h1 class="entry-title"><a href="/compliance-at-home-whats-being-done.html">Compliance at home: What's being done</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="2016-11-02T22:30:20-04:00">
-                Published: Wed 02 November 2016
+        <abbr class="published" title="2014-03-07T05:47:00-05:00">
+                Published: Fri 07 March 2014
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="/author/jared-jennings.html">Jared Jennings</a>
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
         </address>
-<p>In <a href="/category/misc.html">misc</a>.</p>
-
-</footer><!-- /.post-info --><p>I've imported the content from the original &quot;Writing to think,&quot; a
-WordPress blog previously here at <a class="reference external" href="http://j.agrue.info">http://j.agrue.info</a>, so that I
-can read it again at this new Pelican site. There are some rough
-edges―for example, I think WordPress supported multiple categories and
-Pelican doesn't do so in the same way. But things will improve, and
-besides, if you're reading this, you're probably me, so <a class="reference external" href="http://www.elyrics.net/read/m/mc-frontalot-lyrics/the-omg-skit-lyrics.html">you know all
-this anyway</a>.</p>
+<p>In <a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a>.</p>
+<p>tags: <a href="/tag/nist.html">nist</a> <a href="/tag/oval.html">oval</a> <a href="/tag/scap.html">scap</a> <a href="/tag/security.html">security</a> <a href="/tag/standards.html">standards</a> <a href="/tag/xccdf.html">xccdf</a> </p>
+</footer><!-- /.post-info --><p>Last time I talked about the documents I've seen and used that contain
+security requirements at various levels of detail, and I said I'd speak
+more on what's being done to automate compliance, and what should be
+done instead.</p>
+<p>What's being done is <a class="reference external" href="http://scap.nist.gov/">SCAP</a>. This is a
+specification that binds together a bunch of other standards, namely
+XCCDF, OVAL, OCIL, and CVE and friends. Some part of the idea is that
+some person or
+<a class="reference external" href="https://fedorahosted.org/scap-security-guide/">community</a> makes a
+STIG using the XCCDF format. Someone makes OVAL that describes how to
+check for and possibly change system configuration; then a tool reads
+both XML files, uses the OVAL to find out how the system is configured,
+checks it against how the XCCDF says the system should be configured,
+and either renders a report of how compliant the system is, or, if the
+OVAL writer wrote enough OVAL, fixes the system. (Missing from my
+description: how OCIL, CPE, CCE, CVE, CVSS, CCSS and XML signatures play
+in.)</p>
+<p>The problem with this is that it's focused solely on security. That
+means a security-specific tool needs to know how to change the
+configuration of my system in general, so it's duplicating knowledge
+that is already kept and improved using languages like Puppet, Chef,
+Salt, cfengine, and the like. It also means that if I need a complete
+accounting of all the configuration changes being made to my system for
+any reason, I can't look in just one place. It means two tools can fight
+over how the system should be configured. It means two infrastructures
+for control and reporting talking across my network. As an admin at
+work, I don't want this headache. As an admin at home, I have no time to
+maintain it and it just won't get set up.</p>
+<p>A few months ago, <a class="reference external" href="http://dgshow.org/">Dave and Gunnar</a> talked about
+the origins of SELinux on their podcast, and they said a great thing
+about SELinux was that it brought the trusted operating system kernel
+into the mainstream, where previously it had been an expensive separate
+product for a tiny side market. I think this is what should happen for
+security-related system configuration as well, and I'll elaborate
+further later.</p>
                 </article>
             </aside><!-- /#featured -->
         <section id="extras" class="body">

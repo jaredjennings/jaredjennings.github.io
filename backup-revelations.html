@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder</title>
+        <title>Backup revelations</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -18,7 +18,7 @@
                     <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
                     <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
-                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li class="active"><a href="/category/projects.html">Projects</a></li>
                     <li><a href="/category/projects-security.html">Projects, Security</a></li>
                     <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
@@ -27,19 +27,42 @@
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<ul>
-    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-    <li><a href="/category/misc.html">misc</a></li>
-    <li><a href="/category/projects.html">Projects</a></li>
-    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
-    <li><a href="/category/security.html">Security</a></li>
-    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-</ul>
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/backup-revelations.html" rel="bookmark"
+           title="Permalink to Backup revelations">Backup revelations</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-08-30T01:06:00-04:00">
+                Published: Sun 30 August 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->      <p>While reading the code of par2cmdline (a month ago or something), I
+think I apprehended that the number of input files and the number of
+slices for the Reed-Solomon calculations are linked quite closely, and
+that perhaps this was why the PAR2 file format moved to using 16-bit
+Galois fields instead of the 8-bit fields used by PAR1, because then you
+can fit more than 256 files in a PAR2 file. I'm still a bit shaky on
+this, but it seems you ought to be able to use 8-bit Galois fields for
+as many files as you like - the Gibraltar project was using it for whole
+disks, of course.</p>
+<p>EDITED TO ADD: Ah, the limit is on the number of output files. Totally
+understandable. I'm not ever going to need more than hundreds of output
+files for my use case, but I guess someone on Usenet did once.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder</title>
+        <title>Somebodyoughta: 9P + GUI widgets</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -23,23 +23,58 @@
                     <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li class="active"><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<ul>
-    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-    <li><a href="/category/misc.html">misc</a></li>
-    <li><a href="/category/projects.html">Projects</a></li>
-    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
-    <li><a href="/category/security.html">Security</a></li>
-    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-</ul>
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/somebodyoughta-9p-gui-widgets.html" rel="bookmark"
+           title="Permalink to Somebodyoughta: 9P + GUI widgets">Somebodyoughta: 9P + GUI widgets</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-01-30T04:15:00-05:00">
+                Published: Fri 30 January 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/somebody-oughta.html">Somebody Oughta</a>.</p>
+
+</footer><!-- /.post-info -->      <p>So <a class="reference external" href="http://plan9.bell-labs.com/sys/doc/acme.html">Acme</a> exposes its
+windows and their contents through 9P. You can easily extend it by
+writing programs that mess around with the files it serves. Very neat
+idea. Now Inferno also has a lot built on 9P, but it uses Tk for its GUI
+widgets. I get it, Tk was small and simple, and their innovations
+weren't in GUI design but system design. But I never loved Tk, and it
+just isn't so beautifully simple as the rest of Plan 9 and Inferno.</p>
+<p>So what if you had a widget toolkit that's a file server? It consumes
+the display, keyboard and mouse devices like any window in Plan 9 or (I
+think) Inferno, but serves a tree of files and directories corresponding
+to widgets, and probably another tree corresponding to events. Rather
+than some XML file describing your GUI form, you have a tree of files
+and directories. Now designing a form is a matter of mkdir and cat. Then
+make a copy of the live widget tree in your project's source somewhere,
+to copy back later at runtime. Also, maybe someone could make a widget
+server that can talk OpenGL and animate things, so then the
+<a class="reference external" href="https://bitbucket.org/floren/inferno/wiki/Home">Hellaphone</a> could
+look like something a smartphone user might want to use. Like, if
+someone ported Hellaphone on top of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Hybris_%28software%29">libhybris</a>,
+they could expose Wayland compositing inside Inferno using Styx.</p>
+<p>While I'm coming up with crazy ideas—somebodyoughta take this blog and a
+lot of funding, and get college students to implement all this stuff.
+Like Jared's Summer of Code or something.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

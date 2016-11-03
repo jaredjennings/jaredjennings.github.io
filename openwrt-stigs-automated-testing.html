@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Somebodyoughta: OpenWRT + STIGs + automated testing</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li class="active"><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
+                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/openwrt-stigs-automated-testing.html" rel="bookmark"
+           title="Permalink to Somebodyoughta: OpenWRT + STIGs + automated testing">Somebodyoughta: OpenWRT + STIGs + automated testing</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-10-10T05:06:00-04:00">
+                Published: Fri 10 October 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Both a <a class="reference external" href="http://securityrules.info/about/xonib-cusyz-kyfek-gitox">Firewall
+STIG</a> and a
+<a class="reference external" href="http://securityrules.info/about/xumac-cabon-pilup-digax">Firewall
+SRG</a> exist.
+They require things like <a class="reference external" href="http://securityrules.info/about/xonib-cusyz-kyfek-gitox/SV-4582r3_rule">authentication for console
+access</a>
+and <a class="reference external" href="http://securityrules.info/about/xumac-cabon-pilup-digax/SRG-NET-000019-FW-000191_rule">suppressing router advertisements on external-facing IPv6
+interfaces</a>.</p>
+<p>Assuming I want my home router and network materially to comply with
+these documents, I could go through them, manually configuring the
+router as I go. But then I could have made a mistake, or I could buy a
+new router and have to do it all again. And all my effort would be
+useless to anyone whose functional requirements and hardware aren't
+exactly the same as mine.</p>
+<p>I think OpenWRT already fulfills a good number of these sorts of
+requirements out of the box. Perhaps it could be improved to do more of
+them by default. Some others are up to how OpenWRT is configured. And
+some of these requirements have more to do with the topology of the
+network than the configuration of a single piece of it. I want to be
+able to write exactly what changes are necessary to comply with each
+security requirement, and I want to be able to test that those changes
+do indeed fulfill the requirement.</p>
+<p>In the desktop and server world, OVAL content fills the gap between the
+kind-of-high-level requirements in an XCCDF checklist and the state of
+the system: &quot;to find out whether the minimum password length is long
+enough, remember this number: 15; read the file /etc/foo/bar; look for a
+line that matches the regex /minimum_pass/; get the second word; parse
+it as an integer; compare it to that number 15.&quot; Or something like that.
+You run a tool like <a class="reference external" href="http://www.open-scap.org/">OpenSCAP</a> or maybe
+Retina, which takes the XCCDF checklist and some OVAL definition files,
+and evaluates the compliance of the system with the configuration
+checklist. But OpenWRT runs on constrained enough platforms that it may
+not be practical to check compliance in place: the binaries and check
+content may not fit on the device, and the processing power may be
+constrained enough that compliance checking interferes with normal
+operation. What's needed, it seems, is a way to figure out what makes
+for compliance and test it somewhere else, then reliably put that
+configuration in place on the real device to obtain the compliant
+behavior in production.</p>
+<p>I've read recently about
+<a class="reference external" href="https://github.com/puppetlabs/beaker">Beaker</a>, which—if I've got
+things straight—brings up a virtual machine with a given OS, installs a
+given version of Puppet and Facter, runs a given Puppet manifest, and
+then lets you make assertions about the final state of the system. It
+helps Puppet Labs test Puppet, and also helps Puppet module authors test
+their modules. It brings the OS into the test loop. Now, it seems
+OpenWRT has an <a class="reference external" href="http://downloads.openwrt.org/barrier_breaker/14.07/x86/">x86 build
+target</a>, so
+that you can easily virtualize it. And
+<a class="reference external" href="http://vagrantup.com/">Vagrant</a> can bring up a
+<a class="reference external" href="http://docs.vagrantup.com/v2/multi-machine/index.html">multi-machine</a>
+environment.</p>
+<p>So, here's what <em>somebodyoughta</em> do: Make a tool that takes a
+description of a <a class="reference external" href="https://www.google.com/search?q=dmz+topology">network
+topology</a>, in terms
+suitable tersely to direct a person to set up a physical network of that
+topology, and makes a Vagrantfile that sets up VMs and virtual networks
+in that topology. Make something like <a class="reference external" href="https://github.com/solarkennedy/puppet-on-openwrt">Puppet for
+OpenWRT</a> (that
+project says, &quot;Status: Dead&quot;) that can configure OpenWRT in a given way.
+(<a class="reference external" href="http://wiki.openwrt.org/doc/uci">UCI</a> probably gets you more than
+halfway there, but the tool may also need to install packages from opkg
+and make extra config files outside of UCI. The tool should be able to
+modify the configuration, not just overwrite it.) Make some test
+description language that works across machines, with which you can say
+something like, &quot;To test the requirement that <a class="reference external" href="http://securityrules.info/about/xumac-cabon-pilup-digax/SRG-NET-000019-FW-000194_rule">the router must drop IPv6
+packets with undefined header
+extensions</a>,
+for each pair of interfaces A,B on the router, send a packet like such
+into interface A. No packet should come out of interface B. This test
+fully tests the requirement.&quot; If the test description language is
+open-ended enough, like say it pokes commands to VMs using
+<a class="reference external" href="http://puppetlabs.com/mcollective">MCollective</a> or
+<a class="reference external" href="http://www.fabfile.org/">Fabric</a> or something, then you could write
+a checklist with items like, &quot;OpenWRT is not vulnerable to
+CVE-YYYY-NNNN,&quot; and the test could be to run Metasploit with
+such-and-such parameters on a virtual machine connected to the virtual
+router.</p>
+<p>With these tools in hand, you could easily test whether any changes made
+to OpenWRT fulfill security requirements, you could easily convey how to
+set up a network environment with certain compliance guarantees, and you
+could test a given runtime configuration of OpenWRT against any kind of
+requirements (security or functional).</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

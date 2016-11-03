@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Writing to think 2: Write harder - Projects</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li class="active"><a href="/category/projects.html">Projects</a></li>
+                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
+                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/for-and-against-par1.html">for and against PAR1</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-02-07T01:56:00-05:00">
+                Published: Sun 07 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info --><p>PAR2 is better than PAR1. Why? Because it can deal with different-sized
+input files, it can store different numbers of parity blocks in parity
+files, and it can read parts of corrupt parity files.</p>
+<p>But how does darbrrb use PAR2? Upon dar slice files that are all one
+size. darbrrb directs PAR2 to store an identical number of parity blocks
+in each parity file, so they will be of predictable and identical size.
+And darbrrb requests a quite conservative amount of parity, and uses
+small slices and parity files, on the theory that if an optical disc
+fails to produce some bytes in the middle of a file, it will fail to
+produce the rest of the file as well, but might (untested) successfully
+produce the next file. In other words, there's a reason PAR2 is
+overcomplicated for darbrrb's uses: darbrrb only needs PAR1.</p>
+<p>And Gibraltar calculates 8-bit Reed-Solomon codes really fast, and
+par2cmdline still recovers from PAR1 files. So there's fast encoding,
+and a strong fallback.</p>
+<p>But PAR1 depends on a technical specification of Reed-Solomon
+calculation that's broken. So Gibraltar will likely not produce the same
+bits as the PAR1 spec says, the bits par2cmdline could decode.</p>
+<p>So I think a new format is still needed. But PAR1 might make a better
+base for it than PAR2, and the PAR1 spec is public-domain. That's easier
+than the GNU FDL.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/redundancy-file-format.html" rel="bookmark"
+                           title="Permalink to redundancy file format">redundancy file format</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-06T04:09:00-05:00">
+                Published: Sat 06 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>First, I'll collect the inspirations for this and the attributes I'd
+like to be true of it.</p>
+<p>par2 is the biggest inspiration. It shows how to make a file that will
+work even if parts of it are corrupted, and which parts are needed. It
+makes a lot ...</p>
+                <a class="readmore" href="/redundancy-file-format.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/backup-revelations.html" rel="bookmark"
+                           title="Permalink to Backup revelations">Backup revelations</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-08-30T01:06:00-04:00">
+                Published: Sun 30 August 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>While reading the code of par2cmdline (a month ago or something), I
+think I apprehended that the number of input files and the number of
+slices for the Reed-Solomon calculations are linked quite closely, and
+that perhaps this was why the PAR2 file format moved to using 16-bit
+Galois fields ...</p>
+                <a class="readmore" href="/backup-revelations.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/backup.html" rel="bookmark"
+                           title="Permalink to Backup">Backup</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-06-24T05:01:00-04:00">
+                Published: Wed 24 June 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>At least temporarily, I've turned back to an old project to back up
+files onto redundant arrays of optical discs.
+<a class="reference external" href="https://github.com/jaredjennings/darbrrb/issues/2">activity</a>.</p>
+<p>It looks like I can't both use the PAR2 file format and use Gibraltar,
+which is a library that uses the GPU to calculate redundancy data really ...</p>
+                <a class="readmore" href="/backup.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/irons-in-the-fire.html" rel="bookmark"
+                           title="Permalink to Irons in the fire">Irons in the fire</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-11T21:05:00-05:00">
+                Published: Sat 11 January 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+<p>tags: <a href="/tag/boot2gecko.html">boot2gecko</a> <a href="/tag/darbrrb.html">darbrrb</a> <a href="/tag/entropy.html">entropy</a> <a href="/tag/reorg.html">reorg</a> <a href="/tag/stigs.html">stigs</a> </p>
+</footer><!-- /.post-info -->                <p>Right now, I'm:</p>
+<ul class="simple">
+<li>digitizing something like 100 LP records, in the highest-quality way
+I can.</li>
+<li>reviving an electric organ from the '60s as a MIDI keyboard
+controller. (<a class="reference external" href="http://j.agrue.info/reorg">info</a>)</li>
+<li>writing <a class="reference external" href="http://github.com/jaredjennings/darbrrb/">a script</a> to
+back up files onto Blu-Ray discs using
+<a class="reference external" href="http://dar.sourceforge.net/">dar</a> and
+<a class="reference external" href="http://parchive.sourceforge.net/">par2</a>. (It's looking like it'll
+be ...</li></ul>
+                <a class="readmore" href="/irons-in-the-fire.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Writing to think 2: Write harder - Projects, Security</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li class="active"><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
+                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/sagemincer-updates.html">sagemincer updates</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-09-27T21:43:00-04:00">
+                Published: Sat 27 September 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects-security.html">Projects, Security</a>.</p>
+
+</footer><!-- /.post-info --><p>When first released,
+<a class="reference external" href="https://gitlab.com/sagemincer/sagemincer">sagemincer</a> was slow.
+Like, thirty seconds to load a page slow. After a bunch of changes, now
+it's fast enough to be far prouder of. Also I got a new domain for it,
+<a class="reference external" href="http://securityrules.info/">securityrules.info</a>.</p>
+<p>The way it got faster was this: I stopped trying to fetch all the
+triples I thought I'd need from the triplestore (4store) using a
+CONSTRUCT query, and parse them into a graph model (<tt class="docutils literal">rdflib.Graph</tt>).
+The step where rdflib parsed 4store's output was very slow. Now
+sagemincer uses SELECT queries with JSON output format, and parses them
+into dictionaries and lists. It's much faster, but it no longer uses
+<tt class="docutils literal">rdflib.Graph</tt>, so anything that builds on rdflib (e.g. the only
+Python reasoner I've found, FuXi) is out of the picture now. This means
+I'm using the flexibility of expression RDF offers (data is shaped like
+an arbitrary directed graph, not only a tree or table) but failing to
+take advantage of its ability to encode domain expertise using RDFS or
+OWL and inference.</p>
+<p>EDITED: project source code moved to GitLab.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/sagemincer.html" rel="bookmark"
+                           title="Permalink to sagemincer">sagemincer</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-08-08T02:44:00-04:00">
+                Published: Fri 08 August 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects-security.html">Projects, Security</a>.</p>
+
+</footer><!-- /.post-info -->                <p>If you've been reading my Compliance at Home series, you'll know that
+the DoD releases security guidance in the form of STIGs. They're
+downloadable as ZIP files, which contain ZIP files, which contain
+checklists written in XCCDF, and stylesheets that can turn the XCCDF
+document into HTML ...</p>
+                <a class="readmore" href="/sagemincer.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

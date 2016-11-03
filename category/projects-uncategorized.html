@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder</title>
+        <title>Writing to think 2: Write harder - Projects, Uncategorized</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -20,26 +20,55 @@
                     <li><a href="/category/misc.html">misc</a></li>
                     <li><a href="/category/projects.html">Projects</a></li>
                     <li><a href="/category/projects-security.html">Projects, Security</a></li>
-                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li class="active"><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
                     <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<ul>
-    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-    <li><a href="/category/misc.html">misc</a></li>
-    <li><a href="/category/projects.html">Projects</a></li>
-    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
-    <li><a href="/category/security.html">Security</a></li>
-    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-</ul>
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/push-generators-and-monads.html">Push generators and monads</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-06-01T03:19:00-04:00">
+                Published: Mon 01 June 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects-uncategorized.html">Projects, Uncategorized</a>.</p>
+
+</footer><!-- /.post-info --><p>I wrote <a class="reference external" href="https://github.com/jaredjennings/shaney/">Shaney</a>
+(<a class="reference external" href="https://github.com/jaredjennings/shaney/blob/master/requirements.txt">history</a>)
+to parse important elements out of hundreds of text files (Puppet source
+code and LaTeX), and produce interesting content out of them, writing it
+into dozens of other text files (LaTeX). Now I'm trying to do much the
+same thing for
+<a class="reference external" href="https://gitlab.com/sagemincer/snailcrusader">snailcrusader</a>, but not
+reading only Puppet source files, and not creating LaTeX as output.
+Shaney started out as a set of classes whose instances would call each
+other's methods, and turned into a set of push generators, thanks to
+some <a class="reference external" href="http://www.dabeaz.com/coroutines/">Beazley reading</a>, becoming
+several times faster in the process. It's small code and fast, but not
+easy to read and write, so I wanted to make the syntax a little nicer.
+But in attempting to do so, I've been bothered by the similarities
+between push generators and monads.</p>
+<p>So I went back to my favorite document on monads, <a class="reference external" href="http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html">You Could Have
+Invented
+Monads</a>
+from Dan Piponi. There are many monad implementations for Python, but I
+doubt they are fast enough, because they are using functions and not
+generators. YCHIM doesn't start from what exists in Haskell, but from
+the problems that could have incited you to invent monads. So it makes
+it easier to see sort of which half I've implemented. Now let's see if
+all that untangling and concept-naming can help me generalize and
+sweeten what I've got, enhance shaney, and create snailcrusader. You can
+follow the effort at <a class="reference external" href="https://gitlab.com/jaredjennings/python-textpush">https://gitlab.com/jaredjennings/python-textpush</a>.</p>
+                </article>
+            </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

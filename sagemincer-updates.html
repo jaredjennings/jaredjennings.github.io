@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder</title>
+        <title>sagemincer updates</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -19,7 +19,7 @@
                     <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
                     <li><a href="/category/projects.html">Projects</a></li>
-                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li class="active"><a href="/category/projects-security.html">Projects, Security</a></li>
                     <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
@@ -27,19 +27,48 @@
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-<ul>
-    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
-    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
-    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
-    <li><a href="/category/misc.html">misc</a></li>
-    <li><a href="/category/projects.html">Projects</a></li>
-    <li><a href="/category/projects-security.html">Projects, Security</a></li>
-    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
-    <li><a href="/category/security.html">Security</a></li>
-    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
-    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
-    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-</ul>
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/sagemincer-updates.html" rel="bookmark"
+           title="Permalink to sagemincer updates">sagemincer updates</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-09-27T21:43:00-04:00">
+                Published: Sat 27 September 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects-security.html">Projects, Security</a>.</p>
+
+</footer><!-- /.post-info -->      <p>When first released,
+<a class="reference external" href="https://gitlab.com/sagemincer/sagemincer">sagemincer</a> was slow.
+Like, thirty seconds to load a page slow. After a bunch of changes, now
+it's fast enough to be far prouder of. Also I got a new domain for it,
+<a class="reference external" href="http://securityrules.info/">securityrules.info</a>.</p>
+<p>The way it got faster was this: I stopped trying to fetch all the
+triples I thought I'd need from the triplestore (4store) using a
+CONSTRUCT query, and parse them into a graph model (<tt class="docutils literal">rdflib.Graph</tt>).
+The step where rdflib parsed 4store's output was very slow. Now
+sagemincer uses SELECT queries with JSON output format, and parses them
+into dictionaries and lists. It's much faster, but it no longer uses
+<tt class="docutils literal">rdflib.Graph</tt>, so anything that builds on rdflib (e.g. the only
+Python reasoner I've found, FuXi) is out of the picture now. This means
+I'm using the flexibility of expression RDF offers (data is shaped like
+an arbitrary directed graph, not only a tree or table) but failing to
+take advantage of its ability to encode domain expertise using RDFS or
+OWL and inference.</p>
+<p>EDITED: project source code moved to GitLab.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

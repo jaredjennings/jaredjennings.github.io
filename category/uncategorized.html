@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Writing to think 2: Write harder - Uncategorized</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li><a href="/category/compliance-at-home-projects-security.html">Compliance at home, Projects, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security.html">Compliance at home, Security</a></li>
+                    <li><a href="/category/compliance-at-home-security-somebody-oughta.html">Compliance at home, Security, Somebody Oughta</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li><a href="/category/projects-security.html">Projects, Security</a></li>
+                    <li><a href="/category/projects-uncategorized.html">Projects, Uncategorized</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/security-somebody-oughta.html">Security, Somebody Oughta</a></li>
+                    <li><a href="/category/somebody-oughta.html">Somebody Oughta</a></li>
+                    <li class="active"><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/netconf-and-the-curse-of-consensus.html">NETCONF and the curse of consensus</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-05-01T02:07:00-04:00">
+                Published: Sun 01 May 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info --><p>So my router runs OpenWRT, and its configuration is complicated enough
+that I can't easily capture it all in one place, nor set up a new blank
+router to do its job if need be. There are packages to install, UCI
+settings to set, configuration files to put in place, and maybe a change
+or two to an /etc/init.d script. And the firewall config when written in
+UCI gets repetitive really fast.</p>
+<p>I wanted Puppet, but that's too big by far, especially now that Puppet
+has copies of all its own dependencies (i.e., its own Ruby interpreter
+and set of gems) inside the official packages. And someone's done it
+before and it's petered out.</p>
+<p>I always sort of thought Puppet was too big: cfengine 2 did 50% of what
+Puppet did, while being much smaller. I'd never trade back now, because
+cfengine 2 wasn't extensible to new resource types, its syntax was not
+good, and cfengine 3 syntax is downright bad.</p>
+<p>I've wanted for a long time to be able to link compliance with config
+policy (see back through the &quot;Compliance at home&quot; category), and the
+cool kids (Salt, Ansible) are using YAML these days, so why not use RDF,
+encoded in something light like Turtle? It's the ultimate in
+linkability. And RDF HDT for wire transfers, or something. But I thought
+through what I would need to write a decent system configuration, and
+something like Puppet's classes and facts would be necessary. Well - one
+of the biggest things OWL does is to classify resources based on
+information, i.e. to figure out what classes things have based on facts
+about the class and the thing. But no one seems to have tried to make a
+small-footprint OWL inference engine. And I found that the Rete
+algorithm, which makes inference fast enough to be possible, does so by
+trading memory use for CPU work. That may not scale on a router. (On
+second thought, I haven't figured out what the scale might need to be.)
+So RDF might be too heavy for a router to deal with.</p>
+<p>OpenWRT has Lua, though: perhaps I could just write a set of functions
+in Lua, calls to which constitute the desired state of the system; the
+functions would check the state and change if necessary. This is the way
+of Lua: munge code in with data. Power in a small size, at the possible
+expense of easy security. Make a package with the desired-state function
+definitions; rsync the description of the desired state up; no packaging
+RDF libraries, no C work (Rust would be nicer but I can't quite get it
+to cross-compile yet, there's some little mips h file missing): quicker,
+smaller, nicer. So I'm reading through the Lua reference manual again.</p>
+<p>Meanwhile I find out about NETCONF, which is XML-based network device
+configuration getting-and-setting, with flexible transports underneath,
+but most likely presented as an SSHv2 subsystem. It probably will only
+do UCI settings, not also put arbitrary config files in place (e.g.
+ntpd.conf, gpsd.conf, sshd_config), but it's already standardized and a
+server is already packaged for OpenWRT.</p>
+<p>So now to my main complaint: worse is better. NETCONF is made of XML not
+ASN.1 BER, woohoo I guess. But it's still grotty, and I think it's
+because no one could agree on anything cooler.</p>
+<p>I'd like for the way of configuration to be either made of RDF, or
+exposed via a 9P filesystem, or both (that's funny because the Plan 9
+folks swear by short strings and local filesystems, and the RDF folks
+reckon the URI as the supreme abstraction: long but global). But I don't
+think I've got time to both flout the consensuses and do cool things in
+the next layer up.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/being-social-without-being-proprietary.html" rel="bookmark"
+                           title="Permalink to being social without being proprietary">being social without being proprietary</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-03-09T03:24:00-05:00">
+                Published: Wed 09 March 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I'm annoyed at the app-centric world that most people live in nowadays.
+The FSF wants my help in <a class="reference external" href="https://defectivebydesign.org/show-them-the-world-is-watching-stop-drm-in-html">protesting the
+Hollyweb</a>,
+and Dave Winer and Hossein Derakhshan are on about <a class="reference external" href="https://medium.com/&#64;davewiner/please-please-post-this-on-your-blog-d21ebd28b929#.w2vffdn13">the web we have to
+save</a>
+(&quot;Log in to Medium to recommend this story!&quot;). I've been annoyed for ...</p>
+                <a class="readmore" href="/being-social-without-being-proprietary.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/for-par1.html" rel="bookmark"
+                           title="Permalink to for PAR1">for PAR1</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-07T05:42:00-05:00">
+                Published: Sun 07 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I looked in the source of parchive (which is only like 3500 lines of
+code to par2cmdline's 13500 or so) and didn't find any evidence of the
+flawed math that was in the original RS tutorial. I don't think parchive
+is flawed at this point.</p>
+<p>And it ...</p>
+                <a class="readmore" href="/for-par1.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/against-turbo-codes.html" rel="bookmark"
+                           title="Permalink to against turbo codes">against turbo codes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-06T15:12:00-05:00">
+                Published: Sat 06 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Upon reading a few more papers, I find that the reason people only
+simulate turbo codes in software is because decoding them is so
+computationally difficult that for the applications they are used in
+(phones and TVs) people make custom silicon or write programs for DSPs
+in order to decode ...</p>
+                <a class="readmore" href="/against-turbo-codes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/redundancy-files.html" rel="bookmark"
+                           title="Permalink to redundancy files">redundancy files</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-06T01:32:00-05:00">
+                Published: Sat 06 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've done some reading about various kinds of codes (thanks again,
+Wikipedia). I've found that while Reed-Solomon is a good code, it takes
+a lot of computation to encode as compared to some others. Most
+interestingly, turbocodes seem faster and the patent on them just
+expired in 2013 ...</p>
+                <a class="readmore" href="/redundancy-files.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/darbrrb-three-years-later.html" rel="bookmark"
+                           title="Permalink to darbrrb, three years later">darbrrb, three years later</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-02-02T04:32:00-05:00">
+                Published: Tue 02 February 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>In 2013, I wrote <a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a>
+to make redundant backups onto optical media using dar and par2. After
+some testing I found par2 was so slow that backing up my files (a couple
+of hundred gigabytes) would take more than a week, not counting the time
+it takes to burn each ...</p>
+                <a class="readmore" href="/darbrrb-three-years-later.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/why-im-not-running-qubes-os.html" rel="bookmark"
+                           title="Permalink to Why I'm not running Qubes OS">Why I'm not running Qubes OS</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-01-13T03:42:00-05:00">
+                Published: Wed 13 January 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p><a class="reference external" href="https://www.qubes-os.org/">Qubes OS</a> uses virtualization to greatly
+enhance system security, for example by running the code for the network
+stack and the code for the firewall in separate virtual machines.</p>
+<p>But:</p>
+<ul class="simple">
+<li>NVIDIA proprietary drivers aren't supported, but I'm trying to use
+libgibraltar, which needs CUDA, which needs the proprietary ...</li></ul>
+                <a class="readmore" href="/why-im-not-running-qubes-os.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/winning-free-software.html" rel="bookmark"
+                           title="Permalink to Winning Free software">Winning Free software</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-09-19T03:01:00-04:00">
+                Published: Sat 19 September 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've worried a lot lately rather than coding. I haven't got that much
+time to do either of them, so it's important to make sure that the
+coding I do helps people or has lasting merit. Or at least it seems like
+that.</p>
+<p>This means I haven ...</p>
+                <a class="readmore" href="/winning-free-software.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/system-configuration-management-woes.html" rel="bookmark"
+                           title="Permalink to System configuration management woes">System configuration management woes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-09-19T02:34:00-04:00">
+                Published: Sat 19 September 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>First, there aren't enough prebuilt packages for system configuration
+management software (e.g. Puppet, Chef, Ansible, Salt) for ARM.</p>
+<p>Then about Puppet's modules. They are supposed to be a great help: I
+want to configure a subsystem, I go to the Puppet Forge and find a
+module, I ...</p>
+                <a class="readmore" href="/system-configuration-management-woes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/child-theme-created.html" rel="bookmark"
+                           title="Permalink to Child theme created">Child theme created</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-09-04T02:15:00-04:00">
+                Published: Fri 04 September 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've moved the font customizations I made for this blog into a child
+theme, after learning that Wordpress has these things called child
+themes, and after a Wordpress upgrade took out the changes I had made in
+an ad-hoc fashion. <a class="reference external" href="https://gitlab.com/jaredjennings/wordpress-theme-twenty-fifteen-c64-child">The GitLab
+repo</a>.</p>
+
+                <a class="readmore" href="/child-theme-created.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/moved.html" rel="bookmark"
+                           title="Permalink to Moved">Moved</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-08-30T01:10:00-04:00">
+                Published: Sun 30 August 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've moved to Pittsburgh, and obtained a job at Peoples Natural Gas as a
+cybersecurity analyst. This is so far rather less focused on the details
+of compliance on individual hosts, and more on the whole organization,
+the whole networks, people, and the policies people follow. This may
+mark ...</p>
+                <a class="readmore" href="/moved.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/firefox-os-nexus-4.html" rel="bookmark"
+                           title="Permalink to Firefox OS on the Nexus 4">Firefox OS on the Nexus 4</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-02-04T05:21:00-05:00">
+                Published: Wed 04 February 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Podcasts and hardware support.</p>
+<p>I built Firefox OS (or Boot2Gecko; are they still calling it that when
+it doesn't come straight from Mozilla?) for my Nexus 4 phone. It boots
+fast, it runs well, and I used it for a couple of days. It's a great
+piece of ...</p>
+                <a class="readmore" href="/firefox-os-nexus-4.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/look-on-my-works-ye-mighty-and-despair.html" rel="bookmark"
+                           title="Permalink to Look on my works, ye mighty, and despair">Look on my works, ye mighty, and despair</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-06-01T20:20:00-04:00">
+                Published: Sun 01 June 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I've been learning about <a class="reference external" href="http://linkeddata.org/">Linked Data</a>
+lately, along with other related concepts like RDF, RDFS, OWL, and
+SPARQL, and having a lot of fun with it. I think it's quite promising,
+which is a silly statement to make because it's already doing a lot of
+work for ...</p>
+                <a class="readmore" href="/look-on-my-works-ye-mighty-and-despair.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/syndication-fail.html" rel="bookmark"
+                           title="Permalink to Read what I read">Read what I read</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-20T06:26:00-05:00">
+                Published: Mon 20 January 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I read dozens of blogs. I thought I would grab all the posts I thought
+were worth reading and share them here. But they drowned out my own
+writing, so I stopped. (<a class="reference external" href="http://ttrss-agrue.rhcloud.com/public.php?op=rss&amp;id=-2&amp;key=5639d9a3cd9c66cff02752fca1d676c86801eb91">The
+feed</a>,
+if you want it.)</p>
+
+                <a class="readmore" href="/syndication-fail.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/new-frist-psot.html" rel="bookmark"
+                           title="Permalink to New frist psot">New frist psot</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-10T23:59:00-05:00">
+                Published: Fri 10 January 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
+
+</footer><!-- /.post-info -->                <p>So this is the blog where I commune with my past and future selves. A
+story: Once I filed an issue against a piece of software I had written,
+about the need to redesign it to be orders of magnitude faster. That
+ticket has over 100 comments, all from me ...</p>
+                <a class="readmore" href="/new-frist-psot.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
