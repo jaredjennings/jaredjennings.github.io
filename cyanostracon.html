@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Tags</title>
+        <title>cyanostracon</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -17,37 +17,55 @@
                     <li><a href="/category/commentary.html">Commentary</a></li>
                     <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
                     <li><a href="/category/misc.html">misc</a></li>
-                    <li><a href="/category/projects.html">Projects</a></li>
+                    <li class="active"><a href="/category/projects.html">Projects</a></li>
                     <li><a href="/category/security.html">Security</a></li>
                     <li><a href="/category/uncategorized.html">Uncategorized</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
-
 <section id="content" class="body">
-    <h1>Tags for Writing to think 2: Write harder</h1>
-    <ul>
-        <li><a href="/tag/boot2gecko.html">boot2gecko</a> (1)</li>
-        <li><a href="/tag/chef.html">chef</a> (1)</li>
-        <li><a href="/tag/darbrrb.html">darbrrb</a> (1)</li>
-        <li><a href="/tag/disa.html">disa</a> (2)</li>
-        <li><a href="/tag/entropy.html">entropy</a> (1)</li>
-        <li><a href="/tag/haiku.html">haiku</a> (1)</li>
-        <li><a href="/tag/nist.html">nist</a> (3)</li>
-        <li><a href="/tag/oval.html">oval</a> (1)</li>
-        <li><a href="/tag/puppet.html">puppet</a> (1)</li>
-        <li><a href="/tag/reorg.html">reorg</a> (1)</li>
-        <li><a href="/tag/scap.html">scap</a> (1)</li>
-        <li><a href="/tag/security.html">security</a> (10)</li>
-        <li><a href="/tag/somebodyoughta.html">somebodyoughta</a> (12)</li>
-        <li><a href="/tag/srg.html">srg</a> (1)</li>
-        <li><a href="/tag/standards.html">standards</a> (3)</li>
-        <li><a href="/tag/stig.html">stig</a> (1)</li>
-        <li><a href="/tag/stigs.html">stigs</a> (1)</li>
-        <li><a href="/tag/tails.html">tails</a> (1)</li>
-        <li><a href="/tag/xccdf.html">xccdf</a> (1)</li>
-    </ul>
-</section>
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/cyanostracon.html" rel="bookmark"
+           title="Permalink to cyanostracon">cyanostracon</a></h1>
+    </header>
 
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-11-02T23:19:35-04:00">
+                Published: Wed 02 November 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->      <p><a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a> is
+well-developed and well-tested. I've made several backups with it. But
+I've grown frustrated with how serial it is. I decided early on to
+make it as simple as I could: it calls dar (so to be able to write
+down exactly how dar was called inside the backup), dar calls it after
+every slice, and before it hands control back to dar, it will run par
+to generate archive files, and/or it will burn a completed set of
+optical discs.</p>
+<p>The opportunity for improvement is that, while par is fast, it could
+be running at the same time as dar creates more slices. And, more
+interestingly, if multiple Blu-Ray drives exist, multiple discs of a
+set could be being burned at once (during a backup) or read at once
+(during a restore). But making this possible requires inversion of
+control, such that instead of waiting until a thing has finished and
+doing the next thing, we can ask for everything to be done that can be
+done for now, and when something is done that we can act on, we act on
+it, in an event-based fashion.</p>
+<p>cyanostracon is the attempt to invert control in this fashion. It's
+slow going but it's taking shape, based on David Beazley's <a class="reference external" href="https://github.com/dabeaz/curio">curio</a> library. It's not hosted anywhere
+yet, but it'll probably go up on GitLab one of these days.</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>
