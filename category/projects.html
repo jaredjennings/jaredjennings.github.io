@@ -25,7 +25,59 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/personal-container-cloud.html">personal container cloud</a></h1>
+                    <h1 class="entry-title"><a href="/sagemincer-broken.html">sagemincer broken</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-01-25T23:07:00-05:00">
+                Published: Wed 25 January 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info --><p>So <a class="reference external" href="http://securityrules.info/">http://securityrules.info/</a> is still around, and highly trafficked
+by search engine bots—bingbot, Googlebot, AhrefsBot, Baiduspider,
+MJ12Bot and BLEXBot. Real people appear to have fetched around 15,000
+pages of information about security rules in the past month—around
+20 hits per hour on average.</p>
+<p>But there is a big problem: it doesn't appear that up-to-date STIGs
+are being shown on the site. I expended a great deal of effort to make
+sure it would Just Work, without my constant supervision. But there
+are problems that block fixing that. To wit:</p>
+<p>First, the site is running an old version of sagemincer, and it
+appears this has some silly error in it that makes the fetch always
+fail under present conditions.</p>
+<p>But even if that were fixed, sagemincer takes up 91% of its disk
+quota, with its logs just scrubbed. If it were to successfully fetch
+new STIGs, it would run out of space. I have a <a class="reference external" href="https://trello.com/c/8a4Gywf6/38-deal-with-space-constraints">Trello card</a> about
+that, but haven't done anything to fix it.</p>
+<p>But even if that were fixed, OpenShift Online is going away some time
+soon. sagemincer needs to run in containers instead, but OpenShift
+Online next gen isn't in place yet, and will likely cost money when it
+is. Other container hosting exists today; using it means doing CI/CD
+outside OpenShift, and it will likely also cost money.</p>
+<p>I don't want to pay money nor set up ads, and I don't want all of my
+cool URIs to fail to resolve either. Grumpf.</p>
+<p>Oh also I just read a few blog articles about Luigi, Airflow, and
+Pinball, which all seem to be dealing in bigger data than I am; and
+LinkedPipes ETL and UnifiedViews, which are about ETLing with RDF but
+are too anti-coding. And I read about Kafka—intriguing as it was last
+time I looked, but also too big iirc.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/personal-container-cloud.html" rel="bookmark"
+                           title="Permalink to personal container cloud">personal container cloud</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-01-25T00:16:00-05:00">
                 Published: Wed 25 January 2017
@@ -36,109 +88,13 @@
         </address>
 <p>In <a href="/category/projects.html">Projects</a>.</p>
 <p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info --><p>Containers are real neat. I like how you can build a single thing that
+</footer><!-- /.post-info -->                <p>Containers are real neat. I like how you can build a single thing that
 contains a hunk of an application, and deploy both the initial version
 and follow-on updates quickly. Containers are very easy to deploy to
-any of a panoply of public clouds, but I want to host web apps for my
-own use, containing my own data, on my own hardware.</p>
-<p>And my hardware is a single box having an Athlon FX with eight cores,
-8GB of RAM, and a couple of terabytes of mirrored spinning disks.</p>
-<p>I've had my eye on OpenShift for a while now. It's a thing that can
-build your code into containers, deploy the containers in various
-slicey-dicey ways, and manage your web apps, including setting up DNS
-so people can go to <a class="reference external" href="https://yourapp-you.openshift.example.com">https://yourapp-you.openshift.example.com</a> or some
-such. I also looked at Deis, Rancher, and a couple of other whiz-bang
-things. Besides a shocking loss of code diversity as everybody
-scrambles to rebase everything on Kubernetes, what they have in common
-is that the people who made them figure you must have at least three
-beefy boxen to dedicate to your cloud, and more like a hundred, if you
-are bothering to use their software. Oh, yes, try out our thing in a
-Vagrant box, or run it as a container—but that's for developing,
-debugging, kicking the tires; it might not remember things you told it
-if you restart it.</p>
-<p>Meanwhile, it seems that since I last checked, Docker has grown into
-several products, rkt and appc have sprung up, and the Open Container
-Initiative has begun (Gunnar and Dave let me in on that one). I'm
-impressed with rkt and its attempts to be only one thing rather than
-subsuming the world. In particular, I'm swayed by the case for using
-systemd to manage containers rather than Docker's daemon. Perhaps,
-like the time when PulseAudio stopped stuttering and started working,
-this is systemd's moment to come into its own.</p>
-<p>But everyone is building all their container networks on IPv4. How
-silly! IPv6 is made for this sort of thing. I've only got one public
-IPv4 address and it's dynamic. And what if I want to have fun with
-containers that live on a darknet instead?</p>
-<p>So here's what I've got so far on how to have fun running containers
-on a single box.</p>
-<blockquote>
-<ol class="arabic">
-<li><p class="first">Make a VM and install CoreOS Container Linux. (I got version
-1248.4.0.) This entails getting the iso, constructing a cloud-config
-file, making that into an iso, mounting it on the VM, and running
-coreos-install with it. My cloud-config.yaml goes like:</p>
-<pre class="literal-block">
-#cloud-config
-coreos:
-  update:
-    reboot-strategy: best-effort
-ssh_authorized_keys:
-  - &quot;ssh-rsa AAAA...&quot;
-hostname: &quot;myhostname&quot;
-</pre>
-</li>
-<li><p class="first">(coreos-install needs outbound https.) Once booted, the CoreOS box
-obtains an address on my fd00::/16 local network. Add a firewall
-rule to allow my internal box to ssh to it, and ssh
-core&#64;myhostname. Find out the real 2001:db8::/48 IP, add another
-firewall rule for ssh, add a DNS entry.</p>
-</li>
-<li><p class="first">Read about <a class="reference external" href="https://github.com/coreos/rkt/blob/6e3292bfa3d2d0238df3402ba9fe2f73327335f5/Documentation/networking/overview.md">rkt networking</a>
-using CNI plugins. Create <tt class="docutils literal"><span class="pre">/etc/rkt/net.d/10-dmz.conf</span></tt> with
-these contents:</p>
-<pre class="literal-block">
-{
-  &quot;name&quot;: &quot;dmz&quot;,
-  &quot;type&quot;: &quot;macvlan&quot;,
-  &quot;master&quot;: &quot;eth0&quot;,
-  &quot;ipam&quot;: {
-    &quot;type&quot;: &quot;dhcp&quot;
-  }
-}
-</pre>
-</li>
-<li><p class="first">Read about the dhcp plugin. Find
-<tt class="docutils literal"><span class="pre">/usr/lib/rkt/stage1-images/stage1-coreos.aci</span></tt>. <tt class="docutils literal">rkt fetch</tt> that sucker as per the <a class="reference external" href="https://github.com/coreos/rkt/blob/6e3292bfa3d2d0238df3402ba9fe2f73327335f5/Documentation/networking/overview.md#dhcp">dhcp section</a>, then follow the rest of the directions.</p>
-</li>
-<li><p class="first">Run <tt class="docutils literal">sudo ./dhcp daemon</tt>. Ctrl-Z, bg.</p>
-</li>
-<li><p class="first"><tt class="docutils literal">sudo rkt run <span class="pre">--net=dmz</span> <span class="pre">--interactive</span>
-<span class="pre">quay.io/coreos/alpine-sh</span></tt>. Inside the container, run <tt class="docutils literal">ip a</tt> and
-see the unique IPv6 address.</p>
-</li>
-<li><p class="first"><tt class="docutils literal">sudo rkt gc <span class="pre">--grace-period=0s</span></tt> and watch the dhcp lease get
-released.</p>
-</li>
-<li><p class="first">Wonder how to ever remember where that silly <tt class="docutils literal">/home/core/dhcp</tt>
-executable came from; write silly manual directions.</p>
-</li>
-</ol>
-</blockquote>
-<p>Unanswered questions:</p>
-<blockquote>
-<ul class="simple">
-<li>How can that dhcp thingy be made suitably repeatable or automatic?
-Why isn't that part of CoreOS?</li>
-<li>How can the containers update a DNS server with their IPv6
-addresses?</li>
-<li><a class="reference external" href="https://nonconformity.net/2016/06/10/onionboat-using-docker-for-easy-tor-hidden-services/">onionboat</a></li>
-</ul>
-</blockquote>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+any of a panoply of public clouds, but I want to host web ...</p>
+                <a class="readmore" href="/personal-container-cloud.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
