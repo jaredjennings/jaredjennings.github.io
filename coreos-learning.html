@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>learning about CoreOS Container Linux</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder </a></h1>
+                <nav><ul>
+                    <li><a href="/category/commentary.html">Commentary</a></li>
+                    <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li class="active"><a href="/category/projects.html">Projects</a></li>
+                    <li><a href="/category/security.html">Security</a></li>
+                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/coreos-learning.html" rel="bookmark"
+           title="Permalink to learning about CoreOS Container Linux">learning about CoreOS Container Linux</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-01-25T00:16:00-05:00">
+                Published: Wed 25 January 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+<p>tags: <a href="/tag/security.html">security</a> </p>
+</footer><!-- /.post-info -->      <p>So the macvlan networking doesn't appear to work for me in the way I
+had hoped. What I imagined CNI would get me was that each one of my
+containers would get its own autoconfigured IPv6 address, and it would
+be some Small Matter of Programming to get those addresses poked into
+a DNS somewhere. But it seems all the container networking goodness of
+CNI was really intended to let containers talk to each other: some
+less-containerized, more-static, separate load balancer and/or reverse
+proxy would sit in front, from what I'm gathering.</p>
+<p>Bah, totally derailed, had to deal with
+<a class="reference external" href="https://github.com/jaredjennings/puppet-mac_plist_value/issues/2">https://github.com/jaredjennings/puppet-mac_plist_value/issues/2</a>. (Whaat,
+someone is <em>using</em> my code? Wow!)</p>
+<p>Ah - so I had a Docker nginx container running under rkt with macvlan,
+and it could ping outward, and fetch things over the Web and such, but
+it was trying to listen on port 80 and either sending RSTs to my SYN
+packets, or dropping them. I made my own ACI container with acbuild
+that just did an <tt class="docutils literal">ip a</tt> to verify that it had the addresses by the
+time code was running in the container, and then a <tt class="docutils literal">nc <span class="pre">-l</span> <span class="pre">-p</span>
+80</tt>. Still no dice.</p>
+<p>So I tried making my <tt class="docutils literal">eth0</tt> in my CoreOS box be part of a bridge,
+and making my containers be on the bridge network. It works for my
+VMs, it ought to work for the containers. But now the CoreOS box can
+ping out and fetch things, but not be pinged nor SSHed to.</p>
+<p>I've found that the toolbox command in CoreOS exists, and also <a class="reference external" href="https://github.com/coreos/bugs/issues/1698">found</a> that at the moment you
+need to explicitly use Fedora 24 inside it not Fedora 25.</p>
+<p>And I've found that CoreOS doesn't have ip6tables. And the first
+result from a search for &quot;ipv6 coreos&quot; is &quot;Guide for disabling ipv6.&quot;
+Project Atomic isn't brimming with web pages about IPv6 either, but
+Docker is being said to have some kind of IPv6 support. (The reader
+should understand that IPv6 has been around for 25 years now, and I've
+chosen to use it everywhere I can.)</p>
+
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
