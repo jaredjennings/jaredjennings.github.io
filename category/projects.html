@@ -25,7 +25,37 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/sagemincer-broken.html">sagemincer broken</a></h1>
+                    <h1 class="entry-title"><a href="/personal-container-cloud-2.html">personal container cloud 2</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-02-07T19:58:00-05:00">
+                Published: Tue 07 February 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+<p>tags: <a href="/tag/security.html">security</a> </p>
+</footer><!-- /.post-info --><p>I've learned a few things. First, a firewall misconfiguration was
+partly to blame. Second, neither Alpine's nginx package, nor netcat as
+found in Debian, appear to support IPv6. The dhcp daemon can be
+written into a systemd unit; I haven't done it yet. DNS updates might
+happen if I were to serve DHCPv6 from my dnsmasq instance; I haven't
+tried it yet. And acbuild is easy and quick to start using.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/sagemincer-broken.html" rel="bookmark"
+                           title="Permalink to sagemincer broken">sagemincer broken</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-01-25T23:07:00-05:00">
                 Published: Wed 25 January 2017
@@ -36,40 +66,15 @@
         </address>
 <p>In <a href="/category/projects.html">Projects</a>.</p>
 
-</footer><!-- /.post-info --><p>So <a class="reference external" href="http://securityrules.info/">http://securityrules.info/</a> is still around, and highly trafficked
+</footer><!-- /.post-info -->                <p>So <a class="reference external" href="http://securityrules.info/">http://securityrules.info/</a> is still around, and highly trafficked
 by search engine bots—bingbot, Googlebot, AhrefsBot, Baiduspider,
 MJ12Bot and BLEXBot. Real people appear to have fetched around 15,000
 pages of information about security rules in the past month—around
 20 hits per hour on average.</p>
-<p>But there is a big problem: it doesn't appear that up-to-date STIGs
-are being shown on the site. I expended a great deal of effort to make
-sure it would Just Work, without my constant supervision. But there
-are problems that block fixing that. To wit:</p>
-<p>First, the site is running an old version of sagemincer, and it
-appears this has some silly error in it that makes the fetch always
-fail under present conditions.</p>
-<p>But even if that were fixed, sagemincer takes up 91% of its disk
-quota, with its logs just scrubbed. If it were to successfully fetch
-new STIGs, it would run out of space. I have a <a class="reference external" href="https://trello.com/c/8a4Gywf6/38-deal-with-space-constraints">Trello card</a> about
-that, but haven't done anything to fix it.</p>
-<p>But even if that were fixed, OpenShift Online is going away some time
-soon. sagemincer needs to run in containers instead, but OpenShift
-Online next gen isn't in place yet, and will likely cost money when it
-is. Other container hosting exists today; using it means doing CI/CD
-outside OpenShift, and it will likely also cost money.</p>
-<p>I don't want to pay money nor set up ads, and I don't want all of my
-cool URIs to fail to resolve either. Grumpf.</p>
-<p>Oh also I just read a few blog articles about Luigi, Airflow, and
-Pinball, which all seem to be dealing in bigger data than I am; and
-LinkedPipes ETL and UnifiedViews, which are about ETLing with RDF but
-are too anti-coding. And I read about Kafka—intriguing as it was last
-time I looked, but also too big iirc.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<p>But there is ...</p>
+                <a class="readmore" href="/sagemincer-broken.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
