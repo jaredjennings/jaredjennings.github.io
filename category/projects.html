@@ -25,7 +25,65 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/freebsd.html">FreeBSD</a></h1>
+                    <h1 class="entry-title"><a href="/photo-management.html">photo management</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-04-12T22:24:00-04:00">
+                Published: Wed 12 April 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info --><p>FreeBSD jails are not nearly so glamorous as OCI/Docker
+containers. FreeBSD jail statically assigned IP addresses are not
+nearly so glamorous as CNI. But it's been like one week and I have a
+PHP/MySQL app up inside a FreeBSD jail with IPv6, where it took me
+three weeks or so (check old blog post dates) of noodling about with
+CoreOS to figure out it wasn't going to work for me in the way I
+wanted.</p>
+<p>Lychee is a photo gallery application. It has a snazzy website. By
+installing it and importing 1000 photos into it, I found these things:</p>
+<blockquote>
+<ul class="simple">
+<li>It can import 1000 photos in, like, 30 or 40 minutes.</li>
+<li>It's not really snappy with 600 photos in a single gallery.</li>
+<li>It shows names of folders and files fairly prominently.</li>
+<li>These two mean that it expects you to have organized your photos already.</li>
+<li>It seems like the goal is to pick some photos and make them publicly available.</li>
+<li>It doesn't have a progress bar for the import.</li>
+</ul>
+</blockquote>
+<p>I looked at digital asset management systems; several exist that are
+open-source, mostly made in Europe, and some of those even have
+working websites. They are about helping you choose things to publish,
+not managing everything you have. And there was one to help you curate
+digital collections—sort of the case where you are a museum in
+possession of physical objects, you take some pictures of each, and
+you want to create a web experience analogous to a room in your
+museum. This, too, assumed the pictures I have to be more topical and
+organized than they are.</p>
+<p>I'm getting into another crazy mood, where I want to pick up and use
+things that are popularly rejected, like NetBSD, Enyo and RDF, and
+write impractically large things, like a web-based photo manager. Then
+again I just looked through Bootstrap, jQuery, and AngularJS photo
+gallery plugins, and there's stuff there, while the entire Enyo
+project hasn't said anything for months.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/freebsd.html" rel="bookmark"
+                           title="Permalink to FreeBSD">FreeBSD</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-04-09T00:19:00-04:00">
                 Published: Sun 09 April 2017
@@ -36,35 +94,14 @@
         </address>
 <p>In <a href="/category/projects.html">Projects</a>.</p>
 
-</footer><!-- /.post-info --><p>So <a class="reference external" href="https://github.com/containernetworking/cni/issues/245">this issue</a> has gotten
+</footer><!-- /.post-info -->                <p>So <a class="reference external" href="https://github.com/containernetworking/cni/issues/245">this issue</a> has gotten
 some comments, but no fixes. Meanwhile I've been listening to the <a class="reference external" href="http://bsdnow.tv/">BSD
 Now</a> podcast. I decided to give FreeBSD a go.</p>
 <p>On BSDs you have jails not usually containers. Docker exists for
-FreeBSD, but I decided to find out what the flap about jails is. I was
-shocked to find that when you create a jail you have to give it an
-IPv6 address if you want it to have one. I tried using vnet to give it
-a whole network stack instead of just an IP address, but it didn't
-autoconfigure. Perhaps this is possible using one of the many arcane
-flags to <tt class="docutils literal">ifconfig</tt> (which truly feels like a throwback after using
-<tt class="docutils literal">ip</tt>), but I didn't find it, and I did find that to this day vnet is
-crashing people's FreeBSD boxen.</p>
-<p>Upon contemplation I realized this is much simpler. The issue linked
-above is about how to get an IPv6 address for a container and then
-make sure that address is known wherever it needs to be (DNS, other
-containers, etcd, or whatnot). This is important when you don't want
-to pay individual attention to a container. But what I'm finding is
-that at the scale I'm operating at (one node, dozens of containers at
-most), it wouldn't kill me to configure an IP address, and then I'd
-know it ahead of time.</p>
-<p>After being revolted by dbus, NetworkManager, systemd and their
-dynamic ilk, and eventually getting used to them, it's odd to go
-back. But I'm trying it.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+FreeBSD, but I decided to find out what the flap about jails is …</p>
+                <a class="readmore" href="/freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
