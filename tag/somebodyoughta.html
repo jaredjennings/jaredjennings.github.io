@@ -25,7 +25,68 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/somebodyoughta-three-axis-trackball.html">Somebodydid! Three-axis trackball</a></h1>
+                    <h1 class="entry-title"><a href="/router-bellyache.html">router bellyache</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-04-21T23:22:00-04:00">
+                Published: Fri 21 April 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
+        </address>
+<p>In <a href="/category/commentary.html">Commentary</a>.</p>
+<p>tags: <a href="/tag/somebodyoughta.html">somebodyoughta</a> </p>
+</footer><!-- /.post-info --><p>I have a router that runs LEDE. It has 115 firewall rules. I made
+these by typing stanzas of about eight lines each into a file
+<cite>/etc/config/firewall</cite>. Not great, not bad. I've already <a class="reference external" href="/netconf-and-the-curse-of-consensus.html">held forth</a> on this some. But now the
+path of least resistance for deploying web apps on my own
+infrastructure seems to be to create jails on a FreeBSD system
+(statically setting their IPv6 addresses), (security hardening
+handwaving), and add a firewall rule to allow access to a jail from
+some zone (e.g. my LAN, the Internet). This is now an orchestratey
+kind of task. And in between my earlier rant and now, I've used
+Ansible some.</p>
+<p>There's an Ansible role to set the firewall configuration on an
+OpenWRT router—but it only sets the entire configuration. To do this
+orchestratey task, I would need to use <tt class="docutils literal">uci</tt> to make the edit. But
+<tt class="docutils literal">uci</tt>, when you are setting something like a firewall rule, lets you
+list all the things, add or remove a thing, and reorder things, but it
+doesn't help you order them, for example by saying &quot;this one should go
+after the one that has such-and-such set to so-and-so.&quot; Perhaps
+NETCONF will save everything? I've been reading that Ansible is
+ramping up support for it. But it's awful!</p>
+<p>In the meantime, I've been using BSD more, and I sort of want it on my
+router, if it's so much better designed or has a much nicer packet
+filter or something. But BSD on routers seems to be sort of an x86
+thing, like you get a desktop computer, put multiple network cards in
+it, and voila; or you get a PCEngines board. It seems NetBSD won't run
+on my MIPS-based router (specifically) while FreeBSD will (!?), and
+FreeBSD for my router has nothing like the customization OpenWRT/LEDE
+has, where entire subsystems of a usual desktop/server OS have been
+removed and replaced with smaller, more purpose-built ones (glibc,
+systemd, dbus, NetworkManager, firewalld, ISC dhcpd, etc.). It looks
+like NetBSD has a flash-specific filesystem (CHFS) for a while now,
+and a way to statically link a whole bunch of binaries into a single
+file and make the different subsumed commands runnable using
+hardlinks. I have no idea of the relative merits of NPF vs. any of
+FreeBSD's <cite>three</cite> packet filtering systems vs. iptables.</p>
+<p>Somebodyoughta make a router OS out of a BSD, and stick 9P support in
+it, and use Rust or Go or something for all the new hotness that gets
+added.</p>
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/somebodyoughta-three-axis-trackball.html" rel="bookmark"
+                           title="Permalink to Somebodydid! Three-axis trackball">Somebodydid! Three-axis trackball</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2015-04-15T15:05:00-04:00">
                 Published: Wed 15 April 2015
@@ -36,19 +97,14 @@
         </address>
 <p>In <a href="/category/uncategorized.html">Uncategorized</a>.</p>
 <p>tags: <a href="/tag/somebodyoughta.html">somebodyoughta</a> </p>
-</footer><!-- /.post-info --><p>Somebodyoughta make a trackball that can tell when I twist the ball as
+</footer><!-- /.post-info -->                <p>Somebodyoughta make a trackball that can tell when I twist the ball as
 well as when I roll it.</p>
 <p>EDITED TO ADD: I posted this in a hurry, from my phone, without taking
 the time to find out whether someone had <a class="reference external" href="https://vimeo.com/69113731">already done
-it</a>. And while searching I found a
-wonderful site I had forgotten about, <a class="reference external" href="http://www.halfbakery.com/idea/Three_20axis_20trackball">the
-Halfbakery</a>.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+it</a>. And while searching I found a …</p>
+                <a class="readmore" href="/somebodyoughta-three-axis-trackball.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
