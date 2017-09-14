@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <title>Writing to think 2: Write harder</title>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Security</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
-
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
 </head>
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Writing to think 2: Write harder </a></h1>
-                <nav><ul>
-                    <li><a href="/category/commentary.html">Commentary</a></li>
-                    <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
-                    <li><a href="/category/misc.html">misc</a></li>
-                    <li><a href="/category/projects.html">Projects</a></li>
-                    <li class="active"><a href="/category/security.html">Security</a></li>
-                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-                </ul></nav>
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
         </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content">
+<h2>Articles in the Security category</h2>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/bro-2-4-1-on-openwrt.html">Bro 2.4.1 on OpenWRT</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2016-04-07T02:21:00-04:00">
-                Published: Thu 07 April 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/security.html">Security</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info --><p>.</p>
+<ol id="post-list">
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/bro-2-4-1-on-openwrt.html" rel="bookmark" title="Permalink to Bro 2.4.1 on OpenWRT">Bro 2.4.1 on OpenWRT</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-04-07T02:21:00-04:00"> Thu 07 April 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>.</p>
 <blockquote>
 <p>&quot;Holy waffles if troubleshooting build errors in a large Autotools
 mess isn’t the most hemorrhage-inducing activity known to mankind.&quot;</p>
@@ -50,115 +37,29 @@ mess isn’t the most hemorrhage-inducing activity known to mankind.&quot;</p>
 <a class="reference external" href="https://openwrt.org/">OpenWRT</a>, and <a class="reference external" href="https://github.com/jaredjennings/openwrt-bro/tree/update-to-2.4.1">updated
 it</a>
 to package Bro 2.4.1 on the present OpenWRT trunk. This was necessary
-because 2.3.1 is no longer available for download.—Except, you know, in
-the
-<a class="reference external" href="https://www.bro.org/downloads/archive/bro-2.3.1.tar.gz">archive</a>.
-Whatever. It's not the newest version anymore, and it is
-security-related, and it has a ton of protocol analyzers in it, in which
-vulnerabilities <a class="reference external" href="https://web.nvd.nist.gov/view/vuln/search-results?adv_search=true&amp;cves=on&amp;cpe_vendor=cpe%3a%2f%3awireshark&amp;cpe_product=cpe%3a%2f%3awireshark%3awireshark&amp;cvss_version=3&amp;cve_id=">like
-these</a>
-might be found, so one should keep it updated.</p>
-<p>It builds; I don't know if it works yet. But I've never run Bro before,
-so problems might take a bit to flush out. I'm going to eat the ice
-cream of victory now.</p>
-<p>Here's what I know about Bro: it is a language and runtime system for
-expressing and handling events that happen on a network. The events may
-be very basic (&quot;a packet was seen with protocol TCP and destination port
-123&quot;) or more refined (&quot;within a telnet connection, these keystrokes
-were sent just after the text 'Password:' was received,&quot; or so). So it
-started life being called an intrusion detection system, but has gained
-much more general significance. I think this is how it is different from
-Snort and the like. Bro has a nice <a class="reference external" href="http://try.bro.org">hands-on
-tutorial</a>, which I'm going through now.</p>
-<p>The reason it is exciting to have Bro on OpenWRT is that it should make
-some modern security capabilities deployable to a home network. With a
-compliance focus, I can look at all the guidance that some people think
-is a good idea, decide how much of it makes sense for me, and then try
-to figure out how to implement and track that compliance at a small
-scale. I'm personally motivated, because I've thought through the ways
-one could break in without that compliance in place. This is likely
-analogous to reading news stories about a burglary, reading up on
-locksmithing, and buying a better front door lock, because the usual
-locks have design deficiencies: It's probably an improvement, but
-narrowly focused and possibly irrelevant. But anyone could benefit from
-knowing the usual sorts of connections made, and knowing when weird
-things seem to be afoot. People are even starting to try to sell
-services like this, mediated by routers whose firmware they control. But
-of course I think people should be in control of their own computing
-equipment, no less than companies are.</p>
-<p>A bit on what I actually did: Bro 2.3.1 required five patches to build
-properly under OpenWRT, and krkhan generated those patches. I updated to
-Bro 2.4.1, and most of those patches didn't apply cleanly anymore. So I
-was able to find that one isn't necessary anymore, and regenerate
-another one. Then there was some source code that doesn't compile under
-the compiler presently used in OpenWRT trunk, i.e. gcc 5.3.1. Fixed
-that. Then, I found that the musl C library is being used, which is
-great, it's smaller, but it doesn't have the <tt class="docutils literal">fts</tt> API, which is used
-for iterating over files and directories (like <tt class="docutils literal">os.walk</tt> in Python). I
-found <a class="reference external" href="https://github.com/pullmoll/musl-fts">musl-fts</a> (thanks!)
-which implements that API, packaged it, and made Bro build against it.</p>
-<p>You'll likely find out whether it works first here.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/a-secret-sharing-app.html" rel="bookmark"
-                           title="Permalink to Somebodyoughta: A secret sharing app">Somebodyoughta: A secret sharing app</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-10-01T04:38:00-04:00">
-                Published: Wed 01 October 2014
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/security.html">Security</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> <a href="/tag/somebodyoughta.html">somebodyoughta</a> </p>
-</footer><!-- /.post-info -->                <p>I've recently read about secret-sharing protocols, where by means of
+because …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/a-secret-sharing-app.html" rel="bookmark" title="Permalink to Somebodyoughta: A secret sharing app">Somebodyoughta: A secret sharing app</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2014-10-01T04:38:00-04:00"> Wed 01 October 2014 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I've recently read about secret-sharing protocols, where by means of
 mathematics some secret bits can be distributed among some number of
 people such that reconstructing the secret requires some size of quorum.
 For example, say I've built a successful drink company. The recipe for
-the drink is of course secret …</p>
-                <a class="readmore" href="/a-secret-sharing-app.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
+the drink is of course secret …</p> </div><!-- /.entry-content -->
+        </article></li>
+</ol><!-- /#posts-list -->
+</section><!-- /#content -->
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
                 </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
         </footer><!-- /#contentinfo -->
-
 </body>
 </html>

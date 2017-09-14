@@ -1,599 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <title>Writing to think 2: Write harder</title>
         <meta charset="utf-8" />
-        <title>Writing to think 2: Write harder - Projects</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
-
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
 </head>
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Writing to think 2: Write harder </a></h1>
-                <nav><ul>
-                    <li><a href="/category/commentary.html">Commentary</a></li>
-                    <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
-                    <li><a href="/category/misc.html">misc</a></li>
-                    <li class="active"><a href="/category/projects.html">Projects</a></li>
-                    <li><a href="/category/security.html">Security</a></li>
-                    <li><a href="/category/uncategorized.html">Uncategorized</a></li>
-                </ul></nav>
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
         </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content">
+<h2>Articles in the Projects category</h2>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/photo-management.html">photo management</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2017-04-12T22:24:00-04:00">
-                Published: Wed 12 April 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info --><p>FreeBSD jails are not nearly so glamorous as OCI/Docker
+<ol id="post-list">
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/photo-management.html" rel="bookmark" title="Permalink to photo management">photo management</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-04-12T22:24:00-04:00"> Wed 12 April 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>FreeBSD jails are not nearly so glamorous as OCI/Docker
 containers. FreeBSD jail statically assigned IP addresses are not
 nearly so glamorous as CNI. But it's been like one week and I have a
 PHP/MySQL app up inside a FreeBSD jail with IPv6, where it took me
-three weeks or so (check old blog post dates) of noodling about with
-CoreOS to figure out it wasn't going to work for me in the way I
-wanted.</p>
-<p>Lychee is a photo gallery application. It has a snazzy website. By
-installing it and importing 1000 photos into it, I found these things:</p>
-<blockquote>
-<ul class="simple">
-<li>It can import 1000 photos in, like, 30 or 40 minutes.</li>
-<li>It's not really snappy with 600 photos in a single gallery.</li>
-<li>It shows names of folders and files fairly prominently.</li>
-<li>These two mean that it expects you to have organized your photos already.</li>
-<li>It seems like the goal is to pick some photos and make them publicly available.</li>
-<li>It doesn't have a progress bar for the import.</li>
-</ul>
-</blockquote>
-<p>I looked at digital asset management systems; several exist that are
-open-source, mostly made in Europe, and some of those even have
-working websites. They are about helping you choose things to publish,
-not managing everything you have. And there was one to help you curate
-digital collections—sort of the case where you are a museum in
-possession of physical objects, you take some pictures of each, and
-you want to create a web experience analogous to a room in your
-museum. This, too, assumed the pictures I have to be more topical and
-organized than they are.</p>
-<p>I'm getting into another crazy mood, where I want to pick up and use
-things that are popularly rejected, like NetBSD, Enyo and RDF, and
-write impractically large things, like a web-based photo manager. Then
-again I just looked through Bootstrap, jQuery, and AngularJS photo
-gallery plugins, and there's stuff there, while the entire Enyo
-project hasn't said anything for months.</p>
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/freebsd.html" rel="bookmark"
-                           title="Permalink to FreeBSD">FreeBSD</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-04-09T00:19:00-04:00">
-                Published: Sun 09 April 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>So <a class="reference external" href="https://github.com/containernetworking/cni/issues/245">this issue</a> has gotten
+three weeks …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/freebsd.html" rel="bookmark" title="Permalink to FreeBSD">FreeBSD</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-04-09T00:19:00-04:00"> Sun 09 April 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>So <a class="reference external" href="https://github.com/containernetworking/cni/issues/245">this issue</a> has gotten
 some comments, but no fixes. Meanwhile I've been listening to the <a class="reference external" href="http://bsdnow.tv/">BSD
 Now</a> podcast. I decided to give FreeBSD a go.</p>
 <p>On BSDs you have jails not usually containers. Docker exists for
-FreeBSD, but I decided to find out what the flap about jails is …</p>
-                <a class="readmore" href="/freebsd.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/lede-ipv6-odyssey.html" rel="bookmark"
-                           title="Permalink to LEDE IPv6 odyssey">LEDE IPv6 odyssey</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-03-31T00:05:00-04:00">
-                Published: Fri 31 March 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>It seems after all that my LEDE upgrade didn't work flawlessly. I
+FreeBSD, but I decided to find out what the flap about jails is …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/lede-ipv6-odyssey.html" rel="bookmark" title="Permalink to LEDE IPv6 odyssey">LEDE IPv6 odyssey</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-03-31T00:05:00-04:00"> Fri 31 March 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>It seems after all that my LEDE upgrade didn't work flawlessly. I
 suddenly lost all of my IPv6 addresses (except the link-local ones,
 natch). I've just quelled this rebellion by disabling odhcpd and using
 dnsmasq-full to serve stateless DHCPv6 (<a class="reference external" href="https://code.google.com/p/android/issues/detail?id=32621">Android does not support
 stateful DHCPv6</a>).</p>
-<p>Along the way I discovered …</p>
-                <a class="readmore" href="/lede-ipv6-odyssey.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/personal-container-cloud-3.html" rel="bookmark"
-                           title="Permalink to personal container cloud 3">personal container cloud 3</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-03-19T00:39:00-04:00">
-                Published: Sun 19 March 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>I decided I needed to use DHCPv6 to get the IPv6 address for my
+<p>Along the way I discovered …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/personal-container-cloud-3.html" rel="bookmark" title="Permalink to personal container cloud 3">personal container cloud 3</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-03-19T00:39:00-04:00"> Sun 19 March 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I decided I needed to use DHCPv6 to get the IPv6 address for my
 container, so that if dnsmasq served the address it could update its
 DNS (one nice thing it does), and I could at least get to my container
-using a DNS name inside my own network, if …</p>
-                <a class="readmore" href="/personal-container-cloud-3.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/personal-container-cloud-2.html" rel="bookmark"
-                           title="Permalink to personal container cloud 2">personal container cloud 2</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-02-07T19:58:00-05:00">
-                Published: Tue 07 February 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>I've learned a few things. First, a firewall misconfiguration was
+using a DNS name inside my own network, if …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/personal-container-cloud-2.html" rel="bookmark" title="Permalink to personal container cloud 2">personal container cloud 2</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-02-07T19:58:00-05:00"> Tue 07 February 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I've learned a few things. First, a firewall misconfiguration was
 partly to blame. Second, neither Alpine's nginx package, nor netcat as
 found in Debian, appear to support IPv6. The dhcp daemon can be
 written into a systemd unit; I haven't done it yet. DNS updates might
-happen if I were …</p>
-                <a class="readmore" href="/personal-container-cloud-2.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/sagemincer-broken.html" rel="bookmark"
-                           title="Permalink to sagemincer broken">sagemincer broken</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-01-25T23:07:00-05:00">
-                Published: Wed 25 January 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>So <a class="reference external" href="http://securityrules.info/">http://securityrules.info/</a> is still around, and highly trafficked
+happen if I were …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/sagemincer-broken.html" rel="bookmark" title="Permalink to sagemincer broken">sagemincer broken</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-01-25T23:07:00-05:00"> Wed 25 January 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>So <a class="reference external" href="http://securityrules.info/">http://securityrules.info/</a> is still around, and highly trafficked
 by search engine bots—bingbot, Googlebot, AhrefsBot, Baiduspider,
 MJ12Bot and BLEXBot. Real people appear to have fetched around 15,000
 pages of information about security rules in the past month—around
 20 hits per hour on average.</p>
-<p>But there is …</p>
-                <a class="readmore" href="/sagemincer-broken.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/coreos-learning.html" rel="bookmark"
-                           title="Permalink to learning about CoreOS Container Linux">learning about CoreOS Container Linux</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-01-25T00:16:00-05:00">
-                Published: Wed 25 January 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>So the macvlan networking doesn't appear to work for me in the way I
+<p>But there is …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/coreos-learning.html" rel="bookmark" title="Permalink to learning about CoreOS Container Linux">learning about CoreOS Container Linux</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-01-25T00:16:00-05:00"> Wed 25 January 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>So the macvlan networking doesn't appear to work for me in the way I
 had hoped. What I imagined CNI would get me was that each one of my
 containers would get its own autoconfigured IPv6 address, and it would
-be some Small Matter of Programming to get those addresses …</p>
-                <a class="readmore" href="/coreos-learning.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/personal-container-cloud.html" rel="bookmark"
-                           title="Permalink to personal container cloud">personal container cloud</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-01-25T00:16:00-05:00">
-                Published: Wed 25 January 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>Containers are real neat. I like how you can build a single thing that
+be some Small Matter of Programming to get those addresses …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/personal-container-cloud.html" rel="bookmark" title="Permalink to personal container cloud">personal container cloud</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2017-01-25T00:16:00-05:00"> Wed 25 January 2017 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>Containers are real neat. I like how you can build a single thing that
 contains a hunk of an application, and deploy both the initial version
 and follow-on updates quickly. Containers are very easy to deploy to
-any of a panoply of public clouds, but I want to host web …</p>
-                <a class="readmore" href="/personal-container-cloud.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/cyanostracon.html" rel="bookmark"
-                           title="Permalink to cyanostracon">cyanostracon</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-11-02T23:19:35-04:00">
-                Published: Wed 02 November 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p><a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a> is
+any of a panoply of public clouds, but I want to host web …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/cyanostracon.html" rel="bookmark" title="Permalink to cyanostracon">cyanostracon</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-11-02T23:19:35-04:00"> Wed 02 November 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p><a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a> is
 well-developed and well-tested. I've made several backups with it. But
 I've grown frustrated with how serial it is. I decided early on to
 make it as simple as I could: it calls dar (so to be able to write
-down exactly how dar was called inside the backup …</p>
-                <a class="readmore" href="/cyanostracon.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/for-par1.html" rel="bookmark"
-                           title="Permalink to for PAR1">for PAR1</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-07T05:42:00-05:00">
-                Published: Sun 07 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>I looked in the source of parchive (which is only like 3500 lines of
+down exactly how dar was called inside the backup …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/for-par1.html" rel="bookmark" title="Permalink to for PAR1">for PAR1</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-07T05:42:00-05:00"> Sun 07 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I looked in the source of parchive (which is only like 3500 lines of
 code to par2cmdline's 13500 or so) and didn't find any evidence of the
 flawed math that was in the original RS tutorial. I don't think parchive
 is flawed at this point.</p>
-<p>And it's five and a …</p>
-                <a class="readmore" href="/for-par1.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/for-and-against-par1.html" rel="bookmark"
-                           title="Permalink to for and against PAR1">for and against PAR1</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-07T01:56:00-05:00">
-                Published: Sun 07 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>PAR2 is better than PAR1. Why? Because it can deal with different-sized
+<p>And it's five and a …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/for-and-against-par1.html" rel="bookmark" title="Permalink to for and against PAR1">for and against PAR1</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-07T01:56:00-05:00"> Sun 07 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>PAR2 is better than PAR1. Why? Because it can deal with different-sized
 input files, it can store different numbers of parity blocks in parity
 files, and it can read parts of corrupt parity files.</p>
 <p>But how does darbrrb use PAR2? Upon dar slice files that are all one
-size. darbrrb …</p>
-                <a class="readmore" href="/for-and-against-par1.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/against-turbo-codes.html" rel="bookmark"
-                           title="Permalink to against turbo codes">against turbo codes</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-06T15:12:00-05:00">
-                Published: Sat 06 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>Upon reading a few more papers, I find that the reason people only
+size. darbrrb …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/against-turbo-codes.html" rel="bookmark" title="Permalink to against turbo codes">against turbo codes</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-06T15:12:00-05:00"> Sat 06 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>Upon reading a few more papers, I find that the reason people only
 simulate turbo codes in software is because decoding them is so
 computationally difficult that for the applications they are used in
 (phones and TVs) people make custom silicon or write programs for DSPs
-in order to decode …</p>
-                <a class="readmore" href="/against-turbo-codes.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/redundancy-file-format.html" rel="bookmark"
-                           title="Permalink to redundancy file format">redundancy file format</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-06T04:09:00-05:00">
-                Published: Sat 06 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>First, I'll collect the inspirations for this and the attributes I'd
+in order to decode …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/redundancy-file-format.html" rel="bookmark" title="Permalink to redundancy file format">redundancy file format</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-06T04:09:00-05:00"> Sat 06 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>First, I'll collect the inspirations for this and the attributes I'd
 like to be true of it.</p>
 <p>par2 is the biggest inspiration. It shows how to make a file that will
 work even if parts of it are corrupted, and which parts are needed. It
-makes a lot of sense …</p>
-                <a class="readmore" href="/redundancy-file-format.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/redundancy-files.html" rel="bookmark"
-                           title="Permalink to redundancy files">redundancy files</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-06T01:32:00-05:00">
-                Published: Sat 06 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>I've done some reading about various kinds of codes (thanks again,
+makes a lot of sense …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/redundancy-files.html" rel="bookmark" title="Permalink to redundancy files">redundancy files</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-06T01:32:00-05:00"> Sat 06 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I've done some reading about various kinds of codes (thanks again,
 Wikipedia). I've found that while Reed-Solomon is a good code, it takes
 a lot of computation to encode as compared to some others. Most
 interestingly, turbocodes seem faster and the patent on them just
-expired in 2013. They are …</p>
-                <a class="readmore" href="/redundancy-files.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/darbrrb-three-years-later.html" rel="bookmark"
-                           title="Permalink to darbrrb, three years later">darbrrb, three years later</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2016-02-02T04:32:00-05:00">
-                Published: Tue 02 February 2016
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>In 2013, I wrote <a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a>
+expired in 2013. They are …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/darbrrb-three-years-later.html" rel="bookmark" title="Permalink to darbrrb, three years later">darbrrb, three years later</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2016-02-02T04:32:00-05:00"> Tue 02 February 2016 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>In 2013, I wrote <a class="reference external" href="https://github.com/jaredjennings/darbrrb">darbrrb</a>
 to make redundant backups onto optical media using dar and par2. After
 some testing I found par2 was so slow that backing up my files (a couple
 of hundred gigabytes) would take more than a week, not counting the time
-it takes to burn each …</p>
-                <a class="readmore" href="/darbrrb-three-years-later.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/backup-revelations.html" rel="bookmark"
-                           title="Permalink to Backup revelations">Backup revelations</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2015-08-30T01:06:00-04:00">
-                Published: Sun 30 August 2015
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>While reading the code of par2cmdline (a month ago or something), I
+it takes to burn each …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/backup-revelations.html" rel="bookmark" title="Permalink to Backup revelations">Backup revelations</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2015-08-30T01:06:00-04:00"> Sun 30 August 2015 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>While reading the code of par2cmdline (a month ago or something), I
 think I apprehended that the number of input files and the number of
 slices for the Reed-Solomon calculations are linked quite closely, and
 that perhaps this was why the PAR2 file format moved to using 16-bit
-Galois fields …</p>
-                <a class="readmore" href="/backup-revelations.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/backup.html" rel="bookmark"
-                           title="Permalink to Backup">Backup</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2015-06-24T05:01:00-04:00">
-                Published: Wed 24 June 2015
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>At least temporarily, I've turned back to an old project to back up
+Galois fields …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/backup.html" rel="bookmark" title="Permalink to Backup">Backup</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2015-06-24T05:01:00-04:00"> Wed 24 June 2015 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>At least temporarily, I've turned back to an old project to back up
 files onto redundant arrays of optical discs.
 <a class="reference external" href="https://github.com/jaredjennings/darbrrb/issues/2">activity</a>.</p>
 <p>It looks like I can't both use the PAR2 file format and use Gibraltar,
 which is a library that uses the GPU to calculate redundancy data really
 quickly.</p>
-
-                <a class="readmore" href="/backup.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/push-generators-and-monads.html" rel="bookmark"
-                           title="Permalink to Push generators and monads">Push generators and monads</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2015-06-01T03:19:00-04:00">
-                Published: Mon 01 June 2015
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>I wrote <a class="reference external" href="https://github.com/jaredjennings/shaney/">Shaney</a>
+ </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/push-generators-and-monads.html" rel="bookmark" title="Permalink to Push generators and monads">Push generators and monads</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2015-06-01T03:19:00-04:00"> Mon 01 June 2015 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I wrote <a class="reference external" href="https://github.com/jaredjennings/shaney/">Shaney</a>
 (<a class="reference external" href="https://github.com/jaredjennings/shaney/blob/master/requirements.txt">history</a>)
 to parse important elements out of hundreds of text files (Puppet source
 code and LaTeX), and produce interesting content out of them, writing it
 into dozens of other text files (LaTeX). Now I'm trying to do much the
 same thing for
 <a class="reference external" href="https://gitlab.com/sagemincer/snailcrusader">snailcrusader</a>, but not
-reading only …</p>
-                <a class="readmore" href="/push-generators-and-monads.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/sagemincer-updates.html" rel="bookmark"
-                           title="Permalink to sagemincer updates">sagemincer updates</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-09-27T21:43:00-04:00">
-                Published: Sat 27 September 2014
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-
-</footer><!-- /.post-info -->                <p>When first released,
+reading only …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/sagemincer-updates.html" rel="bookmark" title="Permalink to sagemincer updates">sagemincer updates</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2014-09-27T21:43:00-04:00"> Sat 27 September 2014 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>When first released,
 <a class="reference external" href="https://gitlab.com/sagemincer/sagemincer">sagemincer</a> was slow.
 Like, thirty seconds to load a page slow. After a bunch of changes, now
 it's fast enough to be far prouder of. Also I got a new domain for it,
 <a class="reference external" href="http://securityrules.info/">securityrules.info</a>.</p>
-<p>The way it got faster was this: I stopped trying to fetch …</p>
-                <a class="readmore" href="/sagemincer-updates.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/sagemincer.html" rel="bookmark"
-                           title="Permalink to sagemincer">sagemincer</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-08-08T02:44:00-04:00">
-                Published: Fri 08 August 2014
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/security.html">security</a> </p>
-</footer><!-- /.post-info -->                <p>If you've been reading my Compliance at Home series, you'll know that
+<p>The way it got faster was this: I stopped trying to fetch …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/sagemincer.html" rel="bookmark" title="Permalink to sagemincer">sagemincer</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2014-08-08T02:44:00-04:00"> Fri 08 August 2014 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>If you've been reading my Compliance at Home series, you'll know that
 the DoD releases security guidance in the form of STIGs. They're
 downloadable as ZIP files, which contain ZIP files, which contain
 checklists written in XCCDF, and stylesheets that can turn the XCCDF
-document into HTML. So if I …</p>
-                <a class="readmore" href="/sagemincer.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/irons-in-the-fire.html" rel="bookmark"
-                           title="Permalink to Irons in the fire">Irons in the fire</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-01-11T21:05:00-05:00">
-                Published: Sat 11 January 2014
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="/author/jaredj.html">jaredj</a>
-        </address>
-<p>In <a href="/category/projects.html">Projects</a>.</p>
-<p>tags: <a href="/tag/boot2gecko.html">boot2gecko</a> <a href="/tag/darbrrb.html">darbrrb</a> <a href="/tag/entropy.html">entropy</a> <a href="/tag/reorg.html">reorg</a> <a href="/tag/stigs.html">stigs</a> </p>
-</footer><!-- /.post-info -->                <p>Right now, I'm:</p>
+document into HTML. So if I …</p> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/irons-in-the-fire.html" rel="bookmark" title="Permalink to Irons in the fire">Irons in the fire</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2014-01-11T21:05:00-05:00"> Sat 11 January 2014 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>Right now, I'm:</p>
 <ul class="simple">
 <li>digitizing something like 100 LP records, in the highest-quality way
 I can.</li>
@@ -603,39 +318,15 @@ controller. (<a class="reference external" href="http://j.agrue.info/reorg">info
 back up files onto Blu-Ray discs using
 <a class="reference external" href="http://dar.sourceforge.net/">dar</a> and
 <a class="reference external" href="http://parchive.sourceforge.net/">par2</a>. (It's looking like it'll
-be using <a class="reference external" href="http://www.cs.sandia.gov/Scalable_IO/">Gibraltar</a> too …</li></ul>
-                <a class="readmore" href="/irons-in-the-fire.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
+be using <a class="reference external" href="http://www.cs.sandia.gov/Scalable_IO/">Gibraltar</a> too …</li></ul> </div><!-- /.entry-content -->
+        </article></li>
+</ol><!-- /#posts-list -->
+</section><!-- /#content -->
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
                 </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
         </footer><!-- /#contentinfo -->
-
 </body>
 </html>
