@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/4store-freebsd.html" rel="bookmark"
+         title="Permalink to building 4store on FreeBSD">building 4store on FreeBSD</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2017-12-27T23:03:00-05:00">
+      Wed 27 December 2017
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>To build 4store on FreeBSD, of course you need Raptor, Redland and
+Rasqal: pkg install redland. And the autotools: pkg install autoconf
+automake libtool. Git to check it out: pkg install git. You need glib,
+and libxml if you don't have it already. readline, for some
+reason. And ossp-uuid, without which it will segfault for no
+discernible reason. And you have to configure it with
+<tt class="docutils literal"><span class="pre">CFLAGS='-I/usr/local/include'</span> <span class="pre">LDFLAGS='-L/usr/local/lib'</span></tt>.</p>
+<p>I say this because there is no 4store port, and FreeBSD's shell
+doesn't keep history across sessions, and FreeBSD's sudo doesn't log
+what you do (!?).</p>
+<p>I've already given up on putting this in a jail, after the fourth time
+of running into <a class="reference external" href="https://github.com/iocage/iocage/issues/302">https://github.com/iocage/iocage/issues/302</a> since
+October, apparently because <a class="reference external" href="https://forums.freebsd.org/threads/52843/">stability</a> is better than fixing
+bugs.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
