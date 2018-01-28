@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/freebsd-2.html" rel="bookmark"
+         title="Permalink to FreeBSD for virtualization">FreeBSD for virtualization</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2018-01-27T20:24:00-05:00">
+      Sat 27 January 2018
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>I'm presently running an assortment of virtual machines on my desktop
+using Fedora, KVM, and libvirt. I did this because I wanted one of my
+virtual machines to have real video cards, and Fedora had a new enough
+kernel at the time to just barely be able to do this. Over the past
+couple of years it has added the capability of not crashing every time
+I try to shut it down.</p>
+<p>Meanwhile I've been listening to the BSD Now podcast, where they have
+(unsurprisingly) many good things to say about FreeBSD, and ZFS in
+particular. So I've kept trying different physical OSes. This time it
+was FreeBSD as a Xen dom0. First I learned that my Athlon FX-8320E
+can't run Xen PVH domains. Then I learned <a class="reference external" href="https://wiki.xen.org/wiki/Virtualization_Spectrum">what PVH is</a>, that dom0 can
+be either PV or PVH, and then that FreeBSD 11 dropped PV dom0
+support. So, no FreeBSD+Xen on this machine.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
