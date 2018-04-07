@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/openscad-woes.html" rel="bookmark"
+         title="Permalink to OpenSCAD woes">OpenSCAD woes</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2018-04-07T00:00:00-04:00">
+      Sat 07 April 2018
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>I've gotten to the point in my <a class="reference external" href="https://github.com/jaredjennings/dactyl-keyboard">keyboard building</a> (the real action
+is happening in branches other than master) where I want to connect
+the new cool sides I've made to the frame of the keyboard. No sweat,
+right? Just come up with a cool connector, draw a sort of cone out
+from that connector intersecting the cool curvy side, intersect the
+cool curvy side with the cone, and hull that intersection to the
+beginning of the connector, right?</p>
+<p>Uh-oh. The OpenSCAD output resulting from those cool sides somehow
+amounts to like 5MB. And every time I want to intersect those cool
+sides with something, the entire shape is reiterated in the OpenSCAD
+output. So now it's 35MB of OpenSCAD code, and it takes up gigabytes
+of RAM just seemingly to parse it.</p>
+<p>With every large setback in this project, I've looked aside: maybe I
+should be writing this in Python instead. Maybe I should be writing it
+in OpenSCAD instead—it can't be quite as bad as Matt Adereth said,
+right?—or perhaps that libfive thing that the fstl author wrote. But
+every time I've realized how much work it would be to start over from
+first principles, and if there were ever a community for this thing
+how much smaller it would be for not being a branch of The Dactyl
+Keyboard. I've also found that most other things besides OpenSCAD that
+let you describe a 3D object with code and render it to polygons are
+immature, unmaintained, or both.</p>
+<p>In this particular case, though, writing raw OpenSCAD wouldn't help: you can't say</p>
+<pre class="literal-block">
+x = this cool object;
+intersection() { x; some other thing; }
+intersection() { x; some third thing; }
+</pre>
+<p>OpenSCAD (afaict) doesn't let you do anything with an object other
+than state it exists. Now you can make a module, so you could say</p>
+<pre class="literal-block">
+intersection() { this_cool_object(); some other thing; }
+intersection() { this_cool_object(); some third thing; }
+</pre>
+<p>but now you are making multiples of <tt class="docutils literal">this_cool_object</tt>, and that is
+the problem. I could try to approximate the local shape of the cool
+object with something simpler, but it would be tricky and error-prone.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
