@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/libfive.html" rel="bookmark"
+         title="Permalink to libfive">libfive</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2018-04-10T00:00:00-04:00">
+      Tue 10 April 2018
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>So earlier I got <a class="reference external" href="https://github.com/libfive/libfive">libfive</a> and
+built and installed it, and the libfive Studio segfaulted. And then
+updates caused the Studio to work. But I do a lot of my work through
+Termius and VNC on my phone while riding the bus, and Studio has a
+small font with low contrast, and I want to edit my text with Emacs
+anyway. I rejected libfive earlier thinking it wouldn't be able to
+make an STL file with sharp corners; but it's smarter than all that.</p>
+<p>I've set out to make libfive work for me this time in order to reduce
+the distance between transforming objects and deriving points. I think
+that boundary still exists but at least it's all written in the same
+language. Also I've been annoyed at how slowly Clojure's repl starts
+up (But you shouldn't start it every time, you should leave it
+running! you say. But I'm not used to old definitions sticking around
+when I rename a function and forget to rename all the calls to it. So
+I decided to start with a clean slate every time.) and runs my
+code. Also dragging in the entire JVM just to write a text
+file... eh. Also the EPL is incompatible with the GPL. Also the way
+clj-scad is writing OpenSCAD code causes it to balloon in size in the
+particular case I'm throwing at it.</p>
+<p>(Oh, before I forget—the reason I wanted to derive points was so I
+could make more math happen in Clojure and less in OpenSCAD, by
+deriving points and stitching them together into polyhedra. This would
+speed up the OpenSCAD rendering by a lot, but slow down the Clojure
+run. Eh, perhaps it would be faster than writing the OpenSCAD code to
+piecewise hull a lot of cubes with eight transforms on each one.)</p>
+<p>So, there's not that much documentation for libfive usage outside the
+Studio. I figured out how to make my run-of-the-mill Guile 2.2.3
+install render an STL file, and here it is.</p>
+<blockquote>
+<ol class="arabic">
+<li><p class="first">Get and build libfive. (This is documented by the libfive project.)</p>
+</li>
+<li><p class="first">Install libfive. (You may not have to do this but it's what I did.)</p>
+</li>
+<li><p class="first">Make a note of the path to libfive-guile.so, and the directory
+where shapes.scm is found. Mine were at
+<tt class="docutils literal"><span class="pre">/usr/local/lib/libfive-guile.so</span></tt> and
+<tt class="docutils literal">/home/jaredj/libfive/libfive/bind</tt>. Call these GUILESO and
+SHAPESPD.</p>
+</li>
+<li><p class="first">cd to SHAPESPD; <tt class="docutils literal">ln <span class="pre">-s</span> . libfive</tt>. This is so that when SHAPESPD
+is added to your Guile <tt class="docutils literal"><span class="pre">%load-path</span></tt> and you <tt class="docutils literal"><span class="pre">(use-module</span>
+(libfive foo))</tt> and Guile looks for <tt class="docutils literal">SHAPESPD/libfive/foo.scm</tt>
+it will find it.</p>
+</li>
+<li><p class="first">In SHAPESPD, write a file <tt class="docutils literal">kernel.scm</tt> with the following
+contents:</p>
+<pre class="literal-block">
+(define-module (libfive kernel))
+(load-extension &quot;GUILESO&quot; &quot;scm_init_libfive_modules&quot;)
+</pre>
+</li>
+<li><p class="first">Write a file <tt class="docutils literal">cube.scm</tt> that says this:</p>
+<pre class="literal-block">
+(add-to-load-path &quot;/home/jaredj/libfive/libfive/bind&quot;)
+(define-module (cube)
+#:use-module (libfive kernel)
+#:use-module (libfive shapes)
+#:use-module (libfive transforms)
+#:use-module (libfive vec))
+
+(shape-&gt;mesh (box-centered #[1 1 1]) &quot;cube.stl&quot; 10 '((-2 . 2) (-2 . 2) (-2 . 2)))
+</pre>
+</li>
+<li><p class="first"><tt class="docutils literal">guile cube.scm</tt></p>
+</li>
+</ol>
+</blockquote>
+<p>Along the way, I figured out the arrow macros from Clojure, written in Guile:</p>
+<pre class="literal-block">
+(define-syntax -&gt;
+  (syntax-rules ()
+    ((_ x) x)
+    ((_ x (f a ...)) (f x a ...))
+    ((_ x (f a ...) (g b ...) ...) (-&gt; (f x a ...) (g b ...) ...))))
+
+(define-syntax -&gt;&gt;
+  (syntax-rules ()
+    ((_ x) x)
+    ((_ x (f ...)) (f ... x))
+    ((_ x (f ...) (g ...) ...) (-&gt;&gt; (f ... x) (g ...) ...))))
+</pre>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
