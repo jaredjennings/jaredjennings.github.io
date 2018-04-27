@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/xah-fly-keys-rough-edges.html" rel="bookmark"
+         title="Permalink to xah-fly-keys rough edges">xah-fly-keys rough edges</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2018-04-26T18:03:00-04:00">
+      Thu 26 April 2018
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>Here's a list of things I want to improve about xah-fly-keys in spring 2018. (In September 2017, I didn't know some things I know now.) To-dos not gripes.</p>
+<blockquote>
+<ol class="arabic simple">
+<li><tt class="docutils literal">s</tt> does not work like Vi's <tt class="docutils literal">o</tt> or <tt class="docutils literal">O</tt>, but like Emacs'
+<tt class="docutils literal"><span class="pre">C-o</span></tt>. When I open a line, I want what's on the line I have my
+cursor on to move down a line, not to split a line. I have a
+function that does this but making it happen when I press <tt class="docutils literal">s</tt> is
+a matter of hacking up <tt class="docutils literal"><span class="pre">xah-fly-keys.el</span></tt>, or waiting for the
+change Xah has said he wants to make, where keymaps are switched
+not rewritten when modes change.</li>
+<li><tt class="docutils literal">c</tt> does not work like <tt class="docutils literal">x</tt>, in that it does not include the
+newline at the end when run without the mark active (i.e.,
+linewise). Because of this I don't even use <tt class="docutils literal">c</tt>. That leads to
+other problems.</li>
+<li>The amount of precision and subtlety devoted to moving is
+different than that devoted to copying or deleting. I <em>love</em> the
+<tt class="docutils literal">ijkl</tt>, <tt class="docutils literal">uo</tt>, <tt class="docutils literal">h;</tt>, and other movement keys I haven't
+learned to use. I've rejected ergoemacs in large part because its
+<tt class="docutils literal"><span class="pre">M-h</span></tt> and <tt class="docutils literal"><span class="pre">M-S-h</span></tt> are so much worse than <tt class="docutils literal">h</tt> and <tt class="docutils literal">;</tt>. But
+half the time when I want to delete a word with <tt class="docutils literal">e</tt> or <tt class="docutils literal">r</tt>, I
+end up nuking half my document instead, because the mark was set,
+which I didn't know about and can't see, and <tt class="docutils literal">e</tt> deletes the
+region <em>plus a word</em>. Also nearly every time I type <tt class="docutils literal">g</tt>, I was not
+trying to delete a paragraph. I think the solution here is to
+learn to use the mark more intentionally. But—</li>
+<li><tt class="docutils literal">e</tt> and <tt class="docutils literal">r</tt> do something different if the mark is set, but
+<tt class="docutils literal">x</tt> and <tt class="docutils literal">c</tt> only do something different if the mark is
+activated.</li>
+</ol>
+</blockquote>
+<p>To really do this up right, I need to record all my commands and see
+what I do most often—i.e., do the same legwork Xah did. The immediate
+thing to do with such knowledge would be to move commands around
+between keybindings. The deeper thing to do would be to look at
+sequences of commands and ask how they could become single
+commands. This should include looking at things I do, then undo, and
+asking why they didn't work right.</p>
+<p>But this amount of introspection about text editing is a level of
+detail I don't usually want to descend to. It already takes me too
+long to figure out what I really need to say, without also thinking
+about how to type it.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
