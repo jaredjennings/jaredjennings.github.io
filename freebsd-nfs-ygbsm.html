@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder</title>
+        <meta charset="utf-8" />
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/freebsd-nfs-ygbsm.html" rel="bookmark"
+         title="Permalink to FreeBSD NFS YGBSM">FreeBSD NFS YGBSM</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2018-09-18T00:19:00-04:00">
+      Tue 18 September 2018
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>Seriously?</p>
+<p>So I fell back to NFSv4 sec=sys, which proceeded to fail with a storm
+of packets that did not abate when I terminated the hanging mount
+command on the Linux box. The Linux box would try to start a client
+session, and the FreeBSD box would tell it that its handle was stale.</p>
+<p>Fine! As long as we're doing sec=sys, let's do NFSv3! That's what all
+the howtos are about anyway. So I got that all set up, but the nfsd
+refused to register itself as an RPC service, and both Linux and
+FreeBSD clients said program 100003 was missing. (That is the assigned
+program number for nfs, as I found.)</p>
+<p>You guys. YOU GUYS.</p>
+<p>Back a month or two ago, in my haughtiness, I set the sysctl
+vfs.nfsd.server_min_nfsvers to 4. But I didn't notice
+vfs.nfsd.server_max_nfsvers, which was still 3. There was no NFS
+version that server could serve! <em>facepalm</em></p>
+<p>First, when I set server_min_nfsvers to 3 and restarted nfsd, behold,
+it registered itself as an RPC service! And then when I set
+server_max_nfsvers to 4 and did an NFSv4 sec=sys mount, it worked! And
+then when I set sec=krb5i it worked! From the Linux box, anyway. The
+FreeBSD client mount is exiting immediately; <tt class="docutils literal">mount</tt> says there's an
+NFS filesystem mounted on my mountpoint; but no files show up. Still
+working on that one.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
