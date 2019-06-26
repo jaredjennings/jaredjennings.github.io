@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Clojure code organization</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/clojure-code-organization.html" rel="bookmark"
+         title="Permalink to Clojure code organization">Clojure code organization</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2019-06-26T00:24:00-04:00">
+      Wed 26 June 2019
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>I started the Dactyl Marshmallow from the Dactyl, written by Matt
+Adereth. He wrote all his code in a single file, dactyl.clj. This file
+contained definitions for important variables (e.g. how much tenting,
+how many rows and columns of keys), shapes (the frame for a single
+key, the frame for all the keys pressed by the thumb), and code to
+emit OpenSCAD files containing those shapes.</p>
+<p>I split the code into multiple files, roughly by shape (e.g. bottom,
+sides). I started to centralize important variable definitions in
+layout.clj, and added a rudimentary means by which multiple keyboards
+could be defined and chosen from. As I wrote more code to describe
+shapes, with odds of about 60% I put the important configuration for
+that code in the layouts map in layout.clj.</p>
+<p>Now I need not only variables, but shape definitions (really the
+thumb) to vary between different keyboards. If this were Python, I'd
+break out the classes and inheritance at this point, because it is an
+obvious way to share most code, but specialize some. But this isn't
+Python, and it never was highly designed Clojure either.</p>
+<p>It appears I could use multimethods and <tt class="docutils literal">derive</tt> for this task. Or I
+could just throw a function into the layouts map. Or some protocol
+inheritance thingy. But I can't think of splitting the code better
+without trying to think of how to get the data used by a piece of code
+closer to the code.</p>
+<p>Some data is just things that could be calculated but were easier to
+write down. For example, given a 4 row by 6 column finger part,
+without two keys in the corner, it is possible to figure out the key
+coordinates of every place around the edge. It was a challenge, and I
+stepped around it. Now to keep doing it that way complicates the
+definition of each keyboard, where it could be calculated with one
+piece of code for all keyboards.</p>
+<p>Some data is peculiar to the code that uses it, but when it's all
+written together it looks tantalizingly close to a very high-level
+description of a keyboard, a description I want to be able to write -
+including the part where I can say, &quot;the sides of this keyboard are
+the same as everything else, but the thumb part is a little
+different.&quot;</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
