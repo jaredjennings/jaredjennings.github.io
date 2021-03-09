@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Cortex on Kubernetes</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/cortex-on-kubernetes.html" rel="bookmark"
+         title="Permalink to Cortex on Kubernetes">Cortex on Kubernetes</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-03-09T14:15:00-05:00">
+      Tue 09 March 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>Cortex is a piece of software for cybersecurity professionals, which
+coordinates analysis of observables found during investigations, and
+automated response to the findings of the analyses. For example,
+suppose a user receives a phishing email. The &quot;From&quot; address is an
+<em>observable</em>; one way to analyze it would be to find out who else
+within the organization got an email from that address
+recently. Perhaps the email contains a web link; analysis could find
+that it leads to an unsafe site, and one way to respond might be to
+tell the organization's web proxy to block that page.</p>
+<p>Cortex (I'm writing about version 3.1.0) supports different ways to
+run those <em>analyzers</em> and <em>responders</em>.</p>
+<p>One way is that Cortex creates input files on a filesystem, and spawns
+a subprocess. The subprocess writes output files, then exits. Cortex
+reads the output and formulates the report. This is simple, and could
+perhaps be secured tightly using SELinux or AppArmor; but it requires
+the code of every analyzer and responder, plus any libraries they
+need, to be installed within the same filesystem namespace as Cortex,
+even though development of analyzers and responders need not follow
+the same rhythm, nor even be done by the same people, as Cortex.</p>
+<p>Another supported way to run analyzers and responders is using
+Docker. Cortex is run inside a Docker container; it's handed a volume
+pointing at a directory on the host for job I/O, and it's handed the
+host's Docker socket. Then, to run an analyzer or responder, Cortex
+writes the input files, and asks Docker to spawn a new container, with
+the job I/O directory as a volume. The image run is specific to the
+analyzer/responder, and contains only that code and its
+dependencies. Now the analyzers and responders can be built and
+packaged separately, each in their own proper time. If they require
+different versions of dependencies, this is no problem. But handing
+the Docker socket into a container is not recommended from a security
+point of view: it is the same as root access to the machine. The
+Docker socket will only allow running containers on the same machine,
+which impairs scalability. And this also makes Cortex depend
+specifically on Docker, at a time when other software that deals with
+containers is flourishing with many new ideas.</p>
+<p>Building on the excellent work done in making the job runner an
+extension point of Cortex, I filed a <a class="reference external" href="https://github.com/TheHive-Project/Cortex/issues/347">ticket</a> to request a Kubernetes
+job runner, and then a <a class="reference external" href="https://github.com/TheHive-Project/Cortex/pull/349">pull request</a> with an implementation of it.</p>
+<p>One of the goals I set out in the ticket was some kind of
+documentation about how to make it work. Here's how I did that at
+home. Perhaps it may form the germ of some documentation appropriate
+for Cortex users in general.</p>
+<p>Where you see YAML source below, the way to act on it is to write it
+into a file and <cite>kubectl apply -f thefile.yaml</cite>.</p>
+<div class="section" id="k8s-setup">
+<h2>1 K8S setup</h2>
+<div class="section" id="dns-names">
+<h3>1.1 DNS names</h3>
+<p>On my home router, in /etc/dnsmasq.conf:</p>
+<pre class="code sh literal-block">
+<span class="c1"># Entire k subdomain goes to kubernetes node
+</span><span class="nv">address</span><span class="o">=</span>/k.my.domain/192.168.x.y
+</pre>
+</div>
+<div class="section" id="k3s">
+<h3>1.2 k3s</h3>
+<p>Set up as directed at k3s.io. Default Traefik ingress included.</p>
+</div>
+<div class="section" id="helm">
+<h3>1.3 helm</h3>
+<p>Set up as directed at helm.sh.</p>
+<div class="section" id="helm-repos">
+<h4>1.3.1 Helm repos</h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="70%" />
+<col width="22%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>NAME</td>
+<td>URL</td>
+<td>FOR</td>
+</tr>
+<tr><td>bitnami</td>
+<td><a class="reference external" href="https://charts.bitnami.com/bitnami">https://charts.bitnami.com/bitnami</a></td>
+<td>usual stuff like mysql</td>
+</tr>
+<tr><td>twuni</td>
+<td><a class="reference external" href="https://helm.twun.io">https://helm.twun.io</a></td>
+<td>docker-registry</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="insecure-local-unauthenticated-registry">
+<h2>2 insecure local unauthenticated registry</h2>
+<p>Traffic to registries is https by default. hub.docker.com, which many
+consider to be a default registry, recently implemented usage caps for
+free users. I didn't want to run into that. I also didn't want to
+bother with https for my local registry. <em>Don't do this in production</em>!</p>
+<div class="section" id="install">
+<h3>2.1 install</h3>
+<pre class="code sh literal-block">
+helm install registry twuni/docker-registry --set ingress.enabled<span class="o">=</span>true,ingress.hosts<span class="se">\[</span><span class="m">0</span><span class="se">\]</span><span class="o">=</span>registry.k.my.domain
+</pre>
+</div>
+<div class="section" id="use">
+<h3>2.2 use</h3>
+<p>for pushing, in /etc/docker/daemon.json:</p>
+<pre class="code json literal-block">
+<span class="p">{</span> <span class="nt">&quot;insecure-registries&quot;</span><span class="p">:[</span><span class="s2">&quot;registry.k.my.domain&quot;</span><span class="p">]</span> <span class="p">}</span>
+</pre>
+<p>for pulling, in /etc/rancher/k3s/registries.yaml:</p>
+<pre class="code yaml literal-block">
+<span class="nt">mirrors</span><span class="p">:</span>
+  <span class="s">&quot;registry.k.my.domain&quot;</span><span class="p-Indicator">:</span>
+      <span class="nt">endpoint</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="s">&quot;http://registry.k.my.domain:80&quot;</span>
+</pre>
+</div>
+</div>
+<div class="section" id="building-cortex-inside-docker">
+<h2>3 building Cortex inside Docker</h2>
+<p>I never quite managed to get the right environment for building
+Cortex, and about the second or third try, I stopped wanting to
+install a whole OS to try it, and decided I should do it in Docker
+instead. Changing entire userspaces simply by naming a different image
+is what Docker does, after all.</p>
+<p>Note that this approach works around most of the awesome things about
+sbt and probably makes builds take way longer. But it worked for me, a
+complete outsider to Scala.</p>
+<div class="section" id="dockerfile-build-with-sbt">
+<h3>3.1 Dockerfile.build-with-sbt</h3>
+<pre class="code Dockerfile literal-block">
+<span class="k">FROM</span> <span class="s">adoptopenjdk/openjdk8</span>
+<span class="k">ENV</span> SCALA_VERSION <span class="m">2</span>.12.12
+<span class="k">ENV</span> SBT_VERSION <span class="m">1</span>.3.8
+
+<span class="k">RUN</span> <span class="se">\
+</span>apt-get update <span class="o">&amp;&amp;</span> apt-get -y install npm docker.io webpack
+<span class="c"># my host docker group has gid 114</span>
+<span class="k">RUN</span> groupadd -g <span class="m">5000</span> appuser <span class="o">&amp;&amp;</span> groupmod -g <span class="m">114</span> docker <span class="o">&amp;&amp;</span> useradd -m -g <span class="m">5000</span> -G docker -u <span class="m">5000</span> appuser
+<span class="k">USER</span><span class="s"> appuser</span>
+<span class="k">WORKDIR</span><span class="s"> /home/appuser</span>
+<span class="k">VOLUME</span><span class="s"> /home/appuser/Cortex</span>
+<span class="k">VOLUME</span><span class="s"> /home/appuser/.ivy2</span>
+<span class="k">VOLUME</span><span class="s"> /home/appuser/.sbt</span>
+<span class="k">VOLUME</span><span class="s"> /home/appuser/.cache</span>
+</pre>
+</div>
+<div class="section" id="running-build">
+<h3>3.2 running build</h3>
+<pre class="code sh literal-block">
+docker build -f Dockerfile.build-with-sbt -t sbt
+docker run -v /home/me/Cortex:/home/appuser/Cortex -v /home/me/.ivy2:/home/appuser/.ivy2 -v /home/me/.sbt:/home/appuser/.sbt -v /home/me/.cache:/home/appuser/.cache -v /var/run/docker.sock:/var/run/docker.sock -it sbt:latest
+</pre>
+<p>You can't use an NFS directory as the source of a volume (/home/me has
+to be on a local disk).</p>
+<p>npm ELIFECYCLE? <a class="reference external" href="https://stackoverflow.com/a/49505612">Remove some stuff and rebuild</a>:</p>
+<pre class="code sh literal-block">
+<span class="nb">cd</span> Cortex/www
+npm cache clean --force
+rm package-lock.json
+rm -rf node_modules
+</pre>
+</div>
+<div class="section" id="running-build-from-emacs">
+<h3>3.3 running build from Emacs</h3>
+<p>This makes sbt stop with the colorization, and replaces paths inside
+the container with paths outside, so that errors point at files Emacs
+can open.</p>
+<pre class="code sh literal-block">
+docker run -v /home/me/Cortex:/home/appuser/Cortex -v /home/me/.ivy2:/home/appuser/.ivy2 -v /home/me/.sbt:/home/appuser/.sbt -v /home/me/.cache:/home/appuser/.cache -v /var/run/docker.sock:/var/run/docker.sock -it sbt:latest sh -c <span class="s1">'cd Cortex; ./sbt -Dsbt.log.noformat=true docker:stage'</span> <span class="p">|</span> sed <span class="s1">'s,/home/appuser,/home/me,g'</span>
+</pre>
+</div>
+<div class="section" id="getting-image">
+<h3>3.4 getting image</h3>
+<p>output is in target/docker/stage. go there, and then:</p>
+<pre class="code sh literal-block">
+docker build . -t cortex <span class="o">&amp;&amp;</span> <span class="se">\
+</span>docker tag cortex registry.k.my.domain/cortex <span class="o">&amp;&amp;</span> <span class="se">\
+</span>docker push registry.k.my.domain/cortex
+</pre>
+</div>
+</div>
+<div class="section" id="analyzer-job-input-output">
+<h2>4 analyzer job input/output</h2>
+<p>Cortex needs to write input files for the job, the job needs to write
+output files, and Cortex needs to read them. A persistent shared
+filesystem fulfills these requirements.</p>
+<div class="section" id="hdfs-no">
+<h3>4.1 HDFS (no)</h3>
+<p>Didn't end up doing this, but I saved the links I visited.</p>
+<p><a class="reference external" href="https://github.com/apache-spark-on-k8s/kubernetes-HDFS/blob/master/charts/README.md">newest HDFS on Kubernetes I could find, from 2019</a>. oops,
+that one's taken down. <a class="reference external" href="https://gchq.github.io/gaffer-docker">GCHQ HDFS</a>. eh that one is not very
+flexible. <a class="reference external" href="https://artifacthub.io/packages/helm/gradiant/hdfs">gradiant/hdfs</a>. jfrog thinks
+it has vulnerabilities, iirc.</p>
+<p>I believe TheHive (circa 4.0.1) supports storing artifacts on HDFS,
+for cases where you need the scalability and can pay the complexity. I
+looked into how it supports HDFS and it would need to be generalized
+to make Cortex use HDFS for jobs.</p>
+</div>
+<div class="section" id="readwritemany">
+<h3>4.2 ReadWriteMany</h3>
+<p>Shuffle the problem off to Kubernetes! That's what it's there
+for. Just tell it you need a ReadWriteMany persistent volume
+claim. How that is actually provided is not Cortex's business.</p>
+<p>On a trivial cluster with a single node, it can be a local path:</p>
+<pre class="code yaml literal-block">
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolume</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppv</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l-Scalar-Plain">local</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
+  <span class="nt">capacity</span><span class="p">:</span>
+    <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">10Gi</span>
+  <span class="nt">accessModes</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
+  <span class="nt">hostPath</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;/mnt/data&quot;</span>
+</pre>
+<p>On a multinode self-hosted cluster, Longhorn 1.1 can reputedly provide
+such a volume using NFS under the hood. Amazon and Azure have specific
+ways of providing this. VMware can provide one. Etc.</p>
+<p>To use such a volume, first make a claim:</p>
+<pre class="code yaml literal-block">
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolumeClaim</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
+  <span class="nt">accessModes</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
+  <span class="nt">resources</span><span class="p">:</span>
+    <span class="nt">requests</span><span class="p">:</span>
+      <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">3Gi</span>
+</pre>
+<p>Then make some containers use it. This example shows mounting
+subdirectories; this should enable jobs to get at the smallest needed
+set of files while letting Cortex get at the whole thing.</p>
+<pre class="code yaml literal-block">
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">batch/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Job</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">copy-input-to-output</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">template</span><span class="p">:</span>
+    <span class="nt">spec</span><span class="p">:</span>
+      <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+        <span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+          <span class="nt">claimName</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+      <span class="nt">containers</span><span class="p">:</span>
+      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cito</span>
+        <span class="nt">env</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">JOBID</span>
+          <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;01&quot;</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l-Scalar-Plain">busybox</span>
+        <span class="nt">command</span><span class="p">:</span>
+          <span class="p-Indicator">-</span> <span class="s">&quot;rm&quot;</span>
+          <span class="p-Indicator">-</span> <span class="s">&quot;/job/input/hi&quot;</span>
+        <span class="nt">volumeMounts</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/job/input</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+          <span class="nt">subPathExpr</span><span class="p">:</span> <span class="s">&quot;$(JOBID)/input&quot;</span>
+          <span class="nt">readOnly</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
+        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/job/output</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+          <span class="nt">subPathExpr</span><span class="p">:</span> <span class="s">&quot;$(JOBID)/output&quot;</span>
+      <span class="nt">restartPolicy</span><span class="p">:</span> <span class="l-Scalar-Plain">Never</span>
+</pre>
+</div>
+</div>
+<div class="section" id="running-cortex">
+<h2>5 running Cortex</h2>
+<div class="section" id="opendistro-for-elasticsearch-using-helm-no">
+<h3>5.1 OpenDistro for Elasticsearch using Helm (no)</h3>
+<p>As far as I've heard on the Discord, OpenDistro is not supported by
+TheHive project, and no one has gotten it working yet. I decided to
+try it. It didn't work. See farther down for why. I kept the shell
+script I wrote, in case it comes in useful in the future.</p>
+<p><a class="reference external" href="https://opendistro.github.io/for-elasticsearch-docs/docs/install/helm/">https://opendistro.github.io/for-elasticsearch-docs/docs/install/helm/</a></p>
+<pre class="code sh literal-block">
+helm install -n cortex es opendistro-es-1.13.0.tgz --set global.clusterName<span class="o">=</span>cortexes,kibana.enabled<span class="o">=</span><span class="nb">false</span>
+kubectl run -n cortex curl --image<span class="o">=</span>curlimages/curl -- -XGET https://es-opendistro-es-client-service:9200 -u <span class="s1">'admin:admin'</span> --insecure
+kubectl logs -n cortex curl
+</pre>
+<div class="section" id="certs">
+<h4>5.1.1 Certs</h4>
+<p>That worked, but now we need certs. Elastic Cloud on Kubernetes (ECK)
+would do this for us automatically, but it is under the Elastic
+License; I've set out to put Cortex atop ODFE in order to experiment
+with avoiding that license. And Amazon has no motivation to make a
+Kubernetes operator like ECK, because nice management for
+Elasticsearch solely within their cloud is the thing they charge money
+for, the reason they forked ODFE. An operator would let you use
+someone else's cloud.</p>
+<p>So manual cert generation it is. Or was, till I wrote this awesome
+shell script.</p>
+<pre class="code sh literal-block">
+<span class="ch">#!/bin/sh -xe
+</span>
+<span class="nv">CLUSTER_NAME</span><span class="o">=</span>cluster.local <span class="c1"># not sure how to find this
+</span><span class="nv">NS</span><span class="o">=</span>cortex
+<span class="nv">NS_SVC</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NS</span><span class="si">}</span><span class="s2">.svc.</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nv">ES_HELM_RELEASE</span><span class="o">=</span>es
+<span class="nv">ES_HELM_CHART</span><span class="o">=</span>opendistro-es
+<span class="nv">certs</span><span class="o">=</span><span class="s2">&quot;client_svc&quot;</span>
+<span class="nv">client_svc_ADD</span><span class="o">=</span>client-service
+<span class="nv">client_svc_CERT_BASENAME</span><span class="o">=</span>elk-rest
+<span class="nv">CA_NAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">NS</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">ES_HELM_RELEASE</span><span class="si">}</span><span class="s2"> ODFE Root CA&quot;</span>
+
+_secret <span class="o">()</span> <span class="o">{</span>
+    <span class="nb">eval</span> <span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;echo \${</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">_ADD}-certs&quot;</span><span class="k">)</span>
+<span class="o">}</span>
+_shn <span class="o">()</span> <span class="o">{</span>
+    <span class="nb">eval</span> <span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;echo </span><span class="si">${</span><span class="nv">ES_HELM_RELEASE</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">ES_HELM_CHART</span><span class="si">}</span><span class="s2">-\$</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">_ADD&quot;</span><span class="k">)</span>
+<span class="o">}</span>
+_cbn <span class="o">()</span> <span class="o">{</span>
+    <span class="nb">eval</span> <span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;echo \${</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">_CERT_BASENAME}&quot;</span><span class="k">)</span>
+<span class="o">}</span>
+
+clean <span class="o">()</span> <span class="o">{</span>
+  rm -rf ca client_svc
+  kubectl delete secret -n <span class="si">${</span><span class="nv">NS</span><span class="si">}</span> <span class="k">$(</span>_secret client_svc<span class="k">)</span> <span class="o">||</span> <span class="se">\
+</span>      <span class="nb">echo</span> <span class="s2">&quot;- (error ignored)&quot;</span>
+  <span class="nb">exit</span> <span class="m">0</span>
+<span class="o">}</span>
+
+create_ca <span class="o">()</span> <span class="o">{</span>
+    mkdir ca
+    <span class="nb">cd</span> ca
+    mkdir certs crl newcerts
+    touch index.txt
+    head -c <span class="m">4</span> /dev/urandom <span class="p">|</span> od -t u4 -An <span class="p">|</span> tr -d <span class="s1">' '</span> &gt; serial
+    cat &gt; openssl.cnf <span class="s">&lt;&lt;EOF
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+
+dir = .
+certs = \$dir/certs
+crl_dir = \$dir/crl
+database = \$dir/index.txt
+new_certs_dir = \$dir/newcerts
+certificate = \$dir/ca.pem
+serial = \$dir/serial
+crlnumber = \$dir/crlnumber
+crl = \$dir/crl.pem
+private_key = \$dir/ca.key
+x509_extensions = usr_cert
+name_opt = ca_default
+cert_opt = ca_default
+default_days = 730
+default_md = default
+preserve = no
+policy = idontcare
+
+[ idontcare ]
+
+[ usr_cert ]
+
+basicConstraints=CA:FALSE
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+EOF</span>
+    pwgen -s <span class="m">32</span> <span class="m">1</span> &gt; passphrase.txt
+    openssl req -newkey rsa:4096 -keyout ca.key <span class="se">\
+</span>            -passout file:passphrase.txt -out ca.crt <span class="se">\
+</span>            -subj <span class="s2">&quot;/CN=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">NS</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">ES_HELM_RELEASE</span><span class="si">}</span><span class="s2"> ODFE Root CA&quot;</span> <span class="se">\
+</span>            -x509 -days +3650 -sha256
+    <span class="nb">cd</span> ..
+<span class="o">}</span>
+
+issue_cert <span class="o">()</span> <span class="o">{</span>
+    <span class="nv">shn</span><span class="o">=</span><span class="k">$(</span>_shn <span class="nv">$1</span><span class="k">)</span>
+    <span class="nv">cbn</span><span class="o">=</span><span class="k">$(</span>_cbn <span class="nv">$1</span><span class="k">)</span>
+    <span class="nv">fqdn</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">shn</span><span class="si">}</span><span class="s2">.</span><span class="si">${</span><span class="nv">NS_SVC</span><span class="si">}</span><span class="s2">&quot;</span>
+    mkdir <span class="nv">$1</span>
+    <span class="nb">cd</span> <span class="nv">$1</span>
+    cat &gt; req.conf <span class="s">&lt;&lt;EOF
+[req]
+prompt=no
+utf8=yes
+distinguished_name=dn_details
+req_extensions=san_details
+[dn_details]
+CN=${fqdn}
+[san_details]
+subjectAltName=DNS:${fqdn},DNS:${shn}
+EOF</span>
+    openssl req -newkey rsa:4096 -keyout <span class="si">${</span><span class="nv">cbn</span><span class="si">}</span>-key.pem -nodes <span class="se">\
+</span>            -subj <span class="s2">&quot;/CN=</span><span class="si">${</span><span class="nv">fqdn</span><span class="si">}</span><span class="s2">&quot;</span> -out <span class="si">${</span><span class="nv">cbn</span><span class="si">}</span>-csr.pem -config req.conf
+    <span class="nb">cd</span> ../ca
+    openssl ca -keyfile ca.key -cert ca.crt -passin file:passphrase.txt <span class="se">\
+</span>            -in ../<span class="si">${</span><span class="nv">cert</span><span class="si">}</span>/<span class="si">${</span><span class="nv">cbn</span><span class="si">}</span>-csr.pem -out ../<span class="si">${</span><span class="nv">cert</span><span class="si">}</span>/<span class="si">${</span><span class="nv">cbn</span><span class="si">}</span>-crt.pem <span class="se">\
+</span>            -notext -batch -config openssl.cnf -extfile ../<span class="si">${</span><span class="nv">cert</span><span class="si">}</span>/req.conf <span class="se">\
+</span>            -extensions san_details
+    <span class="nb">cd</span> ..
+    cp ca/ca.crt <span class="nv">$1</span>/<span class="si">${</span><span class="nv">cbn</span><span class="si">}</span>-root-ca.pem
+<span class="o">}</span>
+
+create_secret <span class="o">()</span> <span class="o">{</span>
+    kubectl create secret generic -n <span class="si">${</span><span class="nv">NS</span><span class="si">}</span> <span class="k">$(</span>_secret <span class="nv">$1</span><span class="k">)</span> <span class="se">\
+</span>            --from-file<span class="o">=</span><span class="nv">$1</span>
+    kubectl patch -n <span class="si">${</span><span class="nv">NS</span><span class="si">}</span> secret <span class="k">$(</span>_secret <span class="nv">$1</span><span class="k">)</span> <span class="se">\
+</span>            -p <span class="s1">'{&quot;metadata&quot;:{&quot;labels&quot;:{&quot;app&quot;:&quot;elasticsearch&quot;}}}'</span>
+<span class="o">}</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">=</span> clean <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    clean
+    <span class="nb">exit</span> <span class="m">0</span>
+<span class="k">fi</span>
+
+create_ca
+<span class="k">for</span> cert in <span class="si">${</span><span class="nv">certs</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
+    issue_cert <span class="nv">$cert</span>
+    create_secret <span class="nv">$cert</span>
+<span class="k">done</span>
+</pre>
+<p>#+name es-values.yaml</p>
+<pre class="code yaml literal-block">
+<span class="nn">---</span>
+<span class="nt">global</span><span class="p">:</span>
+  <span class="nt">clusterName</span><span class="p">:</span> <span class="l-Scalar-Plain">cortexes</span>
+<span class="nt">kibana</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">false</span>
+<span class="nt">elasticsearch</span><span class="p">:</span>
+  <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l-Scalar-Plain">IfNotPresent</span>
+  <span class="nt">ssl</span><span class="p">:</span>
+    <span class="nt">rest</span><span class="p">:</span>
+      <span class="nt">enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
+      <span class="nt">existingCertSecret</span><span class="p">:</span> <span class="l-Scalar-Plain">client-service-certs</span>
+    <span class="nt">transport</span><span class="p">:</span>
+      <span class="nt">existingCertSecret</span><span class="p">:</span> <span class="l-Scalar-Plain">transport-certs</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">opendistro_security.ssl.http.enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
+    <span class="nt">opendistro_security.ssl.http.pemcert_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-crt.pem</span>
+    <span class="nt">opendistro_security.ssl.http.pemkey_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-key.pem</span>
+    <span class="nt">opendistro_security.ssl.http.pemtrustedcas_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-root-ca.pem</span>
+    <span class="nt">opendistro_security.ssl.transport.pemcert_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-crt.pem</span>
+    <span class="nt">opendistro_security.ssl.transport.pemkey_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-key.pem</span>
+    <span class="nt">opendistro_security.ssl.transport.pemtrustedcas_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-root-ca.pem</span>
+<span class="nn">...</span>
+</pre>
+<pre class="code sh literal-block">
+sh build.sh clean
+sh build.sh
+helm uninstall -n cortex es
+helm install -n cortex es opendistro-es-1.13.0.tgz -f es_values.yaml
+</pre>
+</div>
+<div class="section" id="troubles">
+<h4>5.1.2 Troubles</h4>
+<p>The certificates are specified in the Helm values by purpose
+(transport, REST API, admin, etc), and configured the same. But the
+exceptions raised evince that the subject names that need to be in the
+certs belong not to purposes, but to <em>services</em> (discovery, data-svc,
+client-service). This reduces my confidence in the goodness of the
+Helm charts.</p>
+<p>I read some introductory documentation about creating an operator. No
+big deal, right? I'll just learn another language and two more APIs...</p>
+<p>No. For now I'm doing ECK. I've used it before, and it was easy and
+fast. ODFE is a side quest; what I'm trying to do is get a working
+Cortex.</p>
+</div>
+</div>
+<div class="section" id="eck">
+<h3>5.2 ECK</h3>
+<p><a class="reference external" href="https://www.elastic.co/guide/en/cloud-on-k8s/1.4/k8s-quickstart.html#k8s-quickstart">Quickstart</a></p>
+<pre class="code sh literal-block">
+kubectl apply -f https://download.elastic.co/downloads/eck/1.4.0/all-in-one.yaml
+</pre>
+<pre class="code yaml literal-block">
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">elasticsearch.k8s.elastic.co/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Elasticsearch</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">version</span><span class="p">:</span> <span class="l-Scalar-Plain">7.10.2</span>
+  <span class="nt">nodeSets</span><span class="p">:</span>
+  <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">default</span>
+    <span class="nt">count</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
+    <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">node.store.allow_mmap</span><span class="p">:</span> <span class="l-Scalar-Plain">false</span>
+<span class="nn">...</span>
+</pre>
+<p>And done. (I had to back off from 7.11 because of a compatibility
+problem that's since been fixed; look on
+<a class="reference external" href="https://blog.thehive-project.org/">https://blog.thehive-project.org/</a> around March 2021 for details.)</p>
+</div>
+<div class="section" id="cortex">
+<h3>5.3 Cortex</h3>
+<pre class="code yaml literal-block">
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">ports</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="nt">protocol</span><span class="p">:</span> <span class="l-Scalar-Plain">TCP</span>
+      <span class="nt">port</span><span class="p">:</span> <span class="l-Scalar-Plain">80</span>
+      <span class="nt">targetPort</span><span class="p">:</span> <span class="l-Scalar-Plain">9001</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolume</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-hppv</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l-Scalar-Plain">local</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
+  <span class="nt">capacity</span><span class="p">:</span>
+    <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">10Gi</span>
+  <span class="nt">accessModes</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
+  <span class="nt">hostPath</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;/mnt/data&quot;</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolumeClaim</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
+  <span class="nt">accessModes</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
+  <span class="nt">resources</span><span class="p">:</span>
+    <span class="nt">requests</span><span class="p">:</span>
+      <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">3Gi</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">replicas</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">matchLabels</span><span class="p">:</span>
+      <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">template</span><span class="p">:</span>
+    <span class="nt">metadata</span><span class="p">:</span>
+      <span class="nt">labels</span><span class="p">:</span>
+        <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+    <span class="nt">spec</span><span class="p">:</span>
+      <span class="nt">serviceAccountName</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+      <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">jobdir</span>
+        <span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+          <span class="nt">claimName</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca</span>
+        <span class="nt">secret</span><span class="p">:</span>
+          <span class="nt">secretName</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart-es-http-ca-internal</span>
+          <span class="nt">items</span><span class="p">:</span>
+          <span class="p-Indicator">-</span> <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">tls.crt</span>
+            <span class="nt">path</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca.crt</span>
+      <span class="nt">containers</span><span class="p">:</span>
+      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l-Scalar-Plain">registry.k.my.domain/cortex</span>
+        <span class="nt">env</span><span class="p">:</span>
+          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_uri</span>
+            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">https://esquickstart-es-http:9200</span>
+          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_http_ca_cert</span>
+            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/cortex/es-http-ca/es-http-ca.crt</span>
+          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_username</span>
+            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">elastic</span>
+          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_password</span>
+            <span class="nt">valueFrom</span><span class="p">:</span>
+              <span class="nt">secretKeyRef</span><span class="p">:</span>
+                <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart-es-elastic-user</span>
+                <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">elastic</span>
+          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">kubernetes_job_pvc</span>
+            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
+        <span class="nt">volumeMounts</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/tmp/cortex-jobs</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">jobdir</span>
+        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/cortex/es-http-ca</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">networking.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Ingress</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">rules</span><span class="p">:</span>
+  <span class="p-Indicator">-</span> <span class="nt">host</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex.k.my.domain</span>
+    <span class="nt">http</span><span class="p">:</span>
+      <span class="nt">paths</span><span class="p">:</span>
+      <span class="p-Indicator">-</span> <span class="nt">path</span><span class="p">:</span> <span class="l-Scalar-Plain">/</span>
+        <span class="nt">pathType</span><span class="p">:</span> <span class="l-Scalar-Plain">Prefix</span>
+        <span class="nt">backend</span><span class="p">:</span>
+          <span class="nt">service</span><span class="p">:</span>
+            <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
+            <span class="nt">port</span><span class="p">:</span>
+              <span class="nt">number</span><span class="p">:</span> <span class="l-Scalar-Plain">80</span>
+<span class="nn">...</span>
+</pre>
+<p>runs, but jobs don't run yet.</p>
+</div>
+<div class="section" id="service-account">
+<h3>5.4 Service account</h3>
+<p>Create a role and a service account to enable Cortex's use of
+Kubernetes.</p>
+<pre class="code yaml literal-block">
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Role</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">job-runner</span>
+<span class="nt">rules</span><span class="p">:</span>
+<span class="p-Indicator">-</span> <span class="nt">apiGroups</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p-Indicator">]</span>
+  <span class="nt">resources</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p-Indicator">]</span>
+  <span class="nt">verbs</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;list&quot;</span><span class="p-Indicator">]</span>
+<span class="p-Indicator">-</span> <span class="nt">apiGroups</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;batch&quot;</span><span class="p-Indicator">]</span>
+  <span class="nt">resources</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;jobs&quot;</span><span class="p-Indicator">]</span>
+  <span class="nt">verbs</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;create&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;delete&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;list&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;watch&quot;</span><span class="p-Indicator">]</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">ServiceAccount</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">default-token-lzm9h</span>
+<span class="nn">...</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">RoleBinding</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-job-runner</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nt">roleRef</span><span class="p">:</span>
+  <span class="nt">apiGroup</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io</span>
+  <span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Role</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">job-runner</span>
+<span class="nt">subjects</span><span class="p">:</span>
+<span class="p-Indicator">-</span> <span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">ServiceAccount</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
+<span class="nn">...</span>
+</pre>
+<p>And with that, jobs are created.</p>
+</div>
+</div>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
