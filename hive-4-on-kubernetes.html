@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Hive 4 on Kubernetes</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/hive-4-on-kubernetes.html" rel="bookmark"
+         title="Permalink to Hive 4 on Kubernetes">Hive 4 on Kubernetes</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-03-10T15:59:00-05:00">
+      Wed 10 March 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>Here's what I've got so far. It is not complete. For example, it has
+no persistent file storage, and it isn't geared up for Cortex.</p>
+<p>When you see YAML, to act on it, save it in a file and <tt class="docutils literal">kubectl
+apply <span class="pre">-f</span> thefile.yaml</tt>.</p>
+<p>First, install k3s per directions on k3s.io. Any Kubernetes will do,
+but this one has Traefik by default, super simple setup, and runs both
+on one node and multiple.</p>
+<p>Install Longhorn per its directions.</p>
+<pre class="code sh literal-block">
+helm install -n thehive cassandra bitnami/cassandra --set persistence.storageClass<span class="o">=</span>longhorn
+</pre>
+<p>Add a Play secret. (You may need to install pwgen, or just set pw to
+something long and random instead of <tt class="docutils literal">$(pwgen <span class="pre">...)</span></tt>.)</p>
+<pre class="code sh literal-block">
+<span class="o">(</span><span class="nb">set</span> -x<span class="p">;</span> <span class="nv">pw</span><span class="o">=</span><span class="k">$(</span>pwgen -s <span class="m">24</span> -n <span class="m">1</span><span class="k">)</span><span class="p">;</span> <span class="nb">echo</span> <span class="nv">$pw</span><span class="p">;</span> <span class="se">\
+</span> kubectl create -n thehive secret generic hive-play-secret --from-literal<span class="o">=</span><span class="s2">&quot;secret=</span><span class="nv">$pw</span><span class="s2">&quot;</span><span class="o">)</span>
+</pre>
+<p>Create the service.</p>
+<pre class="code yaml literal-block">
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive-web</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+  <span class="nt">ports</span><span class="p">:</span>
+    <span class="p-Indicator">-</span> <span class="nt">protocol</span><span class="p">:</span> <span class="l-Scalar-Plain">TCP</span>
+      <span class="nt">port</span><span class="p">:</span> <span class="l-Scalar-Plain">9000</span>
+</pre>
+<p>Create the deployment.</p>
+<pre class="code yaml literal-block">
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">replicas</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
+  <span class="nt">selector</span><span class="p">:</span>
+    <span class="nt">matchLabels</span><span class="p">:</span>
+      <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+  <span class="nt">template</span><span class="p">:</span>
+    <span class="nt">metadata</span><span class="p">:</span>
+      <span class="nt">labels</span><span class="p">:</span>
+        <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+    <span class="nt">spec</span><span class="p">:</span>
+      <span class="nt">containers</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
+          <span class="nt">image</span><span class="p">:</span> <span class="s">'thehiveproject/thehive4:latest'</span>
+          <span class="nt">volumeMounts</span><span class="p">:</span>
+            <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/data</span>
+              <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">data</span>
+          <span class="nt">env</span><span class="p">:</span>
+            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">TH_SECRET</span>
+              <span class="nt">valueFrom</span><span class="p">:</span>
+                <span class="nt">secretKeyRef</span><span class="p">:</span>
+                  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hive-play-secret</span>
+                  <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">secret</span>
+            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_HOSTNAMES</span>
+              <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
+            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">TH_NO_CONFIG_CORTEX</span>
+              <span class="nt">value</span><span class="p">:</span> <span class="s">'1'</span>
+            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_USERNAME</span>
+              <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
+            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_PASSWORD</span>
+              <span class="nt">valueFrom</span><span class="p">:</span>
+                <span class="nt">secretKeyRef</span><span class="p">:</span>
+                  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
+                  <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra-password</span>
+      <span class="nt">volumes</span><span class="p">:</span>
+        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">data</span>
+          <span class="nt">emptyDir</span><span class="p">:</span> <span class="p-Indicator">{}</span>
+</pre>
+<p>This ingress object makes Traefik route requests for
+<tt class="docutils literal">thehive.my.domain</tt> to TheHive's service.</p>
+<!-- code: yaml
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: thehive
+  namespace: thehive
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: thehive.my.domain
+      http:
+        paths:
+          - backend:
+              serviceName: thehive-web
+              servicePort: 9000
+            path: / -->
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
