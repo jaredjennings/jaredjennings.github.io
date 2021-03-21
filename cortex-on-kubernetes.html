@@ -44,7 +44,8 @@
     </div>
   </footer><!-- /.post-info -->
   <div class="entry-content">
-    <p>Cortex is a piece of software for cybersecurity professionals, which
+    <p><strong>UPDATE</strong>: Cortex Helm chart created. See details below.</p>
+<p>Cortex is a piece of software for cybersecurity professionals, which
 coordinates analysis of observables found during investigations, and
 automated response to the findings of the analyses. For example,
 suppose a user receives a phishing email. The &quot;From&quot; address is an
@@ -82,6 +83,17 @@ containers is flourishing with many new ideas.</p>
 <p>Building on the excellent work done in making the job runner an
 extension point of Cortex, I filed a <a class="reference external" href="https://github.com/TheHive-Project/Cortex/issues/347">ticket</a> to request a Kubernetes
 job runner, and then a <a class="reference external" href="https://github.com/TheHive-Project/Cortex/pull/349">pull request</a> with an implementation of it.</p>
+<p><strong>UPDATE</strong>: <a class="reference external" href="https://github.com/jaredjennings/helm-cortex">https://github.com/jaredjennings/helm-cortex</a> is a Helm
+chart embodying all I've learned
+below. <a class="reference external" href="https://hub.docker.com/r/jaredjennings/cortex">https://hub.docker.com/r/jaredjennings/cortex</a> is a build of the
+code I've submitted in the pull request. It only has a <cite>latest</cite> tag,
+and Helm doesn't let you override the appVersion, so my chart
+presently says the appVersion is &quot;latest.&quot; This is frowned upon,
+because Helm charts are supposed to do the same thing a week from now
+that they did today, and &quot;latest&quot; can certainly change from now to
+then. Take it as an indication of the relative immaturity and
+instability of all this stuff that my chart uses the &quot;latest&quot;
+appVersion, and the chart itself has a 0.x version number.</p>
 <p>One of the goals I set out in the ticket was some kind of
 documentation about how to make it work. Here's how I did that at
 home. Perhaps it may form the germ of some documentation appropriate
