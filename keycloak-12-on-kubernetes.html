@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Keycloak 12 on Kubernetes</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/keycloak-12-on-kubernetes.html" rel="bookmark"
+         title="Permalink to Keycloak 12 on Kubernetes">Keycloak 12 on Kubernetes</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-04-27T15:51:00-04:00">
+      Tue 27 April 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>I'm trying to put a Keycloak in front of my Cortex 3, Hive 4, and MISP
+2.4.140 Kubernetes deployments, to unify authentication decisions for
+all of them. As in previous articles, I'm doing this on a small k3s
+cluster; right now it is at version 1.20.2+k3s1. This version of k3s
+includes Traefik 1.7, and that included version is what I'm using;
+apparently the next one <a class="reference external" href="https://github.com/k3s-io/k3s/issues/1141">will include Traefik 2</a> and all I've learned
+here will be slightly different. Oh well.</p>
+<p>I deployed Keycloak using the <a class="reference external" href="https://www.keycloak.org/getting-started/getting-started-operator-kubernetes">operator</a>. The
+first hurdle is that it serves HTTPS, but Traefik would work much more
+nicely with it if it would serve plaintext HTTP. But it doesn't.</p>
+<p>I deployed the Keycloak cluster by adding this resource:</p>
+<pre class="literal-block">
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  name: mykeycloak
+  namespace: my-keycloak-operator
+  labels:
+    app: mykeycloak
+spec:
+  instances: 1
+  externalAccess:
+    enabled: True
+</pre>
+<p>The externalAccess bit makes the operator construct an Ingress
+object. That object has such annotations:</p>
+<pre class="literal-block">
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+</pre>
+<p>After a long while I learned that the
+<tt class="docutils literal">ingress.kubernetes.io/protocol</tt> annotation needs to be <em>manually
+added</em> to the Ingress to make Traefik 1.7 stop trying to use plaintext
+HTTP to communicate with it:</p>
+<pre class="literal-block">
+metadata:
+  annotations:
+    ingress.kubernetes.io/protocol: https
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+</pre>
+<p>Now, Keycloak makes up a certificate, which of course Traefik doesn't
+trust. The immediate — and <em>temporary</em> — fix is to edit the
+<tt class="docutils literal">traefik</tt> deployment in the <tt class="docutils literal"><span class="pre">kube-system</span></tt> namespace, and add
+<tt class="docutils literal"><span class="pre">--insecureSkipVerify=true</span></tt> to the command-line arguments of
+Traefik; or edit the <tt class="docutils literal">traefik</tt> configmap in the <tt class="docutils literal"><span class="pre">kube-system</span></tt>
+namespace, and add <tt class="docutils literal">insecureSkipVerify=true</tt>. If you edit the
+deployment, you get a restart for free.</p>
+<p>The next thing to try is to set the <tt class="docutils literal">rootCAs</tt> in the <tt class="docutils literal">traefik</tt>
+configmap. But it seems Traefik is trying to get to the Keycloak
+Service by means of its IP address, and there is of course no IP
+address SAN in the certificate for that IP address.</p>
+<p>After a jaunt through the source code of the Keycloak operator and
+container scripts, I've pieced together how to specify a certificate
+to use. This will probably not help with the IP SAN issue, but it will
+help with the made-up-cert issue.</p>
+<p>At <a class="reference external" href="https://github.com/keycloak/keycloak-operator/blob/0c760d38f9caa30cee8bf6a5b1c885ac23ac5d5d/pkg/model/keycloak_deployment.go#L180">line 180 et seq</a>
+of <tt class="docutils literal"><span class="pre">keycloak-operator/keycloak_deployment.go</span></tt>, the Keycloak
+deployment object is laid out. It gets volume mounts for the container
+from <a class="reference external" href="https://github.com/keycloak/keycloak-operator/blob/0c760d38f9caa30cee8bf6a5b1c885ac23ac5d5d/pkg/model/keycloak_deployment.go#L297">KeycloakVolumeMounts</a>,
+which says that the volume having <tt class="docutils literal">ServingCertSecretName</tt> as its
+name should be mounted at <tt class="docutils literal">/etc/x509/https</tt>. Nearby,
+<a class="reference external" href="https://github.com/keycloak/keycloak-operator/blob/0c760d38f9caa30cee8bf6a5b1c885ac23ac5d5d/pkg/model/keycloak_deployment.go#L332">KeycloakVolumes</a>
+specifies that the contents of that volume should come from the secret
+having <tt class="docutils literal">ServingCertSecretName</tt> as its name. That <a class="reference external" href="https://github.com/keycloak/keycloak-operator/blob/0c760d38f9caa30cee8bf6a5b1c885ac23ac5d5d/pkg/model/constants.go#L41">constant</a>'s
+value is <tt class="docutils literal"><span class="pre">&quot;sso-x509-https-secret&quot;</span></tt>.</p>
+<p>Now, the <a class="reference external" href="https://github.com/keycloak/keycloak-containers/blob/d4ce446dde3026f89f66fa86b58c2d0d6132ce4d/server/tools/docker-entrypoint.sh">Docker entrypoint</a>
+for the Keycloak server image runs one <a class="reference external" href="https://github.com/keycloak/keycloak-containers/blob/d4ce446dde3026f89f66fa86b58c2d0d6132ce4d/server/tools/x509.sh">x509.sh</a>,
+which takes the files <tt class="docutils literal">tls.crt</tt> and <tt class="docutils literal">tls.key</tt> from
+<tt class="docutils literal">/etc/x509/https</tt> and makes a keystore out of them for Keycloak to
+use.</p>
+<p>So! To specify a certificate, make a usual TLS secret in the
+appropriate namespace, with a tls.crt and tls.key inside. Call the
+secret <tt class="docutils literal"><span class="pre">sso-x509-https-secret</span></tt>.</p>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
