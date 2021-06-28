@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Asus Chromebox CN60</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/asus-chromebox-cn60.html" rel="bookmark"
+         title="Permalink to Asus Chromebox CN60">Asus Chromebox CN60</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-06-27T22:17:00-04:00">
+      Sun 27 June 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>I'm trying to split my IT estate across two floors of my house. The
+present plan for that entails some kind of low-powered device
+upstairs, and the muscle in the basement.</p>
+<p>I found an Asus mini PC with an Intel Core i3, 8 GB RAM, and two video
+outputs, for cheaper than a Raspberry Pi 4, considering the case and
+SSD I'd need for the Pi 4. I was waffling about it. Then I found an
+Asus Chromebox with an Intel Core i3, 4 GB RAM, a 16GB SSD, and two
+video outputs, for cheaper than the Pi 4. I bit. For that price I
+could afford to be wrong.</p>
+<p>So far I've found that even Chromeboxes with x86 processors are not
+quite PCs in the sense I expected, and it's all to do with what
+happens at boot time. I did manage to install the TianoCore-based
+MrChromebox UEFI firmware, and I'm able to start executing all sorts
+of OSes that have EFI bootloaders. But not nearly all of them end up
+working. Enough experiences have accumulated that I need to dump them
+here.</p>
+<dl class="docutils">
+<dt>9front &quot;MIT FRUCHTGESCHMACK&quot;</dt>
+<dd>I had to unplug and replug the thumbdrive for the installer to
+be able to find it, and there are some odd messages to do with the
+mouse during boot, but graphics, input, storage and networking do
+seem to work. I'm pretty sure nothing is optimized though. I run
+a lot of CAD lately; both CGAL (underneath OpenSCAD) and OpenCascade
+(underneath FreeCAD, to say nothing of Qt) require C++, which is
+nowhere to be found in the Plan 9 universe, and I'm not certain
+that the VNC viewer will push pixels fast enough for me. Also the
+ssh client appears not to support public keys.</dd>
+<dt>Haiku Beta 2</dt>
+<dd>Boot screen with light-up icons shows; they fly by, but then the
+machine reboots.</dd>
+<dt>NetBSD 9.2, FreeBSD 13.0, Dragonfly 6.0</dt>
+<dd>All three of these hang at boot just after showing &quot;EFI framebuffer
+information.&quot; It appears there is <a class="reference external" href="https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=209821">a FreeBSD bug filed about it</a>, and even
+a patch under review. If I had stronger build-fu, I could build a
+FreeBSD install thumbdrive with the patched loader.</dd>
+<dt>OpenBSD 6.9</dt>
+<dd>Downloaded the USB image; didn't try it. I think I don't like Theo.</dd>
+<dt>Debian GNU/Linux 10.10</dt>
+<dd>Installer boots nicely. Network card (rtl8169 was it?) requires
+nonfree firmware. Wait, on a second install it didn't require the
+firmware?? Anyway ChromeOS is Linux, so this machine will run Linux
+well.</dd>
+<dt>Fedora</dt>
+<dd>I haven't liked the way Red Hat does open-source software for a
+while. They start or join projects that make the software that the
+company needs for its products, and they make the code grow, but
+maybe not the project. The result is a piece of software with
+poorly stated goals, little or no useful documentation, and a weak
+community. It's only really useful and dependable when you buy the
+Red Hat product. And it's summarily dropped the moment the
+company's strategy no longer includes it. Fine decisions for a
+company to make—maybe even not as bad as some other open-source
+strip mining that goes on—but I'm not inclined to help them.</dd>
+<dt>Slackware</dt>
+<dd>Last released in 2016, bless them.</dd>
+</dl>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
