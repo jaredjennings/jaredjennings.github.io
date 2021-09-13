@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - The road to production with Kubernetes</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/the-road-to-production-with-kubernetes.html" rel="bookmark"
+         title="Permalink to The road to production with Kubernetes">The road to production with Kubernetes</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-09-13T10:53:00-04:00">
+      Mon 13 September 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>Up to now my Hive/Cortex on Kubernetes work has been focused on
+getting things to initially work. Now I need to pay some attention to
+how to keep them working, and get them working again when they break.</p>
+<div class="section" id="use-case">
+<h2>Use case</h2>
+<p>For actual use, so far, I have five VMs with CentOS, plugged
+appropriately into my organization's infrastructure (authentication,
+logging, backup...). On these I'm running k3s, MetalLB, Traefik, and
+Longhorn.</p>
+</div>
+<div class="section" id="logging">
+<h2>Logging</h2>
+<p><a class="reference external" href="https://kubernetes.io/docs/concepts/cluster-administration/logging/">Kubernetes logging design documentation</a>.</p>
+<p>Logs have been kept and forwarded on my nodes before I ever installed
+Kubernetes. The simplest way to get container logs collected and
+forwarded is using the design from the above documentation labelled
+<cite>node logging agent</cite>. This just means configuring the existing system
+logger to pick up the container logs and forward them, as it's already
+doing for the OS logs.</p>
+<p>I found <a class="reference external" href="https://github.com/kincl/kubernetes-logging-syslog/blob/master/rsyslog.conf.template">a template</a> rsyslog.conf.d snippet, modified it as
+necessary, and contrived to put it in
+<tt class="docutils literal">/etc/rsyslog.d/05_containers.conf</tt> on all my nodes. I filled in
+values for the <tt class="docutils literal">RSYSLOG_*</tt> variables at the bottom, but your values
+will vary so I left them for you. Here is a copy of the linked
+template in case of link rot:</p>
+<pre class="literal-block">
+global(workDirectory=&quot;/var/lib/rsyslog&quot;)
+
+module(load=&quot;imfile&quot; PollingInterval=&quot;10&quot;)
+input(type=&quot;imfile&quot;
+      file=&quot;/var/log/containers/*.log&quot;
+      tag=&quot;container-logs&quot;)
+
+template(name=&quot;ContainerLogs&quot; type=&quot;list&quot;) {
+    property(name=&quot;timestamp&quot; dateFormat=&quot;rfc3339&quot;)
+    constant(value=&quot; &quot;)
+    property(name=&quot;$!metadata!filename&quot; regex.type=&quot;ERE&quot;
+        regex.nomatchmode=&quot;FIELD&quot;
+        regex.expression=&quot;([a-zA-Z0-9_-]*)-&quot;
+        regex.submatch=&quot;1&quot;)
+    constant(value=&quot; &quot;)
+    property(name=&quot;msg&quot; spifno1stsp=&quot;on&quot;)
+    property(name=&quot;msg&quot; droplastlf=&quot;on&quot;)
+    constant(value=&quot;\n&quot;)
+}
+
+action(type=&quot;omfwd&quot;
+       template=&quot;ContainerLogs&quot;
+       Target=&quot;${RSYSLOG_TARGET}&quot;
+       Port=&quot;${RSYSLOG_PORT}&quot;
+       Protocol=&quot;${RSYSLOG_PROTOCOL}&quot;)
+
+#action(type=&quot;omfile&quot; dirCreateMode=&quot;0700&quot; fileCreateMode=&quot;0644&quot;
+# file=&quot;/var/log/messages&quot; template=&quot;ContainerLogs&quot;)
+</pre>
+</div>
+<div class="section" id="patching">
+<h2>Patching</h2>
+<p>In my organization we have patching practices. Part of patching is
+rebooting. If you do rebooting right, and you did your deployment
+right with Kubernetes, you can do a rolling restart of the cluster
+with no service downtime.</p>
+<p>I found a piece of software for doing restarting right:
+<a class="reference external" href="https://github.com/weaveworks/kured">https://github.com/weaveworks/kured</a>. A <a class="reference external" href="https://www.weave.works/blog/one-year-kured-kubernetes-reboot-daemon">blog post</a> evinces that it
+has been around and maintained for at least a year—quite an
+accomplishment in the Kubernetes space, I'm sad to say.</p>
+<p><tt class="docutils literal">kured</tt> works just like it says on the tin, so I'm not going to say
+anything more about it here.</p>
+</div>
+<div class="section" id="monitoring">
+<h2>Monitoring</h2>
+<p><a class="reference external" href="https://github.com/kubernetes/node-problem-detector">https://github.com/kubernetes/node-problem-detector</a> takes OS-level
+events and makes them available at the cluster level: for example, if
+your kernel has an out-of-memory event and kills a process,
+<tt class="docutils literal"><span class="pre">node-problem-detector</span></tt> sees the resulting kernel messages and sends
+them to Kubernetes as events about the node, so that they can be
+reacted to at the cluster level. It also provides a Prometheus
+endpoint for monitoring and alerting in that fashion.</p>
+<p>Speaking of Prometheus,
+<a class="reference external" href="https://github.com/cablespaghetti/k3s-monitoring">https://github.com/cablespaghetti/k3s-monitoring</a> has k3s-specific
+installation and configuration directions for Prometheus and
+Grafana. It does not go into making Prometheus and Grafana securely
+available from outside the cluster. This method of setting up Grafana
+does not involve persistent volumes, so changes you make in the
+Grafana web UI will not persist. Instead you add custom resource
+objects to your cluster to describe your dashboards.</p>
+<p>I put all these Kubernetes objects in their own namespace,
+<tt class="docutils literal">monitoring</tt>.</p>
+<div class="section" id="traefik">
+<h3>Traefik</h3>
+<p>Traefik is the example given in the k3s-monitoring repository: you add
+a ServiceMonitor custom resource to tell Prometheus to scrape
+Traefik's monitoring endpoint (I may have had to add this in other
+namespaces too; can't quite remember); a PrometheusRule that defines
+alert levels; and a ConfigMap that provides the dashboard to
+Grafana. The Prometheus Operator takes care of turning those into
+actual configuration for Prometheus, the alert monitor, and Grafana. I
+didn't watch the Operator logs while changing things; my experience
+was that I didn't have to restart things myself, but it took a couple
+of minutes for the operator to do it—just long enough for me to hit
+Refresh several times and wonder if it was working right.</p>
+</div>
+<div class="section" id="longhorn">
+<h3>Longhorn</h3>
+<p>Longhorn has an entire <a class="reference external" href="https://longhorn.io/docs/1.2.0/monitoring/prometheus-and-grafana-setup">set of directions</a> for Prometheus and Grafana
+setup, which I skipped entirely. I think the <tt class="docutils literal"><span class="pre">k3s-monitoring</span></tt> stuff
+got me most of this, and with operators and Helm charts instead of
+manually added Kubernetes objects.</p>
+<p>First, to get Prometheus to monitor (&quot;scrape&quot;) Longhorn, I added this
+resource to the cluster:</p>
+<pre class="literal-block">
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: longhorn
+    name: longhorn-prometheus-servicemonitor
+    release: prometheus
+  name: longhorn-prometheus-servicemonitor
+  namspace: monitoring
+spec:
+  endpoints:
+    - port: manager
+  namespaceSelector:
+    matchNames:
+      - longhorn-system
+  selector:
+    matchLabels:
+      app: longhorn-manager
+</pre>
+</div>
+<div class="section" id="adding-grafana-dashboards">
+<h3>Adding Grafana dashboards</h3>
+<p>There is a <a class="reference external" href="https://grafana.com/grafana/dashboards/13032">Grafana dashboard</a> for Longhorn which I picked up and
+installed. This is not explained in exact detail by the existing
+sources, so I'm going to go into it here.</p>
+<p>When you download the dashboard JSON, the <a class="reference external" href="https://grafana.com/docs/reference/export_import/">export/import</a>
+documentation says that the JSON has an <tt class="docutils literal">__inputs</tt> part that defines
+some variables used throughout the rest of the JSON. When you import
+the dashboard, values for these inputs are set. But the means of
+providing dashboards to Grafana using Kubernetes resources doesn't use
+Grafana's import mechanism, so you have to fix this up manually.</p>
+<p>The <a class="reference external" href="https://grafana.com/api/dashboards/13032/revisions/6/download">JSON I downloaded</a> starts like this:</p>
+<pre class="literal-block">
+{
+  &quot;__inputs&quot;: [
+    {
+      &quot;name&quot;: &quot;DS_PROMETHEUS&quot;,
+      &quot;label&quot;: &quot;prometheus&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;type&quot;: &quot;datasource&quot;,
+      &quot;pluginId&quot;: &quot;prometheus&quot;,
+      &quot;pluginName&quot;: &quot;Prometheus&quot;
+    }
+  ],
+  ...
+</pre>
+<blockquote>
+<p>And later on there are lots of parts like this:</p>
+<pre class="literal-block">
+{
+  &quot;datasource&quot;: &quot;${DS_PROMETHEUS}&quot;,
+  ...
+  &quot;title&quot;: &quot;Number Of Healthy Volumes&quot;,
+  &quot;type&quot;: &quot;stat&quot;
+},
+</pre>
+</blockquote>
+<p>So what I had to do was to remove the entire <cite>__inputs__</cite> object, and
+find all the variable references <tt class="docutils literal">${DS_PROMETHEUS}</tt>, and replace
+them with just &quot;Prometheus,&quot; like</p>
+<pre class="literal-block">
+&quot;datasource&quot;: &quot;Prometheus&quot;,
+</pre>
+<p>To find that value, I looked into other dashboards that were already
+working in my Grafana instance.</p>
+<p>Now to make it into a Kubernetes resource, I had to write a file like
+this; let's call it <tt class="docutils literal"><span class="pre">longhorn-dashboard.yaml</span></tt>:</p>
+<pre class="literal-block">
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      namespace: monitoring
+      name: longhorn-dashboard
+      labels:
+        grafana_dashboard: &quot;true&quot;
+    data:
+      longhorn-dashboard.json: |-
+        {
+          &quot;__requires&quot;: [
+             ...
+
+That is to say, I placed the entire Longhorn dashboard JSON file,
+with ``__inputs`` variable references fixed up and ``__inputs``
+removed, indented under ``longhorn-dashboard.json`` with the ``|-``
+thingy... *[refers to YAML spec]* um, that's a `block scalar`_ with a
+`strip chomping indicator`_.
+
+.. _`block scalar`:: https://yaml.org/spec/1.2.1/#id2793652
+.. _`strip chomping indicator`:: https://yaml.org/spec/1.2.1/#id2794534
+</pre>
+<p>From there, the operator takes that and stuffs it into Grafana's
+configuration. I don't know how, and I don't have to yet.</p>
+</div>
+</div>
+<div class="section" id="more-to-come">
+<h2>More to come</h2>
+<p>I'm going to touch on backup, hardening, reconstitution,
+documentation, and resource reservation later.</p>
+</div>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
