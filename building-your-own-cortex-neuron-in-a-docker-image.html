@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Writing to think 2: Write harder - Building your own Cortex neuron in a Docker image</title>
+        <meta charset="utf-8" />
+
+
+
+
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/category/commentary.html">Commentary</a></li>
+            <li><a href="/category/compliance-at-home.html">Compliance at home</a></li>
+            <li><a href="/category/editors.html">Editors</a></li>
+            <li><a href="/category/emacs.html">Emacs</a></li>
+            <li><a href="/category/misc.html">misc</a></li>
+            <li class="active"><a href="/category/projects.html">Projects</a></li>
+            <li><a href="/category/security.html">Security</a></li>
+            <li><a href="/category/uncategorized.html">Uncategorized</a></li>
+            <li><a href="/category/untangling.html">Untangling</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/building-your-own-cortex-neuron-in-a-docker-image.html" rel="bookmark"
+         title="Permalink to Building your own Cortex neuron in a Docker image">Building your own Cortex neuron in a Docker image</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2021-10-04T13:45:00-04:00">
+      Mon 04 October 2021
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/jaredj.html">jaredj</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/projects.html">Projects</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <div class="section" id="neurons">
+<h2>Neurons</h2>
+<p>In the context of computer security incident response using TheHive
+and Cortex, <cite>neurons</cite> are pieces of software invoked by Cortex which
+perform the analysis (<cite>analyzers</cite>) of some observables producing a
+report, or use the observables to in some way respond (<cite>responders</cite>)
+to a threat.</p>
+<p>As an example, the VirusTotal analyzer can take a hash observable,
+send a web request to VirusTotal to search for it, and return the list
+of engines which detected a threat in the file with that hash, as well
+as the count of detections, which is used to give a colored tag to the
+observable.</p>
+<p>Another example is the DNS-RPZ responder. It can take a [DNS] domain
+observable, and feed it to a DNS blackhole server configured using
+DNS-RPZ, such that anyone in the organization who tries to look up
+that DNS name will be directed aside from the real (malicious) site.</p>
+<p>Cortex is at this point in history able to kick these off (<cite>run a
+job</cite>) in two ways: by executing them as subprocesses (with the
+<tt class="docutils literal">process</tt> JobRunner, or <tt class="docutils literal"><span class="pre">fork-join-executor</span></tt>), or by communicating
+with a Docker daemon via Unix socket to run them inside containers
+(the <tt class="docutils literal">docker</tt> JobRunner). No one has yet contradicted me when I
+guessed that calling analyzers and responders collectively as
+<cite>neurons</cite> came at the same time as the ability to run them as
+containers. In some code they may also be called <cite>workers.</cite></p>
+<p>(A third way of running jobs, using Kubernetes, was pull-requested in
+<a class="reference external" href="https://github.com/TheHive-Project/Cortex/pull/349">https://github.com/TheHive-Project/Cortex/pull/349</a> in March 2021, but
+as of October 2021 has not been merged.)</p>
+</div>
+<div class="section" id="custom-analyzers-with-the-subprocess-job-runner">
+<h2>Custom analyzers with the subprocess job runner</h2>
+<p>Outside of Docker, Cortex has configuration items <tt class="docutils literal">analyzer.path</tt>
+and <tt class="docutils literal">responder.path</tt> where you list directories where Cortex should
+look for analyzers and responders. Each analyzer or responder consists
+of a directory inside one of those path entries, with one or more
+flavor JSON files, one or more executable files, and any other needed
+files. So, for example, if Cortex is configured to have <tt class="docutils literal">/dir1</tt> in
+its <tt class="docutils literal">analyzer.path</tt>, a <tt class="docutils literal">dhcp_info</tt> analyzer would be arranged
+therein like so:</p>
+<pre class="literal-block">
+-- /dir1
+|
+\-- dhcp_info
+     |
+     |-- dhcp_info.json
+     \-- dhcp_info_executable
+</pre>
+<p>where <tt class="docutils literal">dhcp_info.json</tt> names <tt class="docutils literal">dhcp_info_executable</tt> as the
+<tt class="docutils literal">command</tt>:</p>
+<pre class="literal-block">
+{
+    &quot;name&quot;: &quot;dhcp_info&quot;,
+    &quot;command&quot;: &quot;dhcp_info/dhcp_info_executable&quot;,
+    [...]
+}
+</pre>
+<p>(Note that the pathname of the command is relative not to the
+analyzer's directory <tt class="docutils literal">dhcp_info</tt>, but to <tt class="docutils literal">/dir1</tt>.)</p>
+</div>
+<div class="section" id="cortex-analyzers">
+<h2>Cortex-Analyzers</h2>
+<p>Any analyzer or responder that didn't already exist as part of
+<a class="reference external" href="https://github.com/TheHive-Project/Cortex-Analyzers/">https://github.com/TheHive-Project/Cortex-Analyzers/</a>, and that
+therefore you had to write, you are urged to pull-request into that
+repository (which was clearly named before responders had been
+conceived). Once it is merged, anyone who is running Cortex not using
+Docker, and is following the official directions, will obtain it when
+installing Cortex and be able to use it.</p>
+</div>
+<div class="section" id="neuralizing">
+<h2>Neuralizing</h2>
+<p>But installing a real Cortex with real files on a real server is so
+passé. Don't you want to be using Docker? It's much easier to set
+up. When Cortex is using the Docker job runner, you don't have to
+worry about installing a bunch of Python module dependencies on your
+server - they just magically come in the container with the analyzer!
+Instead of a list of directories containing json files and
+executables, Cortex is configured with a list of URLs to JSON files
+with info about the <cite>neurons</cite> it has, including the container images
+to pull and run.</p>
+<p>As long as the analyzers and responders you care about are part of the
+official build, everything works quite nicely for you. But if you need
+a newer version of an analyzer, or one that has not yet been
+integrated into the <cite>Cortex-Analyzers</cite> repository, what then? (At this
+writing there are 54 open pull requests against Cortex-Analyzers. You
+may know I am not neutral on this issue, because three of those are
+from me.)</p>
+<p>Most of the analyzers were not written by people who at the time
+expected their code would be built into a container. How is it made
+so? The neuron images are uploaded to
+<a class="reference external" href="https://hub.docker.com/u/cortexneurons">https://hub.docker.com/u/cortexneurons</a> by the
+<a class="reference external" href="https://github.com/TheHive-Project/cortex-neurons-builder">cortex-neurons-builder</a>, and cataloged into the JSON file hosted at
+(e.g.) <a class="reference external" href="https://download.thehive-project.org/analyzers.json">https://download.thehive-project.org/analyzers.json</a>. That file
+is allegedly a <a class="reference external" href="https://github.com/TheHive-Project/CortexDocs/blob/5fdc930feb2d5a9f95fcabd7d96dccedae62d993/admin/cortex3.md">concatenation</a> of all the JSON flavor files into one
+JSON array; but there seems to be a <tt class="docutils literal">dockerImage</tt> value added in
+there, somehow.</p>
+</div>
+<div class="section" id="custom-neurons">
+<h2>Custom neurons</h2>
+<p>So how to include your own neurons in a Cortex instance using Docker
+(or Kubernetes, where the job runner uses the same container images)?</p>
+<p>Officially, you could run your own <cite>cortex-neurons-builder</cite>. It is
+open-source, after all. This is how you would automate the build. But
+if you don't build your code very often, here's how
+<cite>cortex-neurons-builder</cite> does it, in English:</p>
+<blockquote>
+<ol class="arabic">
+<li><p class="first">Add a Dockerfile to your analyzer/responder. Make it say this:</p>
+<pre class="literal-block">
+FROM python:3
+WORKDIR /worker
+COPY . {worker_name}
+RUN test ! -e {worker_name}/requirements.txt || pip install --no-cache-dir -r {worker_name}/requirements.txt
+ENTRYPOINT {command}
+</pre>
+<p>where <tt class="docutils literal">{worker_name}</tt> is the name of the subdirectory your
+analyzer/responder code is in (<tt class="docutils literal">dhcp_info</tt> from our example
+above), and <tt class="docutils literal">{command}</tt> is the value of <tt class="docutils literal">command</tt> from the
+flavor JSON file.</p>
+</li>
+<li><p class="first">This step number is reserved in case I find out the metadata
+included at <a class="reference external" href="https://github.com/TheHive-Project/cortex-neurons-builder/blob/fe8c39333c3ebf52db8ce6a0ea83878998774bba/registry.py#L47">registry.py line 47</a>
+are absolutely necessary.</p>
+</li>
+<li><p class="first">Build this using <a class="reference external" href="https://buildah.io">buildah</a> or Docker. Push
+this to your own local container registry. (<a class="reference external" href="cortex-on-kubernetes.html">Insecure local
+unauthenticated registry</a> in section
+2 of that link.)</p>
+</li>
+<li><p class="first">Collect the flavor JSON files. For each flavor, add a
+<tt class="docutils literal">dockerImage</tt> value that points to the image inside your own
+registry.</p>
+</li>
+<li><p class="first">Place the aggregate JSON file somewhere in a filesystem visible to
+your Cortex instance.</p>
+</li>
+<li><p class="first">Add <tt class="docutils literal"><span class="pre">file:///my/analyzer/list.json</span></tt> to the <tt class="docutils literal">analyzer.urls</tt>
+list in your Cortex configuration.</p>
+</li>
+<li><p class="first">Do likewise for responders; the list of those is configured in the
+<tt class="docutils literal">responder.urls</tt> list in Cortex's configuration.</p>
+</li>
+<li><p class="first">You may need one image per flavor, not per analyzer/responder; if some
+of your analyzers/responders have more than one flavor, that's
+an exercise for the reader.</p>
+</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="totally-custom-neurons">
+<h2>Totally custom neurons</h2>
+<p>As a &quot;Day-2&quot; task, you should build a complete set of your own
+neurons, just like you should have built your own container images for
+all the other software you run... You did do that, right?</p>
+</div>
+
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
