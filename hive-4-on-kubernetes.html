@@ -3,6 +3,7 @@
 <head>
           <title>Writing to think 2: Write harder - Hive 4 on Kubernetes</title>
         <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
 
 
 
@@ -12,7 +13,7 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+                <h1><a href="/">Writing to think 2: Write harder</a></h1>
         </header><!-- /#banner -->
         <nav id="menu"><ul>
             <li><a href="/category/commentary.html">Commentary</a></li>
@@ -66,91 +67,91 @@ something long and random instead of <tt class="docutils literal">$(pwgen <span 
 </pre>
 <p>Create the service.</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Service</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive-web</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">selector</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">ports</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="nt">protocol</span><span class="p">:</span> <span class="l-Scalar-Plain">TCP</span>
-      <span class="nt">port</span><span class="p">:</span> <span class="l-Scalar-Plain">9000</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Service</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive-web</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">TCP</span><span class="w">
+      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">9000</span>
 </pre>
 <p>Create the deployment.</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">apps/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Deployment</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">labels</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">replicas</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
-  <span class="nt">selector</span><span class="p">:</span>
-    <span class="nt">matchLabels</span><span class="p">:</span>
-      <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">template</span><span class="p">:</span>
-    <span class="nt">metadata</span><span class="p">:</span>
-      <span class="nt">labels</span><span class="p">:</span>
-        <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-    <span class="nt">spec</span><span class="p">:</span>
-      <span class="nt">containers</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-          <span class="nt">image</span><span class="p">:</span> <span class="s">'thehiveproject/thehive4:latest'</span>
-          <span class="nt">volumeMounts</span><span class="p">:</span>
-            <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/data</span>
-              <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">data</span>
-          <span class="nt">env</span><span class="p">:</span>
-            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">TH_SECRET</span>
-              <span class="nt">valueFrom</span><span class="p">:</span>
-                <span class="nt">secretKeyRef</span><span class="p">:</span>
-                  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hive-play-secret</span>
-                  <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">secret</span>
-            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_HOSTNAMES</span>
-              <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
-            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">TH_NO_CONFIG_CORTEX</span>
-              <span class="nt">value</span><span class="p">:</span> <span class="s">'1'</span>
-            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_USERNAME</span>
-              <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
-            <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">CQL_PASSWORD</span>
-              <span class="nt">valueFrom</span><span class="p">:</span>
-                <span class="nt">secretKeyRef</span><span class="p">:</span>
-                  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra</span>
-                  <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">cassandra-password</span>
-      <span class="nt">volumes</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">data</span>
-          <span class="nt">emptyDir</span><span class="p">:</span> <span class="p-Indicator">{}</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">apps/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Deployment</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">1</span><span class="w">
+  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">'thehiveproject/thehive4:latest'</span><span class="w">
+          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/opt/data</span><span class="w">
+              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">data</span><span class="w">
+          </span><span class="nt">env</span><span class="p">:</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">TH_SECRET</span><span class="w">
+              </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+                </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w">
+                  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hive-play-secret</span><span class="w">
+                  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">secret</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">CQL_HOSTNAMES</span><span class="w">
+              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cassandra</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">TH_NO_CONFIG_CORTEX</span><span class="w">
+              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">'1'</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">CQL_USERNAME</span><span class="w">
+              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cassandra</span><span class="w">
+            </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">CQL_PASSWORD</span><span class="w">
+              </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+                </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w">
+                  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cassandra</span><span class="w">
+                  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cassandra-password</span><span class="w">
+      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">data</span><span class="w">
+          </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">{}</span>
 </pre>
 <p>This ingress object makes Traefik route requests for
 <tt class="docutils literal">thehive.my.domain</tt> to TheHive's service.</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">extensions/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Ingress</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive</span>
-  <span class="nt">annotations</span><span class="p">:</span>
-    <span class="nt">kubernetes.io/ingress.class</span><span class="p">:</span> <span class="l-Scalar-Plain">traefik</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">rules</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="nt">host</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive.my.domain</span>
-      <span class="nt">http</span><span class="p">:</span>
-        <span class="nt">paths</span><span class="p">:</span>
-          <span class="p-Indicator">-</span> <span class="nt">backend</span><span class="p">:</span>
-              <span class="nt">serviceName</span><span class="p">:</span> <span class="l-Scalar-Plain">thehive-web</span>
-              <span class="nt">servicePort</span><span class="p">:</span> <span class="l-Scalar-Plain">9000</span>
-            <span class="nt">path</span><span class="p">:</span> <span class="l-Scalar-Plain">/</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">extensions/v1beta1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Ingress</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive</span><span class="w">
+  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+    </span><span class="nt">kubernetes.io/ingress.class</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">traefik</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive.my.domain</span><span class="w">
+      </span><span class="nt">http</span><span class="p">:</span><span class="w">
+        </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">backend</span><span class="p">:</span><span class="w">
+              </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">thehive-web</span><span class="w">
+              </span><span class="nt">servicePort</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">9000</span><span class="w">
+            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/</span>
 </pre>
 
   </div><!-- /.entry-content -->
 </section>
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="https://www.python.org/">Python</a>.
                 </address><!-- /#about -->
         </footer><!-- /#contentinfo -->
 </body>

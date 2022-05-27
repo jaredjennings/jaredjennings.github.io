@@ -3,11 +3,12 @@
 <head>
         <title>Writing to think 2: Write harder</title>
         <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
 </head>
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+                <h1><a href="/">Writing to think 2: Write harder</a></h1>
         </header><!-- /#banner -->
         <nav id="menu"><ul>
             <li><a href="/category/commentary.html">Commentary</a></li>
@@ -24,6 +25,42 @@
 <h2>All articles</h2>
 
 <ol id="post-list">
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/photoprism-on-freebsd-131.html" rel="bookmark" title="Permalink to Photoprism on FreeBSD 13.1">Photoprism on FreeBSD 13.1</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2022-05-26T21:51:00-04:00"> Thu 26 May 2022 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>Photoprism depends on TensorFlow. In May 2022, the py38-tensorflow
+package <a class="reference external" href="https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=259620">does not build</a>. Also
+it's pretty old.</p>
+<blockquote>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Create a jail. Java needs proc and /dev/fd::</dt>
+<dd><p class="first last">iocage create -r 13.1-RELEASE -n portbuild ip4_addr='[...]'
+iocage set mount_procfs=1 mount_fdesc_fs=1 portbuild</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Start the jail and go …</dt></dl></li></ol></blockquote> </div><!-- /.entry-content -->
+        </article></li>
+        <li><article class="hentry">
+                <header> <h2 class="entry-title"><a href="/chickenostracon.html" rel="bookmark" title="Permalink to Chickenostracon">Chickenostracon</a></h2> </header>
+                <footer class="post-info">
+                    <time class="published" datetime="2022-03-09T09:24:00-05:00"> Wed 09 March 2022 </time>
+                    <address class="vcard author">By
+                        <a class="url fn" href="/author/jaredj.html">jaredj</a>
+                    </address>
+                </footer><!-- /.post-info -->
+                <div class="entry-content"> <p>I wrote a script once called darbrrb, which helps you make backups
+onto optical discs with redundancy. That script assumes you have one
+optical drive of interest, and it waits for complete burns or reads of
+discs to happen on that drive before going on to other things. If you …</p> </div><!-- /.entry-content -->
+        </article></li>
         <li><article class="hentry">
                 <header> <h2 class="entry-title"><a href="/building-your-own-cortex-neuron-in-a-docker-image.html" rel="bookmark" title="Permalink to Building your own Cortex neuron in a Docker image">Building your own Cortex neuron in a Docker image</a></h2> </header>
                 <footer class="post-info">
@@ -1240,7 +1277,7 @@ specification that binds …</p> </div><!-- /.entry-content -->
                     </address>
                 </footer><!-- /.post-info -->
                 <div class="entry-content"> <div class="line-block">
-<div class="line">[caption width=&quot;707&quot; align=&quot;alignnone&quot;]<a class="reference external" href="http://linkeddata.org/"><img alt="An excerpt of the map of Linked Open Data." src="http://linkeddata.org/static/images/lod-datasets_2009-07-14_cropped.png" style="width: 707px; height: 526px;" /></a> An excerpt of the map of Linked Open Data, from
+<div class="line">[caption width=&quot;707&quot; align=&quot;alignnone&quot;]<a class="reference external image-reference" href="http://linkeddata.org/"><img alt="An excerpt of the map of Linked Open Data." src="http://linkeddata.org/static/images/lod-datasets_2009-07-14_cropped.png" style="width: 707px; height: 526px;" /></a> An excerpt of the map of Linked Open Data, from
 linkeddata.org.[/caption]</div>
 <div class="line"><a class="reference external" href="http://enyojs.com">Enyo</a> is a JavaScript- and HTML5-based widget
 library. <a class="reference external" href="http://linkeddata.org">Linked Open Data</a> is a paradigm
@@ -1395,8 +1432,8 @@ ticket has over 100 comments, all from me …</p> </div><!-- /.entry-content -->
 </section><!-- /#content -->
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="https://www.python.org/">Python</a>.
                 </address><!-- /#about -->
         </footer><!-- /#contentinfo -->
 </body>

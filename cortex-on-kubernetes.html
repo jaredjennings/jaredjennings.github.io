@@ -3,6 +3,7 @@
 <head>
           <title>Writing to think 2: Write harder - Cortex on Kubernetes</title>
         <meta charset="utf-8" />
+        <meta name="generator" content="Pelican" />
 
 
 
@@ -12,7 +13,7 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Writing to think 2: Write harder <strong></strong></a></h1>
+                <h1><a href="/">Writing to think 2: Write harder</a></h1>
         </header><!-- /#banner -->
         <nav id="menu"><ul>
             <li><a href="/category/commentary.html">Commentary</a></li>
@@ -159,14 +160,14 @@ helm install registry twuni/docker-registry --set ingress.enabled<span class="o"
 <h3>2.2 use</h3>
 <p>for pushing, in /etc/docker/daemon.json:</p>
 <pre class="code json literal-block">
-<span class="p">{</span> <span class="nt">&quot;insecure-registries&quot;</span><span class="p">:[</span><span class="s2">&quot;registry.k.my.domain&quot;</span><span class="p">]</span> <span class="p">}</span>
+<span class="p">{</span><span class="w"> </span><span class="nt">&quot;insecure-registries&quot;</span><span class="p">:[</span><span class="s2">&quot;registry.k.my.domain&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 </pre>
 <p>for pulling, in /etc/rancher/k3s/registries.yaml:</p>
 <pre class="code yaml literal-block">
-<span class="nt">mirrors</span><span class="p">:</span>
-  <span class="s">&quot;registry.k.my.domain&quot;</span><span class="p-Indicator">:</span>
-      <span class="nt">endpoint</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="s">&quot;http://registry.k.my.domain:80&quot;</span>
+<span class="nt">mirrors</span><span class="p">:</span><span class="w">
+  </span><span class="s">&quot;registry.k.my.domain&quot;</span><span class="p-Indicator">:</span><span class="w">
+      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="s">&quot;http://registry.k.my.domain:80&quot;</span>
 </pre>
 </div>
 </div>
@@ -183,20 +184,20 @@ complete outsider to Scala.</p>
 <div class="section" id="dockerfile-build-with-sbt">
 <h3>3.1 Dockerfile.build-with-sbt</h3>
 <pre class="code Dockerfile literal-block">
-<span class="k">FROM</span> <span class="s">adoptopenjdk/openjdk8</span>
-<span class="k">ENV</span> SCALA_VERSION <span class="m">2</span>.12.12
-<span class="k">ENV</span> SBT_VERSION <span class="m">1</span>.3.8
+<span class="k">FROM</span><span class="w"> </span><span class="s">adoptopenjdk/openjdk8</span>
+<span class="k">ENV</span><span class="w"> </span>SCALA_VERSION <span class="m">2</span>.12.12
+<span class="k">ENV</span><span class="w"> </span>SBT_VERSION <span class="m">1</span>.3.8
 
-<span class="k">RUN</span> <span class="se">\
+<span class="k">RUN</span><span class="w"> </span><span class="se">\
 </span>apt-get update <span class="o">&amp;&amp;</span> apt-get -y install npm docker.io webpack
 <span class="c"># my host docker group has gid 114</span>
-<span class="k">RUN</span> groupadd -g <span class="m">5000</span> appuser <span class="o">&amp;&amp;</span> groupmod -g <span class="m">114</span> docker <span class="o">&amp;&amp;</span> useradd -m -g <span class="m">5000</span> -G docker -u <span class="m">5000</span> appuser
-<span class="k">USER</span><span class="s"> appuser</span>
-<span class="k">WORKDIR</span><span class="s"> /home/appuser</span>
-<span class="k">VOLUME</span><span class="s"> /home/appuser/Cortex</span>
-<span class="k">VOLUME</span><span class="s"> /home/appuser/.ivy2</span>
-<span class="k">VOLUME</span><span class="s"> /home/appuser/.sbt</span>
-<span class="k">VOLUME</span><span class="s"> /home/appuser/.cache</span>
+<span class="k">RUN</span><span class="w"> </span>groupadd -g <span class="m">5000</span> appuser <span class="o">&amp;&amp;</span> groupmod -g <span class="m">114</span> docker <span class="o">&amp;&amp;</span> useradd -m -g <span class="m">5000</span> -G docker -u <span class="m">5000</span> appuser
+<span class="k">USER</span><span class="w"> </span><span class="s">appuser</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/home/appuser</span>
+<span class="k">VOLUME</span><span class="w"> </span><span class="s">/home/appuser/Cortex</span>
+<span class="k">VOLUME</span><span class="w"> </span><span class="s">/home/appuser/.ivy2</span>
+<span class="k">VOLUME</span><span class="w"> </span><span class="s">/home/appuser/.sbt</span>
+<span class="k">VOLUME</span><span class="w"> </span><span class="s">/home/appuser/.cache</span>
 </pre>
 </div>
 <div class="section" id="running-build">
@@ -258,74 +259,74 @@ for. Just tell it you need a ReadWriteMany persistent volume
 claim. How that is actually provided is not Cortex's business.</p>
 <p>On a trivial cluster with a single node, it can be a local path:</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolume</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppv</span>
-  <span class="nt">labels</span><span class="p">:</span>
-    <span class="nt">type</span><span class="p">:</span> <span class="l-Scalar-Plain">local</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
-  <span class="nt">capacity</span><span class="p">:</span>
-    <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">10Gi</span>
-  <span class="nt">accessModes</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
-  <span class="nt">hostPath</span><span class="p">:</span>
-    <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;/mnt/data&quot;</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">PersistentVolume</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">job</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppv</span><span class="w">
+  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">local</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">manual</span><span class="w">
+  </span><span class="nt">capacity</span><span class="p">:</span><span class="w">
+    </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">10Gi</span><span class="w">
+  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="l-Scalar-Plain">ReadWriteMany</span><span class="w">
+  </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/mnt/data&quot;</span>
 </pre>
 <p>On a multinode self-hosted cluster, Longhorn 1.1 can reputedly provide
 such a volume using NFS under the hood. Amazon and Azure have specific
 ways of providing this. VMware can provide one. Etc.</p>
 <p>To use such a volume, first make a claim:</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolumeClaim</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
-  <span class="nt">accessModes</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
-  <span class="nt">resources</span><span class="p">:</span>
-    <span class="nt">requests</span><span class="p">:</span>
-      <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">3Gi</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">PersistentVolumeClaim</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">job</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">manual</span><span class="w">
+  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="l-Scalar-Plain">ReadWriteMany</span><span class="w">
+  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+    </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+      </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">3Gi</span>
 </pre>
 <p>Then make some containers use it. This example shows mounting
 subdirectories; this should enable jobs to get at the smallest needed
 set of files while letting Cortex get at the whole thing.</p>
 <pre class="code yaml literal-block">
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">batch/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Job</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">copy-input-to-output</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">job</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">template</span><span class="p">:</span>
-    <span class="nt">spec</span><span class="p">:</span>
-      <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-        <span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-          <span class="nt">claimName</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-      <span class="nt">containers</span><span class="p">:</span>
-      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cito</span>
-        <span class="nt">env</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">JOBID</span>
-          <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;01&quot;</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l-Scalar-Plain">busybox</span>
-        <span class="nt">command</span><span class="p">:</span>
-          <span class="p-Indicator">-</span> <span class="s">&quot;rm&quot;</span>
-          <span class="p-Indicator">-</span> <span class="s">&quot;/job/input/hi&quot;</span>
-        <span class="nt">volumeMounts</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/job/input</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-          <span class="nt">subPathExpr</span><span class="p">:</span> <span class="s">&quot;$(JOBID)/input&quot;</span>
-          <span class="nt">readOnly</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
-        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/job/output</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-          <span class="nt">subPathExpr</span><span class="p">:</span> <span class="s">&quot;$(JOBID)/output&quot;</span>
-      <span class="nt">restartPolicy</span><span class="p">:</span> <span class="l-Scalar-Plain">Never</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">batch/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Job</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">copy-input-to-output</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">job</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+        </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+          </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cito</span><span class="w">
+        </span><span class="nt">env</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">JOBID</span><span class="w">
+          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;01&quot;</span><span class="w">
+        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">busybox</span><span class="w">
+        </span><span class="nt">command</span><span class="p">:</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="s">&quot;rm&quot;</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="s">&quot;/job/input/hi&quot;</span><span class="w">
+        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/job/input</span><span class="w">
+          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+          </span><span class="nt">subPathExpr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$(JOBID)/input&quot;</span><span class="w">
+          </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">true</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/job/output</span><span class="w">
+          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+          </span><span class="nt">subPathExpr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$(JOBID)/output&quot;</span><span class="w">
+      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Never</span>
 </pre>
 </div>
 </div>
@@ -474,35 +475,35 @@ create_secret <span class="o">()</span> <span class="o">{</span>
 <span class="k">fi</span>
 
 create_ca
-<span class="k">for</span> cert in <span class="si">${</span><span class="nv">certs</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
+<span class="k">for</span> cert <span class="k">in</span> <span class="si">${</span><span class="nv">certs</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
     issue_cert <span class="nv">$cert</span>
     create_secret <span class="nv">$cert</span>
 <span class="k">done</span>
 </pre>
 <p>#+name es-values.yaml</p>
 <pre class="code yaml literal-block">
-<span class="nn">---</span>
-<span class="nt">global</span><span class="p">:</span>
-  <span class="nt">clusterName</span><span class="p">:</span> <span class="l-Scalar-Plain">cortexes</span>
-<span class="nt">kibana</span><span class="p">:</span>
-  <span class="nt">enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">false</span>
-<span class="nt">elasticsearch</span><span class="p">:</span>
-  <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l-Scalar-Plain">IfNotPresent</span>
-  <span class="nt">ssl</span><span class="p">:</span>
-    <span class="nt">rest</span><span class="p">:</span>
-      <span class="nt">enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
-      <span class="nt">existingCertSecret</span><span class="p">:</span> <span class="l-Scalar-Plain">client-service-certs</span>
-    <span class="nt">transport</span><span class="p">:</span>
-      <span class="nt">existingCertSecret</span><span class="p">:</span> <span class="l-Scalar-Plain">transport-certs</span>
-  <span class="nt">config</span><span class="p">:</span>
-    <span class="nt">opendistro_security.ssl.http.enabled</span><span class="p">:</span> <span class="l-Scalar-Plain">true</span>
-    <span class="nt">opendistro_security.ssl.http.pemcert_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-crt.pem</span>
-    <span class="nt">opendistro_security.ssl.http.pemkey_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-key.pem</span>
-    <span class="nt">opendistro_security.ssl.http.pemtrustedcas_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-rest-root-ca.pem</span>
-    <span class="nt">opendistro_security.ssl.transport.pemcert_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-crt.pem</span>
-    <span class="nt">opendistro_security.ssl.transport.pemkey_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-key.pem</span>
-    <span class="nt">opendistro_security.ssl.transport.pemtrustedcas_filepath</span><span class="p">:</span> <span class="l-Scalar-Plain">elk-transport-root-ca.pem</span>
-<span class="nn">...</span>
+<span class="nn">---</span><span class="w">
+</span><span class="nt">global</span><span class="p">:</span><span class="w">
+  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortexes</span><span class="w">
+</span><span class="nt">kibana</span><span class="p">:</span><span class="w">
+  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">false</span><span class="w">
+</span><span class="nt">elasticsearch</span><span class="p">:</span><span class="w">
+  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">IfNotPresent</span><span class="w">
+  </span><span class="nt">ssl</span><span class="p">:</span><span class="w">
+    </span><span class="nt">rest</span><span class="p">:</span><span class="w">
+      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">true</span><span class="w">
+      </span><span class="nt">existingCertSecret</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">client-service-certs</span><span class="w">
+    </span><span class="nt">transport</span><span class="p">:</span><span class="w">
+      </span><span class="nt">existingCertSecret</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">transport-certs</span><span class="w">
+  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.http.enabled</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">true</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.http.pemcert_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-rest-crt.pem</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.http.pemkey_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-rest-key.pem</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.http.pemtrustedcas_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-rest-root-ca.pem</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.transport.pemcert_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-transport-crt.pem</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.transport.pemkey_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-transport-key.pem</span><span class="w">
+    </span><span class="nt">opendistro_security.ssl.transport.pemtrustedcas_filepath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elk-transport-root-ca.pem</span><span class="w">
+</span><span class="nn">...</span>
 </pre>
 <pre class="code sh literal-block">
 sh build.sh clean
@@ -533,20 +534,20 @@ Cortex.</p>
 kubectl apply -f https://download.elastic.co/downloads/eck/1.4.0/all-in-one.yaml
 </pre>
 <pre class="code yaml literal-block">
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">elasticsearch.k8s.elastic.co/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Elasticsearch</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">version</span><span class="p">:</span> <span class="l-Scalar-Plain">7.10.2</span>
-  <span class="nt">nodeSets</span><span class="p">:</span>
-  <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">default</span>
-    <span class="nt">count</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
-    <span class="nt">config</span><span class="p">:</span>
-      <span class="nt">node.store.allow_mmap</span><span class="p">:</span> <span class="l-Scalar-Plain">false</span>
-<span class="nn">...</span>
+<span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elasticsearch.k8s.elastic.co/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Elasticsearch</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">esquickstart</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">7.10.2</span><span class="w">
+  </span><span class="nt">nodeSets</span><span class="p">:</span><span class="w">
+  </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">default</span><span class="w">
+    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">1</span><span class="w">
+    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+      </span><span class="nt">node.store.allow_mmap</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">false</span><span class="w">
+</span><span class="nn">...</span>
 </pre>
 <p>And done. (I had to back off from 7.11 because of a compatibility
 problem that's since been fixed; look on
@@ -555,122 +556,122 @@ problem that's since been fixed; look on
 <div class="section" id="cortex">
 <h3>5.3 Cortex</h3>
 <pre class="code yaml literal-block">
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Service</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">selector</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">ports</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="nt">protocol</span><span class="p">:</span> <span class="l-Scalar-Plain">TCP</span>
-      <span class="nt">port</span><span class="p">:</span> <span class="l-Scalar-Plain">80</span>
-      <span class="nt">targetPort</span><span class="p">:</span> <span class="l-Scalar-Plain">9001</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolume</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-hppv</span>
-  <span class="nt">labels</span><span class="p">:</span>
-    <span class="nt">type</span><span class="p">:</span> <span class="l-Scalar-Plain">local</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
-  <span class="nt">capacity</span><span class="p">:</span>
-    <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">10Gi</span>
-  <span class="nt">accessModes</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
-  <span class="nt">hostPath</span><span class="p">:</span>
-    <span class="nt">path</span><span class="p">:</span> <span class="s">&quot;/mnt/data&quot;</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">PersistentVolumeClaim</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">storageClassName</span><span class="p">:</span> <span class="l-Scalar-Plain">manual</span>
-  <span class="nt">accessModes</span><span class="p">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">ReadWriteMany</span>
-  <span class="nt">resources</span><span class="p">:</span>
-    <span class="nt">requests</span><span class="p">:</span>
-      <span class="nt">storage</span><span class="p">:</span> <span class="l-Scalar-Plain">3Gi</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">apps/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Deployment</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">labels</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">replicas</span><span class="p">:</span> <span class="l-Scalar-Plain">1</span>
-  <span class="nt">selector</span><span class="p">:</span>
-    <span class="nt">matchLabels</span><span class="p">:</span>
-      <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">template</span><span class="p">:</span>
-    <span class="nt">metadata</span><span class="p">:</span>
-      <span class="nt">labels</span><span class="p">:</span>
-        <span class="nt">app</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-    <span class="nt">spec</span><span class="p">:</span>
-      <span class="nt">serviceAccountName</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-      <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">jobdir</span>
-        <span class="nt">persistentVolumeClaim</span><span class="p">:</span>
-          <span class="nt">claimName</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca</span>
-        <span class="nt">secret</span><span class="p">:</span>
-          <span class="nt">secretName</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart-es-http-ca-internal</span>
-          <span class="nt">items</span><span class="p">:</span>
-          <span class="p-Indicator">-</span> <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">tls.crt</span>
-            <span class="nt">path</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca.crt</span>
-      <span class="nt">containers</span><span class="p">:</span>
-      <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l-Scalar-Plain">registry.k.my.domain/cortex</span>
-        <span class="nt">env</span><span class="p">:</span>
-          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_uri</span>
-            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">https://esquickstart-es-http:9200</span>
-          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_http_ca_cert</span>
-            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/cortex/es-http-ca/es-http-ca.crt</span>
-          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_username</span>
-            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">elastic</span>
-          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es_password</span>
-            <span class="nt">valueFrom</span><span class="p">:</span>
-              <span class="nt">secretKeyRef</span><span class="p">:</span>
-                <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">esquickstart-es-elastic-user</span>
-                <span class="nt">key</span><span class="p">:</span> <span class="l-Scalar-Plain">elastic</span>
-          <span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">kubernetes_job_pvc</span>
-            <span class="nt">value</span><span class="p">:</span> <span class="l-Scalar-Plain">hppvc</span>
-        <span class="nt">volumeMounts</span><span class="p">:</span>
-        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/tmp/cortex-jobs</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">jobdir</span>
-        <span class="p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l-Scalar-Plain">/opt/cortex/es-http-ca</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">es-http-ca</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">networking.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Ingress</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">rules</span><span class="p">:</span>
-  <span class="p-Indicator">-</span> <span class="nt">host</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex.k.my.domain</span>
-    <span class="nt">http</span><span class="p">:</span>
-      <span class="nt">paths</span><span class="p">:</span>
-      <span class="p-Indicator">-</span> <span class="nt">path</span><span class="p">:</span> <span class="l-Scalar-Plain">/</span>
-        <span class="nt">pathType</span><span class="p">:</span> <span class="l-Scalar-Plain">Prefix</span>
-        <span class="nt">backend</span><span class="p">:</span>
-          <span class="nt">service</span><span class="p">:</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-web-ui</span>
-            <span class="nt">port</span><span class="p">:</span>
-              <span class="nt">number</span><span class="p">:</span> <span class="l-Scalar-Plain">80</span>
-<span class="nn">...</span>
+<span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Service</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex-web-ui</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">TCP</span><span class="w">
+      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">80</span><span class="w">
+      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">9001</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">PersistentVolume</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex-hppv</span><span class="w">
+  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">local</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">manual</span><span class="w">
+  </span><span class="nt">capacity</span><span class="p">:</span><span class="w">
+    </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">10Gi</span><span class="w">
+  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="l-Scalar-Plain">ReadWriteMany</span><span class="w">
+  </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/mnt/data&quot;</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">PersistentVolumeClaim</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">manual</span><span class="w">
+  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+    </span><span class="p-Indicator">-</span><span class="w"> </span><span class="l-Scalar-Plain">ReadWriteMany</span><span class="w">
+  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+    </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+      </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">3Gi</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">apps/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Deployment</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">1</span><span class="w">
+  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+      </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">jobdir</span><span class="w">
+        </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+          </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es-http-ca</span><span class="w">
+        </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+          </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">esquickstart-es-http-ca-internal</span><span class="w">
+          </span><span class="nt">items</span><span class="p">:</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">tls.crt</span><span class="w">
+            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es-http-ca.crt</span><span class="w">
+      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">registry.k.my.domain/cortex</span><span class="w">
+        </span><span class="nt">env</span><span class="p">:</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es_uri</span><span class="w">
+            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">https://esquickstart-es-http:9200</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es_http_ca_cert</span><span class="w">
+            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/opt/cortex/es-http-ca/es-http-ca.crt</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es_username</span><span class="w">
+            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elastic</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es_password</span><span class="w">
+            </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+              </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w">
+                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">esquickstart-es-elastic-user</span><span class="w">
+                </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">elastic</span><span class="w">
+          </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">kubernetes_job_pvc</span><span class="w">
+            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">hppvc</span><span class="w">
+        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/tmp/cortex-jobs</span><span class="w">
+          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">jobdir</span><span class="w">
+        </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/opt/cortex/es-http-ca</span><span class="w">
+          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">es-http-ca</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">networking.k8s.io/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Ingress</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex-web-ui</span><span class="w">
+</span><span class="nt">spec</span><span class="p">:</span><span class="w">
+  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
+  </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex.k.my.domain</span><span class="w">
+    </span><span class="nt">http</span><span class="p">:</span><span class="w">
+      </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+      </span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">/</span><span class="w">
+        </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Prefix</span><span class="w">
+        </span><span class="nt">backend</span><span class="p">:</span><span class="w">
+          </span><span class="nt">service</span><span class="p">:</span><span class="w">
+            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex-web-ui</span><span class="w">
+            </span><span class="nt">port</span><span class="p">:</span><span class="w">
+              </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">80</span><span class="w">
+</span><span class="nn">...</span>
 </pre>
 <p>runs, but jobs don't run yet.</p>
 </div>
@@ -679,44 +680,44 @@ problem that's since been fixed; look on
 <p>Create a role and a service account to enable Cortex's use of
 Kubernetes.</p>
 <pre class="code yaml literal-block">
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Role</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">job-runner</span>
-<span class="nt">rules</span><span class="p">:</span>
-<span class="p-Indicator">-</span> <span class="nt">apiGroups</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p-Indicator">]</span>
-  <span class="nt">resources</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p-Indicator">]</span>
-  <span class="nt">verbs</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;list&quot;</span><span class="p-Indicator">]</span>
-<span class="p-Indicator">-</span> <span class="nt">apiGroups</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;batch&quot;</span><span class="p-Indicator">]</span>
-  <span class="nt">resources</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;jobs&quot;</span><span class="p-Indicator">]</span>
-  <span class="nt">verbs</span><span class="p">:</span> <span class="p-Indicator">[</span><span class="s">&quot;create&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;delete&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;list&quot;</span><span class="p-Indicator">,</span> <span class="s">&quot;watch&quot;</span><span class="p-Indicator">]</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">ServiceAccount</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nt">secrets</span><span class="p">:</span>
-<span class="p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">default-token-lzm9h</span>
-<span class="nn">...</span>
-<span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">RoleBinding</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex-job-runner</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nt">roleRef</span><span class="p">:</span>
-  <span class="nt">apiGroup</span><span class="p">:</span> <span class="l-Scalar-Plain">rbac.authorization.k8s.io</span>
-  <span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">Role</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">job-runner</span>
-<span class="nt">subjects</span><span class="p">:</span>
-<span class="p-Indicator">-</span> <span class="nt">kind</span><span class="p">:</span> <span class="l-Scalar-Plain">ServiceAccount</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l-Scalar-Plain">cortex</span>
-<span class="nn">...</span>
+<span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Role</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">job-runner</span><span class="w">
+</span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p-Indicator">]</span><span class="w">
+  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p-Indicator">]</span><span class="w">
+  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p-Indicator">]</span><span class="w">
+</span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;batch&quot;</span><span class="p-Indicator">]</span><span class="w">
+  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;jobs&quot;</span><span class="p-Indicator">]</span><span class="w">
+  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p-Indicator">[</span><span class="s">&quot;create&quot;</span><span class="p-Indicator">,</span><span class="w"> </span><span class="s">&quot;delete&quot;</span><span class="p-Indicator">,</span><span class="w"> </span><span class="s">&quot;get&quot;</span><span class="p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p-Indicator">]</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">ServiceAccount</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nt">secrets</span><span class="p">:</span><span class="w">
+</span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">default-token-lzm9h</span><span class="w">
+</span><span class="nn">...</span><span class="w">
+</span><span class="nn">---</span><span class="w">
+</span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">RoleBinding</span><span class="w">
+</span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex-job-runner</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">rbac.authorization.k8s.io</span><span class="w">
+  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">Role</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">job-runner</span><span class="w">
+</span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">ServiceAccount</span><span class="w">
+  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l-Scalar-Plain">cortex</span><span class="w">
+</span><span class="nn">...</span>
 </pre>
 <p>And with that, jobs are created.</p>
 </div>
@@ -726,8 +727,8 @@ Kubernetes.</p>
 </section>
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="https://www.python.org/">Python</a>.
                 </address><!-- /#about -->
         </footer><!-- /#contentinfo -->
 </body>
